@@ -1,0 +1,38 @@
+{
+  "datasets": {
+    "30a02ada3678": {
+      "id": "30a02ada3678",
+      "name": "gastos",
+      "original_filename": "gastos_ficticios.xlsx",
+      "stored_filename": "30a02ada3678.xlsx",
+      "size_bytes": 12266,
+      "uploaded_at": "2026-03-07T00:36:39.571983+00:00",
+      "updated_at": "2026-03-24T13:01:45.526878+00:00",
+      "last_analysis_at": "2026-03-24T13:00:36.365730+00:00",
+      "last_analysis_method": "mad",
+      "last_suspeitas_count": 5,
+      "last_thresholds": {
+        "lower": null,
+        "upper": 3319.43
+      },
+      "notes": {}
+    },
+    "d99a1d2a9c82": {
+      "id": "d99a1d2a9c82",
+      "name": "Teste arquivo CSV",
+      "original_filename": "transaçõesTesteCSV.csv",
+      "stored_filename": "d99a1d2a9c82.csv",
+      "size_bytes": 36920,
+      "uploaded_at": "2026-03-24T13:47:07.976676+00:00",
+      "updated_at": "2026-03-24T13:48:54.380046+00:00",
+      "last_analysis_at": "2026-03-24T13:48:54.359879+00:00",
+      "last_analysis_method": "zscore",
+      "last_suspeitas_count": 23,
+      "last_thresholds": {
+        "lower": null,
+        "upper": 32833.64
+      },
+      "notes": {}
+    }
+  }
+}
