@@ -1,4 +1,4 @@
-constconst $ = (id) => document.getElementById(id);
+const $ = (id) => document.getElementById(id);
 const formatarMoeda = (valor) => {
     if (valor === null || valor === undefined || isNaN(valor)) return valor;
 
@@ -13,11 +13,11 @@ const i18n = {
         title: "Detecção de Transações Suspeitas",
         themeLight: "Tema Claro",
         themeDark: "Tema Escuro",
-        dirUpper: "Somente acima",
-        dirLower: "Somente abaixo",
-        dirBoth: "Ambos",
-        lower: "inferior",
-        upper: "superior",
+        dirUpper: "Apenas gastos muito altos",
+        dirLower: "Apenas gastos muito baixos",
+        dirBoth: "Qualquer anomalia (Altos ou Baixos)",
+        lower: "Mínimo esperado",
+        upper: "Máximo esperado",
         secUpload: "Enviar Arquivo",
         secConfig: "Configuração da Análise",
         secDatabase: "Base de dados",
@@ -27,13 +27,13 @@ const i18n = {
         labelFile: "Arquivo (.csv, .xlsx, .xls)",
         btnUpload: "Salvar base de dados",
         labelMethod: "Método",
-        labelDirection: "Direção",
+        labelDirection: "O que procurar?",
         labelColumn: "Coluna",
-        labelStreaming: "Leitura em Lotes (CSV)",
+        labelStreaming: "Modo Arquivos Pesados (CSV)",
         labelMaxSus: "Máx. suspeitas",
         placeholderName: "Ex.: Semana 02 - Pagamentos",
         hintUpload: "Dica: a coluna padrão é <b>valor</b> (você pode trocar em “Coluna”).",
-        hintBatch: "Leitura em Lotes ajuda em CSV grande, mas só vale para <b>Sigma</b> e <b>Z-score</b>.",
+        hintBatch: "Dica: Ative para evitar travamentos ao analisar planilhas gigantes.",
         resultHint: "Selecione <b>Analisar</b> em alguma base de dados.",
         chartSubtitle: "Os pontos a vermelho destacam os valores considerados suspeitos.",
         legendNormal: "Transações Normais",
@@ -77,9 +77,9 @@ const i18n = {
         cardStats: "Estatísticas",
         cardLimits: "Limites",
         cardSuspects: "Suspeitas",
-        stat_mean: "média",
-        stat_std: "desvio",
-        stat_median: "mediana",
+        stat_mean: "Média de gastos",
+        stat_std: "Variação comum",
+        stat_median: "Valor central",
         btnBrowse: "Procurar...",
         noFileChosen: "Nenhum arquivo selecionado.",
         optNo: "Não",
@@ -90,26 +90,26 @@ const i18n = {
         errFewData: "Poucos dados na coluna '{col}' para calcular estatísticas.",
         errFewDataStd: "Poucos dados na coluna para calcular desvio padrão.",
         promptRename: "Novo nome do dataset:",
-        confirmDelete: "Excluir dataset {id}?",
+        confirmDelete: "Tem certeza que deseja excluir esta base de dados?",
         msgRenamed: "Nome atualizado.",
         msgReplaced: "Arquivo substituído. (Resultado anterior limpo)",
         msgDeleted: "Dataset excluído.",
         msgSaved: "Dataset salvo:",
         errNoFile: "Escolha um arquivo.",
-        optSigma: "Sigma (média ± k·desvio)",
-        optZscore: "Z-score (|z| > k)",
-        optIqr: "IQR (Q1/Q3 ± k·IQR)",
-        optMad: "MAD (mediana ± k·MAD)",
+        optSigma: "Análise Padrão (Recomendado)",
+        optZscore: "Análise Direta (Z-score)",
+        optIqr: "Análise por Faixa Esperada",
+        optMad: "Análise Rigorosa",
     },
     en: {
         title: "Suspicious Transaction Detection",
         themeLight: "Light Theme",
         themeDark: "Dark Theme",
-        dirUpper: "Only above",
-        dirLower: "Only below",
-        dirBoth: "Both",
-        lower: "lower",
-        upper: "upper",
+        dirUpper: "Only very high spending",
+        dirLower: "Only very low spending",
+        dirBoth: "Any anomaly (High or Low)",
+        lower: "Expected minimum",
+        upper: "Maximum expected",
         secUpload: "Upload File",
         secConfig: "Analysis Configuration",
         secDatabase: "Database",
@@ -119,13 +119,13 @@ const i18n = {
         labelFile: "File (.csv, .xlsx, .xls)",
         btnUpload: "Save dataset",
         labelMethod: "Method",
-        labelDirection: "Direction",
+        labelDirection: "What to look for?",
         labelColumn: "Column",
-        labelStreaming: "Batch Reading (CSV)",
+        labelStreaming: "Heavy Files Mode (CSV)",
         labelMaxSus: "Max. suspects",
         placeholderName: "e.g., Week 02 - Payments",
         hintUpload: "Tip: the default column is <b>value</b> (you can change it under “Column”).",
-        hintBatch: "Batch Reading helps with large CSVs, but only applies to <b>Sigma</b> and <b>Z-score</b>.",
+        hintBatch: "Tip: Enable to avoid crashes when analyzing large spreadsheets.",
         resultHint: "Select <b>Analyze</b> in a database.",
         chartSubtitle: "Red dots highlight values considered suspicious.",
         legendNormal: "Normal Transactions",
@@ -169,9 +169,9 @@ const i18n = {
         cardStats: "Statistics",
         cardLimits: "Limits",
         cardSuspects: "Suspects",
-        stat_mean: "mean",
-        stat_std: "std",
-        stat_median: "median",
+        stat_mean: "Average spending",
+        stat_std: "Common variation",
+        stat_median: "Central value",
         btnBrowse: "Browse...",
         noFileChosen: "No file chosen.",
         optNo: "No",
@@ -182,26 +182,26 @@ const i18n = {
         errFewData: "Not enough data in column '{col}' to calculate statistics.",
         errFewDataStd: "Not enough data to calculate standard deviation.",
         promptRename: "New dataset name:",
-        confirmDelete: "Delete dataset {id}?",
+        confirmDelete: "Are you sure you want to delete this database?",
         msgRenamed: "Name updated.",
         msgReplaced: "File replaced. (Previous result cleared)",
         msgDeleted: "Dataset deleted.",
         msgSaved: "Dataset saved:",
         errNoFile: "Please choose a file.",
-        optSigma: "Sigma (mean ± k·std)",
-        optZscore: "Z-score (|z| > k)",
-        optIqr: "IQR (Q1/Q3 ± k·IQR)",
-        optMad: "MAD (median ± k·MAD)",
+        optSigma: "Standard Analysis",
+        optZscore: "Direct Analysis",
+        optIqr: "Expected Range Analysis",
+        optMad: "Strict Analysis",
     },
     es: {
         title: "Detección de Transacciones Sospechosas",
         themeLight: "Tema Claro",
         themeDark: "Tema Oscuro",
-        dirUpper: "Solo por encima",
-        dirLower: "Solo por debajo",
-        dirBoth: "Ambos",
-        lower: "inferior",
-        upper: "superior",
+        dirUpper: "Solo gastos muy altos",
+        dirLower: "Solo gastos muy bajos",
+        dirBoth: "Cualquier anomalía (alta o baja)",
+        lower: "Mínimo esperado",
+        upper: "Máximo esperado",
         secUpload: "Subir Archivo",
         secConfig: "Configuración de Análisis",
         secDatabase: "Base de datos",
@@ -211,14 +211,13 @@ const i18n = {
         labelFile: "Archivo (.csv, .xlsx, .xls)",
         btnUpload: "Guardar base de datos",
         labelMethod: "Método",
-        labelDirection: "Dirección",
+        labelDirection: "¿Qué buscar?",
         labelColumn: "Columna",
-        labelStreaming: "Lectura en Lotes (CSV)",
+        labelStreaming: "Modo para archivos grandes (CSV)",
         labelMaxSus: "Máx. sospechas",
         placeholderName: "Ej.: Semana 02 - Pagos",
         hintUpload: "Consejo: la columna predeterminada es <b>valor</b> (puedes cambiarla en “Columna”).",
-        hintBatch: "La Lectura por Lotes ayuda con CSV grandes, pero solo funciona para <b>Sigma</b> y <b>Z-score</b>.",
-        resultHint: "Selecciona <b>Analizar</b> en alguna base de datos.",
+        hintBatch: "Consejo: Actívelo para evitar fallos al analizar hojas de cálculo de gran tamaño.",
         chartSubtitle: "Los puntos en rojo resaltan los valores considerados sospechosos.",
         legendNormal: "Transacciones Normales",
         legendSuspect: "Transacciones Sospechosas",
@@ -261,9 +260,9 @@ const i18n = {
         cardStats: "Estadísticas",
         cardLimits: "Límites",
         cardSuspects: "Sospechas",
-        stat_mean: "media",
-        stat_std: "desv",
-        stat_median: "mediana",
+        stat_mean: "Gasto promedio",
+        stat_std: "Variación común",
+        stat_median: "Valor central",
         btnBrowse: "Examinar...",
         noFileChosen: "Ningún archivo seleccionado.",
         optNo: "No",
@@ -274,16 +273,16 @@ const i18n = {
         errFewData: "No hay suficientes datos en la columna '{col}' para calcular estadísticas.",
         errFewDataStd: "No hay suficientes datos para calcular la desviación estándar.",
         promptRename: "Nuevo nombre del dataset:",
-        confirmDelete: "¿Eliminar dataset {id}?",
+        confirmDelete: "¿Está seguro de que desea eliminar esta base de datos?",
         msgRenamed: "Nombre actualizado.",
         msgReplaced: "Archivo reemplazado. (Resultado anterior borrado)",
         msgDeleted: "Dataset eliminado.",
         msgSaved: "Dataset guardado:",
         errNoFile: "Por favor, elige un archivo.",
-        optSigma: "Sigma (media ± k·desv)",
-        optZscore: "Z-score (|z| > k)",
-        optIqr: "IQR (Q1/Q3 ± k·IQR)",
-        optMad: "MAD (mediana ± k·MAD)",
+        optSigma: "Análisis Estándar",
+        optZscore: "Análisis Directo",
+        optIqr: "Análisis por Rango Esperado",
+        optMad: "Análisis Riguroso",
     }
 };
 
@@ -334,15 +333,13 @@ if (langSelectElem) {
 
         await refreshDatasets();
 
-        const dict = i18n[currentLang] || i18n['pt'];
-        $('resultHint').innerHTML = dict.resultHint;
-        $('susHead').innerHTML = '';
-        $('susBody').innerHTML = '';
-        $('rMethod').textContent = '--';
-        $('rStats').textContent = '--';
-        $('rThresh').textContent = '--';
-        $('rCount').textContent = '--';
-        $('sessao-grafico').style.display = 'none';
+        if (ultimoResultadoGlobal) {
+            renderResult(ultimoResultadoGlobal, true, true);
+        } else {
+            const dict = i18n[currentLang] || i18n['pt'];
+            $('resultHint').innerHTML = dict.resultHint;
+            resetarResultado();
+        }
     });
 }
 
@@ -373,6 +370,28 @@ function fmtBytes(bytes) {
     let i = 0; let v = bytes;
     while (v >= 1024 && i < sizes.length - 1) { v /= 1024; i++; }
     return v.toFixed(1) + ' ' + sizes[i];
+}
+
+function tempoRelativo(dataISO) {
+    const data = new Date(dataISO);
+    const agora = new Date();
+    const diffSegundos = Math.round((agora - data) / 1000);
+
+    // Usa a API nativa de internacionalização do JS para traduzir o tempo!
+    const rtf = new Intl.RelativeTimeFormat(currentLang, { numeric: 'auto' });
+
+    if (diffSegundos < 60) return rtf.format(-diffSegundos, 'second');
+
+    const diffMinutos = Math.round(diffSegundos / 60);
+    if (diffMinutos < 60) return rtf.format(-diffMinutos, 'minute');
+
+    const diffHoras = Math.round(diffMinutos / 60);
+    if (diffHoras < 24) return rtf.format(-diffHoras, 'hour');
+
+    const diffDias = Math.round(diffHoras / 24);
+    if (diffDias < 7) return rtf.format(-diffDias, 'day');
+
+    return data.toLocaleDateString(currentLang, { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
 function pill(html, cls) {
@@ -412,31 +431,42 @@ async function apiJson(url, opts = {}) {
 async function refreshDatasets() {
     const tbody = $('dsTbody');
     const dict = i18n[currentLang] || i18n['pt'];
-    tbody.innerHTML = `<tr><td colspan="7">${dict.tblLoading}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5">${dict.tblLoading}</td></tr>`;
 
     try {
         const list = await apiJson('/datasets');
         if (list.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="7">${dict.tblEmpty}</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5">${dict.tblEmpty}</td></tr>`;
             return;
         }
 
         tbody.innerHTML = '';
         for (const ds of list) {
+            let nomeMetodo = '';
+            if (ds.last_analysis_method) {
+                const mapMetodo = {
+                    'sigma': dict.optSigma ? dict.optSigma.split(' (')[0] : 'Sigma',
+                    'zscore': dict.optZscore ? dict.optZscore.split(' (')[0] : 'Z-score',
+                    'iqr': dict.optIqr ? dict.optIqr.split(' (')[0] : 'IQR',
+                    'mad': dict.optMad ? dict.optMad.split(' (')[0] : 'MAD'
+                };
+                nomeMetodo = mapMetodo[ds.last_analysis_method] || ds.last_analysis_method.toUpperCase();
+            }
+
             const last = ds.last_analysis_at
                 ? pill(
-                    `${(ds.last_analysis_method || '--').toUpperCase()} · ${ds.last_suspeitas_count ?? '--'} ${dict.tblSuspects}`,
+                    `${nomeMetodo} · ${ds.last_suspeitas_count ?? '--'} ${dict.tblSuspects}`,
                     (ds.last_suspeitas_count || 0) > 0 ? 'pill-warn' : 'pill-ok'
                 )
                 : pill(dict.tblNoAnalysis, 'pill-info');
+            const dataObj = new Date(ds.uploaded_at);
+            const dataHumanizada = tempoRelativo(ds.uploaded_at);
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
-            <td><code>${ds.id}</code></td>
             <td>${escapeHtml(ds.name)}</td>
             <td>${escapeHtml(ds.original_filename)}</td>
-            <td>${fmtBytes(ds.size_bytes)}</td>
-            <td>${escapeHtml(new Date(ds.uploaded_at).toLocaleString('pt-BR'))}</td>
+            <td>${dataHumanizada}</td>
             <td>${last}</td>
             <td>
               <div class="actions">
@@ -466,6 +496,7 @@ function escapeHtml(s) {
 }
 
 let meuGrafico = null;
+let ultimoResultadoGlobal = null;
 
 // Renderiza os vetores de dados através de projeção geométrica no Canvas, otimizando o uso de memória da GPU ao plotar milhares de pontos.
 function desenharGrafico(chartData) {
@@ -579,26 +610,76 @@ function desenharGrafico(chartData) {
     });
 }
 
-function renderResult(result, isReview = false) {
+function fecharModal() {
+    $('modalGrafico').style.display = 'none';
+}
+
+function mostrarApenasTabela() {
+    fecharModal();
+    $('sessao-grafico').style.display = 'none';
+
+    $('susHead').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function mostrarGrafico(chartData) {
+    fecharModal();
+    desenharGrafico(chartData);
+    $('sessao-grafico').style.display = 'block';
+
+    setTimeout(() => {
+        $('sessao-grafico').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+}
+
+function resetarResultado() {
+    $('susHead').innerHTML = '';
+    $('susBody').innerHTML = '';
+    $('rMethod').textContent = '--';
+    $('rStats').textContent = '--';
+    $('rThresh').textContent = '--';
+    $('rCount').textContent = '--';
+    $('sessao-grafico').style.display = 'none';
+    if (meuGrafico) {
+        meuGrafico.destroy();
+        meuGrafico = null;
+    }
+}
+
+function renderResult(result, isReview = false, skipScroll = false) {
+    ultimoResultadoGlobal = result;
     const dictMsg = i18n[currentLang] || i18n['pt'];
-    const localeStr = currentLang === 'en' ? 'en-US' : currentLang === 'es' ? 'es-ES' : 'pt-BR';
-    const dataFormatada = new Date(result.analysis_at).toLocaleString(localeStr);
+    const dataObj = new Date(result.analysis_at);
+    const dataFormatada = dataObj.toLocaleDateString(currentLang, {
+        day: '2-digit', month: 'short', year: 'numeric'
+    }) +
+        ' às ' + dataObj.toLocaleTimeString(currentLang, { hour: '2-digit', minute: '2-digit' });
 
     const colTraduzida = dictMsg[result.column.toLowerCase()] || result.column;
     $('resultHint').textContent = `${dictMsg.analysisIn} ${dataFormatada} · ${dictMsg.columnLabel}: ${colTraduzida}`;
 
-    $('rMethod').textContent = String(result.method || '--').toUpperCase();
+    const mapMetodoResultado = {
+        'sigma': dictMsg.optSigma ? dictMsg.optSigma.split(' (')[0] : 'Sigma',
+        'zscore': dictMsg.optZscore ? dictMsg.optZscore.split(' (')[0] : 'Z-score',
+        'iqr': dictMsg.optIqr ? dictMsg.optIqr.split(' (')[0] : 'IQR',
+        'mad': dictMsg.optMad ? dictMsg.optMad.split(' (')[0] : 'MAD'
+    };
+    $('rMethod').textContent = mapMetodoResultado[result.method] || String(result.method || '--').toUpperCase();
     $('rCount').textContent = result.quantidade_suspeitas ?? '--';
     const statsPairs = Object.entries(result.stats || {})
         .map(([k, v]) => {
             const nomeEstatistica = dictMsg['stat_' + k] || k;
-            return `${nomeEstatistica}=${v}`;
+            const valorFormatado = (result.column === 'valor' || result.column === 'value') && v !== null ? formatarMoeda(v) : v;
+            return `${nomeEstatistica}: ${valorFormatado}`;
         })
-        .join(' · ');
+        .join(' • ');
     $('rStats').textContent = statsPairs || '--';
     const th = result.thresholds || {};
     const dict = i18n[currentLang] || i18n['pt'];
-    $('rThresh').textContent = `${dict.lower}=${th.lower ?? '--'} · ${dict.upper}=${th.upper ?? '--'}`;
+
+    const minFmt = (th.lower !== null && th.lower !== undefined) ? formatarMoeda(th.lower) : '--';
+    const maxFmt = (th.upper !== null && th.upper !== undefined) ? formatarMoeda(th.upper) : '--';
+
+    $('rThresh').textContent = `${dict.lower}: ${minFmt} • ${dict.upper}: ${maxFmt}`;
 
     const head = $('susHead');
     const body = $('susBody');
@@ -625,6 +706,13 @@ function renderResult(result, isReview = false) {
                 if (c === colAlvo && !isNaN(valorTd) && valorTd !== null) {
                     valorTd = formatarMoeda(valorTd);
                 }
+                const nomeCol = c.toLowerCase();
+                if ((nomeCol === 'data' || nomeCol === 'date' || nomeCol === 'fecha') && valorTd) {
+                    const dataTransacao = new Date(valorTd);
+                    if (!isNaN(dataTransacao.getTime())) {
+                        valorTd = dataTransacao.toLocaleDateString(currentLang, { day: '2-digit', month: 'short', year: 'numeric' });
+                    }
+                }
 
                 return `<td>${escapeHtml(valorTd)}</td>`;
             }).join('')}</tr>`;
@@ -641,33 +729,26 @@ function renderResult(result, isReview = false) {
             if (isReview) {
                 desenharGrafico(result.chart_data);
                 $('sessao-grafico').style.display = 'block';
-                setTimeout(() => {
-                    $('sessao-grafico').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 50);
+                if (!skipScroll) {
+                    setTimeout(() => {
+                        $('sessao-grafico').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50);
+                }
             } else {
-                setTimeout(() => {
-                    const modal = $('modalGrafico');
-                    const msg = $('modalMsg');
-                    const btnSim = $('btnSimGrafico');
-                    const btnNao = $('btnNaoGrafico');
-                    const btnX = $('btnFecharX');
+                const modal = $('modalGrafico');
+                const msg = $('modalMsg');
+                const btnSim = $('btnSimGrafico');
+                const btnNao = $('btnNaoGrafico');
+                const btnX = $('btnFecharX');
 
-                    const dictMsg = i18n[currentLang] || i18n['pt'];
-                    msg.innerHTML = `${dictMsg.modalMsg1}<b style="color: var(--danger); font-size: 16px;">${result.quantidade_suspeitas}</b>${dictMsg.modalMsg2}`;
+                const dictMsg = i18n[currentLang] || i18n['pt'];
+                msg.innerHTML = `${dictMsg.modalMsg1}<b style="color: var(--danger); font-size: 16px;">${result.quantidade_suspeitas}</b>${dictMsg.modalMsg2}`;
 
-                    modal.style.display = 'flex';
+                modal.style.display = 'flex';
 
-                    btnNao.onclick = () => modal.style.display = 'none';
-                    btnX.onclick = () => modal.style.display = 'none';
-
-                    btnSim.onclick = () => {
-                        modal.style.display = 'none';
-                        desenharGrafico(result.chart_data);
-                        setTimeout(() => {
-                            $('sessao-grafico').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 50);
-                    };
-                }, 150);
+                btnX.onclick = () => fecharModal();
+                btnNao.onclick = () => mostrarApenasTabela();
+                btnSim.onclick = () => mostrarGrafico(result.chart_data);
             }
         }
     }
@@ -690,7 +771,7 @@ async function handleUpload() {
 
     try {
         const ds = await apiJson('/datasets', { method: 'POST', body: fd });
-        showOk(`${dict.msgSaved} ${ds.id}`);
+        showOk(`${dict.msgSaved}`);
         $('dsName').value = '';
         $('dsFile').value = '';
         $('fileNameDisplay').textContent = dict.noFileChosen;
@@ -714,22 +795,23 @@ async function analyze(id) {
             body: JSON.stringify(cfg)
         });
         renderResult(result);
+        localStorage.setItem('ultimo-dataset-id', id);
         await refreshDatasets();
     } catch (e) {
         showErr(e.message);
     }
 }
 
-async function viewLast(id) {
+async function viewLast(id, skipScroll = false) {
     clearMsg();
     try {
         const result = await apiJson(`/datasets/${id}/result`);
-        renderResult(result, true);
+        localStorage.setItem('ultimo-dataset-id', id);
+        renderResult(result, true, skipScroll);
     } catch (e) {
         showErr(e.message);
     }
 }
-
 async function renameDataset(id) {
     const dict = i18n[currentLang] || i18n['pt'];
     const newName = prompt(dict.promptRename);
@@ -854,4 +936,9 @@ $('dsFile').addEventListener('change', (e) => {
     }
 });
 // init
-refreshDatasets().catch(e => showErr(e.message));
+refreshDatasets().then(() => {
+    const lastId = localStorage.getItem('ultimo-dataset-id');
+    if (lastId) {
+        viewLast(lastId, true);
+    }
+}).catch(e => showErr(e.message));

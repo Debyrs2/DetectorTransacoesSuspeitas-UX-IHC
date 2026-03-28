@@ -55,7 +55,6 @@ class AnalyzeRequest(BaseModel):
     max_suspeitas: int = Field(default=500, ge=1, le=5000)
 
 def _normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
-    # Padroniza nomes de colunas para evitar bugs do Excel (espaços, maiúsculas etc.)
     df.columns = df.columns.astype(str).str.strip().str.lower()
     return df
 
@@ -68,9 +67,9 @@ def _coerce_ptbr_numeric(series: pd.Series) -> pd.Series:
             s.astype(str)
              .str.replace("R$", "", regex=False)
              .str.replace(" ", "", regex=False)
-             .str.replace(".", "", regex=False)   # remove milhar
-             .str.replace(",", ".", regex=False)  # troca decimal
-        )
+             .str.replace(".", "", regex=False)  
+             .str.replace(",", ".", regex=False) 
+             )
     return pd.to_numeric(s, errors="coerce")
 
 def _read_dataframe_from_bytes(filename: str, content: bytes) -> pd.DataFrame:
@@ -99,10 +98,10 @@ def _read_dataframe_from_path(path: Path) -> pd.DataFrame:
 def _coerce_numeric_series(df: pd.DataFrame, column: str) -> pd.Series:
     if column not in df.columns:
         raise ValueError(f"ERR_MISSING_COLUMN|{column}")
-    s = pd.to_numeric(df[column], errors="coerce")
+    s = _coerce_ptbr_numeric(df[column])
+    
     s = s.dropna()
     return s
-
 # Calcula média e variância em streaming (passagem única com espaço O(1)) via Algoritmo de Welford, evitando estouro de memória em bases massivas.
 def _mean_std_streaming_csv(path: Path, column: str, chunksize: int = 200_000) -> Tuple[int, float, float]:
     """Calcula média e desvio padrão amostral (ddof=1) via Welford (streaming).
@@ -298,6 +297,7 @@ def _analyze_path(path: Path, req: AnalyzeRequest) -> Dict[str, Any]:
 
     streaming só é aplicado para CSV em métodos baseados em mean/std.
     """
+    
     if req.streaming and path.suffix.lower() == ".csv" and req.method in {"sigma", "zscore"}:
 
         col = (req.column or "").strip().lower()

@@ -1,17 +1,33 @@
 {
-  "method": "zscore",
+  "method": "mad",
   "direction": "upper",
   "column": "valor",
   "stats": {
-    "mean": 4971.92,
-    "std": 9287.24
+    "median": 2205.04,
+    "mad": 1098.62
   },
   "thresholds": {
     "lower": null,
-    "upper": 32833.64
+    "upper": 7905.84
   },
-  "quantidade_suspeitas": 23,
+  "quantidade_suspeitas": 50,
   "suspeitas": [
+    {
+      "id_transacao": "S-0001",
+      "data": "2025-03-29 00:00:00",
+      "categoria": "Vestuário",
+      "descricao": "Restaurante Sabor & Arte",
+      "metodo_pagamento": "Dinheiro",
+      "valor": 18367.84
+    },
+    {
+      "id_transacao": "S-0011",
+      "data": "2026-02-10 00:00:00",
+      "categoria": "Saúde",
+      "descricao": "Restaurante Sabor & Arte",
+      "metodo_pagamento": "Pix",
+      "valor": 23171.75
+    },
     {
       "id_transacao": "S-0018",
       "data": "2025-05-09 00:00:00",
@@ -19,6 +35,46 @@
       "descricao": "Livraria Cultura",
       "metodo_pagamento": "Cartão de débito",
       "valor": 44664.86
+    },
+    {
+      "id_transacao": "S-0020",
+      "data": "2026-01-24 00:00:00",
+      "categoria": "Alimentação",
+      "descricao": "Restaurante Sabor & Arte",
+      "metodo_pagamento": "Cartão de débito",
+      "valor": 18952.56
+    },
+    {
+      "id_transacao": "S-0038",
+      "data": "2025-03-05 00:00:00",
+      "categoria": "Assinaturas",
+      "descricao": "Padaria Pão Quente",
+      "metodo_pagamento": "Cartão de débito",
+      "valor": 29912.29
+    },
+    {
+      "id_transacao": "S-0061",
+      "data": "2025-02-05 00:00:00",
+      "categoria": "Assinaturas",
+      "descricao": "Clínica Saúde Total",
+      "metodo_pagamento": "Dinheiro",
+      "valor": 19289.41
+    },
+    {
+      "id_transacao": "S-0071",
+      "data": "2026-03-11 00:00:00",
+      "categoria": "Outros",
+      "descricao": "Loja Center",
+      "metodo_pagamento": "Dinheiro",
+      "valor": 21116.26
+    },
+    {
+      "id_transacao": "S-0077",
+      "data": "2025-03-19 00:00:00",
+      "categoria": "Transporte",
+      "descricao": "Farmácia Popular",
+      "metodo_pagamento": "Dinheiro",
+      "valor": 31270.73
     },
     {
       "id_transacao": "S-0093",
@@ -37,6 +93,14 @@
       "valor": 43737.78
     },
     {
+      "id_transacao": "S-0106",
+      "data": "2026-03-28 00:00:00",
+      "categoria": "Transporte",
+      "descricao": "Posto Avenida",
+      "metodo_pagamento": "Cartão de crédito",
+      "valor": 19921.23
+    },
+    {
       "id_transacao": "S-0111",
       "data": "2025-09-17 00:00:00",
       "categoria": "Educação",
@@ -53,12 +117,36 @@
       "valor": 33994.82
     },
     {
+      "id_transacao": "S-0136",
+      "data": "2025-08-04 00:00:00",
+      "categoria": "Educação",
+      "descricao": "Farmácia Popular",
+      "metodo_pagamento": "Cartão de débito",
+      "valor": 20117.49
+    },
+    {
+      "id_transacao": "S-0152",
+      "data": "2025-07-21 00:00:00",
+      "categoria": "Alimentação",
+      "descricao": "Restaurante Sabor & Arte",
+      "metodo_pagamento": "Boleto",
+      "valor": 21841.07
+    },
+    {
       "id_transacao": "S-0153",
       "data": "2025-02-26 00:00:00",
       "categoria": "Serviços",
       "descricao": "EletroTech",
       "metodo_pagamento": "Boleto",
       "valor": 43037.89
+    },
+    {
+      "id_transacao": "S-0159",
+      "data": "2025-11-07 00:00:00",
+      "categoria": "Moradia",
+      "descricao": "Restaurante Sabor & Arte",
+      "metodo_pagamento": "Cartão de débito",
+      "valor": 30828.86
     },
     {
       "id_transacao": "S-0161",
@@ -77,12 +165,36 @@
       "valor": 37241.33
     },
     {
+      "id_transacao": "S-0186",
+      "data": "2025-04-07 00:00:00",
+      "categoria": "Serviços",
+      "descricao": "Padaria Pão Quente",
+      "metodo_pagamento": "Cartão de débito",
+      "valor": 29330.75
+    },
+    {
+      "id_transacao": "S-0189",
+      "data": "2025-11-06 00:00:00",
+      "categoria": "Saúde",
+      "descricao": "Farmácia Popular",
+      "metodo_pagamento": "Cartão de crédito",
+      "valor": 20238.72
+    },
+    {
       "id_transacao": "S-0199",
       "data": "2025-05-03 00:00:00",
       "categoria": "Alimentação",
       "descricao": "Padaria Pão Quente",
       "metodo_pagamento": "Boleto",
       "valor": 43512.47
+    },
+    {
+      "id_transacao": "S-0213",
+      "data": "2026-01-29 00:00:00",
+      "categoria": "Serviços",
+      "descricao": "Clínica Saúde Total",
+      "metodo_pagamento": "Cartão de débito",
+      "valor": 23160.37
     },
     {
       "id_transacao": "S-0224",
@@ -93,12 +205,36 @@
       "valor": 40806.83
     },
     {
+      "id_transacao": "S-0239",
+      "data": "2025-10-02 00:00:00",
+      "categoria": "Outros",
+      "descricao": "Livraria Cultura",
+      "metodo_pagamento": "Boleto",
+      "valor": 30306.72
+    },
+    {
+      "id_transacao": "S-0249",
+      "data": "2025-10-04 00:00:00",
+      "categoria": "Outros",
+      "descricao": "Loja Center",
+      "metodo_pagamento": "Dinheiro",
+      "valor": 29131.58
+    },
+    {
       "id_transacao": "S-0258",
       "data": "2026-01-20 00:00:00",
       "categoria": "Outros",
       "descricao": "Clínica Saúde Total",
       "metodo_pagamento": "Pix",
       "valor": 43839.04
+    },
+    {
+      "id_transacao": "S-0260",
+      "data": "2025-11-15 00:00:00",
+      "categoria": "Moradia",
+      "descricao": "Academia Fit+",
+      "metodo_pagamento": "Cartão de crédito",
+      "valor": 31308.71
     },
     {
       "id_transacao": "S-0273",
@@ -117,12 +253,44 @@
       "valor": 44798.94
     },
     {
+      "id_transacao": "S-0293",
+      "data": "2025-03-30 00:00:00",
+      "categoria": "Transporte",
+      "descricao": "Oficina do Carro",
+      "metodo_pagamento": "Dinheiro",
+      "valor": 27941.48
+    },
+    {
+      "id_transacao": "S-0336",
+      "data": "2025-06-09 00:00:00",
+      "categoria": "Vestuário",
+      "descricao": "Padaria Pão Quente",
+      "metodo_pagamento": "Pix",
+      "valor": 26594.6
+    },
+    {
+      "id_transacao": "S-0351",
+      "data": "2026-03-29 00:00:00",
+      "categoria": "Lazer",
+      "descricao": "Restaurante Sabor & Arte",
+      "metodo_pagamento": "Pix",
+      "valor": 22050.43
+    },
+    {
       "id_transacao": "S-0352",
       "data": "2026-01-10 00:00:00",
       "categoria": "Serviços",
       "descricao": "EletroTech",
       "metodo_pagamento": "Boleto",
       "valor": 36536.8
+    },
+    {
+      "id_transacao": "S-0363",
+      "data": "2025-05-30 00:00:00",
+      "categoria": "Lazer",
+      "descricao": "Academia Fit+",
+      "metodo_pagamento": "Dinheiro",
+      "valor": 26495.9
     },
     {
       "id_transacao": "S-0365",
@@ -141,12 +309,52 @@
       "valor": 34834.45
     },
     {
+      "id_transacao": "S-0401",
+      "data": "2025-03-14 00:00:00",
+      "categoria": "Assinaturas",
+      "descricao": "Loja Center",
+      "metodo_pagamento": "Cartão de débito",
+      "valor": 21635.46
+    },
+    {
+      "id_transacao": "S-0402",
+      "data": "2026-02-12 00:00:00",
+      "categoria": "Vestuário",
+      "descricao": "StreamingFlix",
+      "metodo_pagamento": "Pix",
+      "valor": 31400.6
+    },
+    {
+      "id_transacao": "S-0414",
+      "data": "2025-08-20 00:00:00",
+      "categoria": "Serviços",
+      "descricao": "Loja Center",
+      "metodo_pagamento": "Cartão de crédito",
+      "valor": 32413.21
+    },
+    {
+      "id_transacao": "S-0418",
+      "data": "2025-12-04 00:00:00",
+      "categoria": "Vestuário",
+      "descricao": "EletroTech",
+      "metodo_pagamento": "Pix",
+      "valor": 20771.57
+    },
+    {
       "id_transacao": "S-0429",
       "data": "2025-06-10 00:00:00",
       "categoria": "Lazer",
       "descricao": "EletroTech",
       "metodo_pagamento": "Dinheiro",
       "valor": 36068.15
+    },
+    {
+      "id_transacao": "S-0434",
+      "data": "2025-07-03 00:00:00",
+      "categoria": "Serviços",
+      "descricao": "Oficina do Carro",
+      "metodo_pagamento": "Cartão de débito",
+      "valor": 21326.15
     },
     {
       "id_transacao": "S-0442",
@@ -195,11 +403,19 @@
       "descricao": "Clínica Saúde Total",
       "metodo_pagamento": "Boleto",
       "valor": 43066.57
+    },
+    {
+      "id_transacao": "S-0496",
+      "data": "2025-08-02 00:00:00",
+      "categoria": "Assinaturas",
+      "descricao": "Academia Fit+",
+      "metodo_pagamento": "Boleto",
+      "valor": 26320.62
     }
   ],
   "truncated": false,
-  "analysis_ms": 7,
-  "analysis_at": "2026-03-24T13:48:54.359879+00:00",
+  "analysis_ms": 21,
+  "analysis_at": "2026-03-27T19:03:28.115276+00:00",
   "n_valid": 500,
   "chart_data": {
     "labels": [
@@ -1207,6 +1423,7 @@
       2806.37
     ],
     "suspeitos": [
+      18367.84,
       null,
       null,
       null,
@@ -1216,8 +1433,7 @@
       null,
       null,
       null,
-      null,
-      null,
+      23171.75,
       null,
       null,
       null,
@@ -1226,6 +1442,25 @@
       null,
       44664.86,
       null,
+      18952.56,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      29912.29,
       null,
       null,
       null,
@@ -1248,6 +1483,7 @@
       null,
       null,
       null,
+      19289.41,
       null,
       null,
       null,
@@ -1257,33 +1493,13 @@
       null,
       null,
       null,
+      21116.26,
       null,
       null,
       null,
       null,
       null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
+      31270.73,
       null,
       null,
       null,
@@ -1312,7 +1528,7 @@
       43737.78,
       null,
       null,
-      null,
+      19921.23,
       null,
       null,
       null,
@@ -1342,6 +1558,7 @@
       null,
       null,
       null,
+      20117.49,
       null,
       null,
       null,
@@ -1357,15 +1574,14 @@
       null,
       null,
       null,
-      null,
-      null,
+      21841.07,
       43037.89,
       null,
       null,
       null,
       null,
       null,
-      null,
+      30828.86,
       null,
       34129.78,
       null,
@@ -1392,10 +1608,10 @@
       null,
       null,
       null,
+      29330.75,
       null,
       null,
-      null,
-      null,
+      20238.72,
       null,
       null,
       null,
@@ -1419,7 +1635,7 @@
       null,
       null,
       null,
-      null,
+      23160.37,
       null,
       null,
       null,
@@ -1445,6 +1661,7 @@
       null,
       null,
       null,
+      30306.72,
       null,
       null,
       null,
@@ -1454,8 +1671,7 @@
       null,
       null,
       null,
-      null,
-      null,
+      29131.58,
       null,
       null,
       null,
@@ -1466,7 +1682,7 @@
       null,
       43839.04,
       null,
-      null,
+      31308.71,
       null,
       null,
       null,
@@ -1499,6 +1715,7 @@
       null,
       null,
       null,
+      27941.48,
       null,
       null,
       null,
@@ -1541,6 +1758,7 @@
       null,
       null,
       null,
+      26594.6,
       null,
       null,
       null,
@@ -1555,9 +1773,7 @@
       null,
       null,
       null,
-      null,
-      null,
-      null,
+      22050.43,
       36536.8,
       null,
       null,
@@ -1569,7 +1785,7 @@
       null,
       null,
       null,
-      null,
+      26495.9,
       null,
       33864.92,
       34834.45,
@@ -1607,6 +1823,8 @@
       null,
       null,
       null,
+      21635.46,
+      31400.6,
       null,
       null,
       null,
@@ -1618,13 +1836,11 @@
       null,
       null,
       null,
+      32413.21,
       null,
       null,
       null,
-      null,
-      null,
-      null,
-      null,
+      20771.57,
       null,
       null,
       null,
@@ -1640,7 +1856,7 @@
       null,
       null,
       null,
-      null,
+      21326.15,
       null,
       null,
       null,
@@ -1702,7 +1918,7 @@
       null,
       null,
       null,
-      null,
+      26320.62,
       null,
       null,
       null,
