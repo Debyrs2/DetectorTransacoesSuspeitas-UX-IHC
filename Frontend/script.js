@@ -10,9 +10,28 @@ const formatarMoeda = (valor) => {
 
 const i18n = {
     pt: {
+        loginTitle: "Entre na sua conta",
+        loginDesc: "Identifique-se para acessar o painel.",
+        showPass: "Ver senha",
+        btnEnter: "Entrar no Sistema",
+        btnGoRegister: "Não tem conta? Cadastre-se",
+        errLogin: "Credenciais incorretas.",
+        regTitle: "Criar Conta",
+        regDesc: "Preencha seus dados para começar.",
+        btnRegister: "Criar Minha Conta",
+        btnGoLogin: "Já tem conta? Entrar",
+        rulePass: "A senha deve ter no mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo especial (ex: *).",
+        phUserOrEmail: "E-mail ou Nome de Usuário",
+        phPassword: "Senha",
+        phName: "Seu Nome",
+        phEmail: "Seu E-mail",
+        phCreatePassword: "Crie uma Senha",
+        errEmailFormat: "⚠️ Entre com um email válido (@gmail.com, @hotmail.com ou @outlook.com).",
+        errPassFormat: "⚠️ A senha não cumpre os requisitos de segurança.",
         title: "Detecção de Transações Suspeitas",
         themeLight: "Tema Claro",
         themeDark: "Tema Escuro",
+        btnLogout: "Sair",
         dirUpper: "Apenas gastos muito altos",
         dirLower: "Apenas gastos muito baixos",
         dirBoth: "Qualquer anomalia (Altos ou Baixos)",
@@ -102,9 +121,28 @@ const i18n = {
         optMad: "Análise Rigorosa",
     },
     en: {
+        loginTitle: "Login to your account",
+        loginDesc: "Identify yourself to access the dashboard.",
+        showPass: "Show password",
+        btnEnter: "Enter System",
+        btnGoRegister: "No account? Register",
+        errLogin: "Invalid credentials.",
+        regTitle: "Create Account",
+        regDesc: "Fill in your details to start.",
+        btnRegister: "Create My Account",
+        btnGoLogin: "Already have an account? Login",
+        rulePass: "Password must have at least 8 characters, with uppercase, lowercase, number, and special symbol.",
+        phUserOrEmail: "E-mail or Username",
+        phPassword: "Password",
+        phName: "Your Name",
+        phEmail: "Your E-mail",
+        phCreatePassword: "Create a Password",
+        errEmailFormat: "⚠️ Enter a valid email (@gmail.com, @hotmail.com, or @outlook.com).",
+        errPassFormat: "⚠️ Password does not meet security requirements.",
         title: "Suspicious Transaction Detection",
         themeLight: "Light Theme",
         themeDark: "Dark Theme",
+        btnLogout: "Logout",
         dirUpper: "Only very high spending",
         dirLower: "Only very low spending",
         dirBoth: "Any anomaly (High or Low)",
@@ -194,52 +232,67 @@ const i18n = {
         optMad: "Strict Analysis",
     },
     es: {
+        loginTitle: "Inicia sesión",
+        loginDesc: "Identifícate para acceder al sistema.",
+        showPass: "Mostrar contraseña",
+        btnEnter: "Ingresar al Sistema",
+        btnGoRegister: "¿No tienes cuenta? Regístrate",
+        errLogin: "Credenciales incorrectas.",
+        regTitle: "Crear Cuenta",
+        regDesc: "Ingresa tus datos para comenzar.",
+        btnRegister: "Crear Mi Cuenta",
+        btnGoLogin: "¿Ya tienes cuenta? Inicia sesión",
+        rulePass: "La contraseña debe tener al menos 8 caracteres, incluir mayúscula, minúscula, número y un símbolo (ej: *).",
+        errEmailFormat: "⚠️ Ingresa un correo válido (@gmail.com, @hotmail.com o @outlook.com).",
+        errPassFormat: "⚠️ La contraseña no cumple con los requisitos de seguridad.",
         title: "Detección de Transacciones Sospechosas",
         themeLight: "Tema Claro",
         themeDark: "Tema Oscuro",
-        dirUpper: "Solo gastos muy altos",
-        dirLower: "Solo gastos muy bajos",
-        dirBoth: "Cualquier anomalía (alta o baja)",
+        btnLogout: "Salir",
+        dirUpper: "Solo gastos excesivamente altos",
+        dirLower: "Solo gastos inusualmente bajos",
+        dirBoth: "Cualquier anomalía (Altos o Bajos)",
         lower: "Mínimo esperado",
         upper: "Máximo esperado",
         secUpload: "Subir Archivo",
-        secConfig: "Configuración de Análisis",
-        secDatabase: "Base de datos",
-        secResult: "Resultado del Análisis",
-        secChart: "Gráfico de Tendencia y Anomalías",
-        labelName: "Nombre de la base de datos (opcional)",
+        secConfig: "Configuración del Análisis",
+        secDatabase: "Base de Datos",
+        secResult: "Resultados del Análisis",
+        secChart: "Gráfico de Tendencias y Anomalías",
+        labelName: "Nombre del conjunto de datos (opcional)",
         labelFile: "Archivo (.csv, .xlsx, .xls)",
         btnUpload: "Guardar base de datos",
-        labelMethod: "Método",
+        labelMethod: "Método de cálculo",
         labelDirection: "¿Qué buscar?",
-        labelColumn: "Columna",
-        labelStreaming: "Modo para archivos grandes (CSV)",
-        labelMaxSus: "Máx. sospechas",
+        labelColumn: "Columna a analizar",
+        labelStreaming: "Modo para archivos pesados (CSV)",
+        labelMaxSus: "Límite de sospechas",
         placeholderName: "Ej.: Semana 02 - Pagos",
-        hintUpload: "Consejo: la columna predeterminada es <b>valor</b> (puedes cambiarla en “Columna”).",
-        hintBatch: "Consejo: Actívelo para evitar fallos al analizar hojas de cálculo de gran tamaño.",
-        chartSubtitle: "Los puntos en rojo resaltan los valores considerados sospechosos.",
+        hintUpload: "Consejo: la columna por defecto es <b>valor</b> (puedes cambiarla en “Columna a analizar”).",
+        hintBatch: "Consejo: Actívalo para evitar bloqueos al analizar hojas de cálculo gigantes.",
+        resultHint: "Selecciona <b>Analizar</b> en alguna base de datos.",
+        chartSubtitle: "Los puntos rojos resaltan los valores considerados sospechosos.",
         legendNormal: "Transacciones Normales",
         legendSuspect: "Transacciones Sospechosas",
         modalTitle: "¡Análisis Completado! 🚀",
-        btnTableOnly: "Solo Tabla",
-        btnViewChart: "📉 Ver Gráfico",
-        chartAll: "Todos los Valores",
+        btnTableOnly: "Ver solo la tabla",
+        btnViewChart: "📉 Ver el Gráfico",
+        chartAll: "Todos los valores",
         chartNormalSingle: "Transacción Normal",
         chartSuspectSingle: "Transacción Sospechosa",
         modalMsg1: "Se encontraron ",
-        modalMsg2: " transacciones sospechosas.<br><br>¿Deseas ver el gráfico de tendencia ahora?",
+        modalMsg2: " transacciones sospechosas.<br><br>¿Deseas ver el gráfico de tendencias ahora?",
         thID: "ID",
         thName: "Nombre",
         thFile: "Archivo",
         thSize: "Tamaño",
         thDate: "Fecha de Subida",
-        thLast: "Última Análisis",
+        thLast: "Último Análisis",
         thActions: "Acciones",
         analysisIn: "Analizado el",
         columnLabel: "columna",
         "data": "fecha",
-        "id transação": "id transacción",
+        "id transação": "id de transacción",
         "nome": "nombre",
         "categoria": "categoría",
         "estabelecimento": "establecimiento",
@@ -253,37 +306,42 @@ const i18n = {
         btnReplace: "Reemplazar",
         btnDelete: "Eliminar",
         tblLoading: "Cargando...",
-        tblEmpty: "Ningún conjunto de datos guardado aún.",
-        tblNoAnalysis: "sin análisis",
-        tblSuspects: "sospechosas",
-        cardMethod: "Método",
+        tblEmpty: "Aún no hay datos guardados.",
+        tblNoAnalysis: "sin analizar",
+        tblSuspects: "sospechas",
+        cardMethod: "Método usado",
         cardStats: "Estadísticas",
-        cardLimits: "Límites",
-        cardSuspects: "Sospechas",
+        cardLimits: "Límites calculados",
+        cardSuspects: "Total Sospechosas",
         stat_mean: "Gasto promedio",
         stat_std: "Variación común",
         stat_median: "Valor central",
         btnBrowse: "Examinar...",
         noFileChosen: "Ningún archivo seleccionado.",
         optNo: "No",
-        optYesBatch: "Sí (media/desv)",
+        optYesBatch: "Sí (media/desviación)",
         defColumn: "valor",
         footerText: "Detección de Transacciones Sospechosas - Por",
         errMissingCol: "La hoja de cálculo debe tener una columna llamada '{col}'.",
         errFewData: "No hay suficientes datos en la columna '{col}' para calcular estadísticas.",
         errFewDataStd: "No hay suficientes datos para calcular la desviación estándar.",
-        promptRename: "Nuevo nombre del dataset:",
-        confirmDelete: "¿Está seguro de que desea eliminar esta base de datos?",
+        promptRename: "Nuevo nombre del archivo:",
+        confirmDelete: "¿Estás seguro de que deseas eliminar esta base de datos?",
         msgRenamed: "Nombre actualizado.",
-        msgReplaced: "Archivo reemplazado. (Resultado anterior borrado)",
-        msgDeleted: "Dataset eliminado.",
-        msgSaved: "Dataset guardado:",
+        msgReplaced: "Archivo reemplazado. (Resultados anteriores borrados)",
+        msgDeleted: "Archivo eliminado.",
+        msgSaved: "Archivo guardado exitosamente:",
         errNoFile: "Por favor, elige un archivo.",
-        optSigma: "Análisis Estándar",
-        optZscore: "Análisis Directo",
+        optSigma: "Análisis Estándar (Recomendado)",
+        optZscore: "Análisis Directo (Z-score)",
         optIqr: "Análisis por Rango Esperado",
         optMad: "Análisis Riguroso",
-    }
+        phUserOrEmail: "Correo o Usuario",
+        phPassword: "Contraseña",
+        phName: "Tu Nombre",
+        phEmail: "Tu Correo",
+        phCreatePassword: "Crea una Contraseña",
+    },
 };
 
 let currentLang = localStorage.getItem('app-lang') || 'pt';
@@ -626,8 +684,13 @@ function mostrarGrafico(chartData) {
     desenharGrafico(chartData);
     $('sessao-grafico').style.display = 'block';
 
+    // Deixa o gráfico focável e legível
+    $('boxGrafico').setAttribute('tabindex', '0');
+    $('boxGrafico').setAttribute('aria-label', `Gráfico de tendência aberto na tela.`);
+
     setTimeout(() => {
         $('sessao-grafico').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        $('boxGrafico').focus(); // Joga o foco pro gráfico pra pessoa já ouvir
     }, 50);
 }
 
@@ -691,7 +754,10 @@ function renderResult(result, isReview = false, skipScroll = false) {
         head.innerHTML = '<th>Resultado</th>';
         body.innerHTML = `<tr><td>Nenhuma suspeita encontrada.</td></tr>`;
     } else {
-        const cols = Object.keys(rows[0]);
+        const cols = Object.keys(rows[0]).filter(c => {
+            const nomeNormalizado = c.toLowerCase().trim();
+            return nomeNormalizado !== 'id' && nomeNormalizado !== 'id transação' && nomeNormalizado !== 'id_transacao';
+        });
         for (const c of cols) {
             const thEl = document.createElement('th');
             thEl.textContent = dictMsg[c.toLowerCase()] || c;
@@ -700,7 +766,10 @@ function renderResult(result, isReview = false, skipScroll = false) {
         const colAlvo = result.column;
         let linhasHTML = '';
         for (const r of rows) {
-            linhasHTML += `<tr>${cols.map(c => {
+
+            let textoLeitor = cols.map(c => `${dictMsg[c.toLowerCase()] || c}: ${r[c]}`).join('. ');
+
+            linhasHTML += `<tr tabindex="0" aria-label="${escapeHtml(textoLeitor)}">${cols.map(c => {
                 let valorTd = r[c];
 
                 if (c === colAlvo && !isNaN(valorTd) && valorTd !== null) {
@@ -718,6 +787,16 @@ function renderResult(result, isReview = false, skipScroll = false) {
             }).join('')}</tr>`;
         }
         body.innerHTML = linhasHTML;
+        $('rMethod').parentElement.setAttribute('tabindex', '0');
+        $('rStats').parentElement.setAttribute('tabindex', '0');
+        $('rThresh').parentElement.setAttribute('tabindex', '0');
+        $('rCount').parentElement.setAttribute('tabindex', '0');
+
+        $('rMethod').parentElement.setAttribute('aria-label', `${dictMsg.cardMethod}. ${$('rMethod').textContent}`);
+        $('rStats').parentElement.setAttribute('aria-label', `${dictMsg.cardStats}. ${$('rStats').textContent}`);
+        $('rThresh').parentElement.setAttribute('aria-label', `${dictMsg.cardLimits}. ${$('rThresh').textContent}`);
+        $('rCount').parentElement.setAttribute('aria-label', `${dictMsg.cardSuspects}. Foram encontradas ${result.quantidade_suspeitas} suspeitas.`);
+        body.innerHTML = linhasHTML;
 
         $('truncMsg').textContent = result.truncated
             ? `⚠️ A lista de suspeitas foi limitada a ${$('maxSus').value}. Total real: ${result.quantidade_suspeitas}.`
@@ -728,6 +807,10 @@ function renderResult(result, isReview = false, skipScroll = false) {
         if (result.chart_data) {
             if (isReview) {
                 desenharGrafico(result.chart_data);
+                $('boxGrafico').setAttribute('tabindex', '0');
+                $('boxGrafico').setAttribute('aria-label', `Gráfico de linha gerado. Exibindo ${result.n_valid} transações normais e ${result.quantidade_suspeitas} suspeitas destacadas em vermelho.`);
+
+                $('sessao-grafico').style.display = 'block';
                 $('sessao-grafico').style.display = 'block';
                 if (!skipScroll) {
                     setTimeout(() => {
@@ -935,10 +1018,248 @@ $('dsFile').addEventListener('change', (e) => {
         updateUI();
     }
 });
-// init
-refreshDatasets().then(() => {
-    const lastId = localStorage.getItem('ultimo-dataset-id');
-    if (lastId) {
-        viewLast(lastId, true);
+//Sistema de Login
+async function checkLogin() {
+    try {
+        const res = await fetch('/me');
+        if (res.ok) {
+            const data = await res.json();
+            $('loginOverlay').style.display = 'none';
+            $('btnSair').style.display = 'block';
+            $('userProfile').style.display = 'flex';
+            $('userNameDisplay').textContent = data.nome;
+            $('userEmailDisplay').textContent = data.email;
+            $('userAvatar').textContent = data.nome.charAt(0).toUpperCase();
+
+            refreshDatasets().then(() => {
+                const lastId = localStorage.getItem('ultimo-dataset-id');
+                if (lastId) {
+                    viewLast(lastId, true);
+                }
+            }).catch(e => showErr(e.message));
+        } else {
+            $('loginOverlay').style.display = 'flex';
+            $('btnSair').style.display = 'none';
+        }
+    } catch (e) {
+        $('loginOverlay').style.display = 'flex';
     }
-}).catch(e => showErr(e.message));
+}
+
+// Enviar Login
+$('btnLogar').addEventListener('click', async () => {
+    const identificador = $('identificadorLogin').value.trim();
+    const senha = $('senhaLogin').value;
+
+    if (!identificador || !senha) {
+        $('loginErro').style.display = 'block';
+        $('loginErro').innerHTML = '⚠️ Preencha todos os campos.';
+        return;
+    }
+
+    const btn = $('btnLogar');
+    btn.textContent = 'Verificando...';
+    btn.disabled = true;
+
+    const fd = new FormData();
+    fd.append('identificador', identificador);
+    fd.append('senha', senha);
+
+    try {
+        const res = await fetch('/login', { method: 'POST', body: fd });
+        const data = await res.json();
+
+        if (res.ok) {
+            $('loginErro').style.display = 'none';
+            $('senhaLogin').value = '';
+            checkLogin();
+        } else {
+            $('loginErro').style.display = 'block';
+            $('loginErro').innerHTML = '⚠️ ' + (data.detail || 'Erro ao entrar.');
+        }
+    } catch (e) {
+        $('loginErro').style.display = 'block';
+        $('loginErro').innerHTML = '⚠️ Erro de conexão.';
+    }
+
+    btn.textContent = 'Entrar no Sistema';
+    btn.disabled = false;
+});
+
+// Alternar entre Login e Cadastro
+$('btnIrCadastro').addEventListener('click', () => {
+    $('boxLogin').style.display = 'none';
+    $('boxCadastro').style.display = 'block';
+});
+
+$('btnIrLogin').addEventListener('click', () => {
+    $('boxCadastro').style.display = 'none';
+    $('boxLogin').style.display = 'block';
+});
+
+// Mostrar senha SÓ no Login
+$('mostrarSenhaBtn').addEventListener('change', (e) => {
+    $('senhaLogin').type = e.target.checked ? 'text' : 'password';
+});
+
+// Mostrar senha SÓ no Cadastro
+$('mostrarSenhaCadastroBtn').addEventListener('change', (e) => {
+    $('senhaCadastro').type = e.target.checked ? 'text' : 'password';
+});
+// Enviar Cadastro
+$('btnCadastrar').addEventListener('click', async () => {
+    const msgBox = $('cadastroMsg');
+    const nome = $('nomeCadastro').value;
+    const email = $('emailCadastro').value;
+    const senha = $('senhaCadastro').value;
+
+    const dictMsg = i18n[currentLang] || i18n['pt']; // Puxa o idioma atual
+
+    // --- VALIDAÇÃO DE E-MAIL ---
+    const dominios = ['@gmail.com', '@hotmail.com', '@outlook.com'];
+    if (!dominios.some(d => email.toLowerCase().endsWith(d))) {
+        msgBox.style.display = 'block';
+        msgBox.style.color = 'var(--danger)';
+        msgBox.textContent = dictMsg.errEmailFormat;
+        return;
+    }
+
+    // --- VALIDAÇÃO DE SENHA RIGOROSA ---
+    const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    if (!regexSenha.test(senha)) {
+        msgBox.style.display = 'block';
+        msgBox.style.color = 'var(--danger)';
+        msgBox.textContent = dictMsg.errPassFormat;
+        return;
+    }
+
+    const btn = $('btnCadastrar');
+    btn.textContent = 'Criando...';
+    btn.disabled = true;
+
+    const fd = new FormData();
+    fd.append('nome', nome);
+    fd.append('email', email);
+    fd.append('senha', senha);
+
+    try {
+        const res = await fetch('/register', { method: 'POST', body: fd });
+        const data = await res.json();
+
+        msgBox.style.display = 'block';
+        if (res.ok) {
+            msgBox.style.color = 'var(--brand)';
+            msgBox.textContent = data.mensagem;
+            setTimeout(() => $('btnIrLogin').click(), 1500);
+        } else {
+            msgBox.style.color = 'var(--danger)';
+            msgBox.textContent = data.detail || 'Erro ao cadastrar';
+        }
+    } catch (e) {
+        msgBox.style.color = 'var(--danger)';
+        msgBox.textContent = 'Erro de conexão';
+    }
+
+    btn.textContent = 'Criar Minha Conta';
+    btn.disabled = false;
+});
+
+// --- LÓGICA DE SAIR (LOGOUT) ---
+$('btnSair').addEventListener('click', async () => {
+    try {
+        await fetch('/logout', { method: 'POST' });
+        localStorage.removeItem('ultimo-dataset-id');
+        location.reload();
+    } catch (e) {
+        console.error("Erro ao sair", e);
+    }
+});
+//ACESSIBILIDADE
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        if ($('modalGrafico') && $('modalGrafico').style.display === 'flex') {
+            fecharModal();
+        }
+    }
+});
+//FUNCIONALIDADES DE ACESSIBILIDADE
+// Leitura Confortável
+$('btnA11yLeitura').addEventListener('click', () => {
+    document.body.classList.toggle('modo-leitura');
+});
+
+// Modo Daltônico
+$('btnA11yDaltonico').addEventListener('click', () => {
+    document.body.classList.toggle('modo-daltonico');
+    if (meuGrafico) meuGrafico.update();
+});
+
+// Leitor de Tela Interativo (Navegação por Tab)
+let leitorAtivo = false;
+
+$('btnA11yAudio').addEventListener('click', () => {
+    leitorAtivo = !leitorAtivo;
+    const btn = $('btnA11yAudio');
+    const dictMsg = i18n[currentLang] || i18n['pt'];
+
+    if (leitorAtivo) {
+        // Deixa o botão pintado para mostrar que está ligado
+        btn.style.background = 'var(--brand)';
+        btn.style.color = 'white';
+        falar(currentLang === 'pt' ? 'Leitor ativado. Navegue com a tecla Tab.' :
+            currentLang === 'en' ? 'Reader activated. Navigate with Tab.' :
+                'Lector activado. Navega con Tab.');
+    } else {
+        // Desliga o botão e cala a boca do robô
+        btn.style.background = '';
+        btn.style.color = '';
+        window.speechSynthesis.cancel();
+    }
+});
+
+// Fica "escutando" para onde o foco do teclado vai
+document.addEventListener('focusin', (e) => {
+    if (!leitorAtivo) return; // Só lê se o modo áudio estiver ligado
+
+    const el = e.target;
+
+    // Tenta descobrir o que ler: o texto escondido (aria-label), o placeholder, o valor, ou o texto do botão
+    let textoParaLer = el.getAttribute('aria-label')
+        || el.getAttribute('placeholder')
+        || (el.tagName === 'SELECT' ? el.options[el.selectedIndex].text : '')
+        || el.innerText
+        || el.value;
+
+    if (textoParaLer) {
+        falar(textoParaLer.trim());
+    }
+});
+
+// Função central que controla a voz e o sotaque
+function falar(texto) {
+    window.speechSynthesis.cancel(); // Para de falar a frase anterior
+    const utterance = new SpeechSynthesisUtterance(texto);
+
+    // Define qual idioma queremos
+    let targetLang = 'pt-BR';
+    if (currentLang === 'en') targetLang = 'en-US';
+    if (currentLang === 'es') targetLang = 'es-ES';
+
+    utterance.lang = targetLang;
+
+    // FORÇA O NAVEGADOR A USAR UMA VOZ NATIVA DESSE IDIOMA
+    const vozes = window.speechSynthesis.getVoices();
+    if (vozes.length > 0) {
+        // Procura uma voz que bata com o idioma selecionado
+        const vozNativa = vozes.find(v => v.lang.replace('_', '-').startsWith(targetLang)) ||
+            vozes.find(v => v.lang.replace('_', '-').startsWith(targetLang.split('-')[0]));
+
+        if (vozNativa) {
+            utterance.voice = vozNativa;
+        }
+    }
+
+    window.speechSynthesis.speak(utterance);
+}
+// Inicializa o sistema verificando se o usuário já tem um acesso salvo
+checkLogin();

@@ -475,3 +475,84 @@ footer {
     transform: translateY(0) scale(1);
   }
 }
+
+/*ACESSIBILIDADE*/
+/* Cria um anel de foco super visível e elegante quando o usuário navega pelo teclado */
+:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  box-shadow: none;
+  /* Remove a sombra padrão para não brigar com o outline */
+}
+
+/*MODOS DE ACESSIBILIDADE*/
+
+/*Leitura Confortável (Independente do Tema) */
+body.modo-leitura {
+  font-size: 105% !important;
+  letter-spacing: 0.5px !important;
+  line-height: 1.6 !important;
+
+  /* Paleta Sépia de Alto Contraste Absoluto */
+  --bg-0: #f4ecd8 !important;
+  --bg-1: #e9dfc7 !important;
+  --panel: #fdf6e3 !important;
+  --panel-border: #c8bc9d !important;
+  --text: #2c2822 !important;
+  /* Quase preto para leitura máxima */
+  --muted: #5c574f !important;
+  --brand: #9c5c2a !important;
+  /* Tom terroso */
+  --card: #f4ecd8 !important;
+  --card-text: #2c2822 !important;
+  --card-border: #c8bc9d !important;
+  --btn2-bg: #fdf6e3 !important;
+  --btn2-text: #2c2822 !important;
+  --btn2-border: #c8bc9d !important;
+  --input-bg: #ffffff !important;
+  --line: #d7cdb5 !important;
+}
+
+/* Força o botão principal a ter contraste na leitura */
+body.modo-leitura button.btn {
+  background: var(--brand) !important;
+  color: #ffffff !important;
+}
+
+body.modo-leitura .muted {
+  color: var(--text);
+  opacity: 0.9;
+}
+
+/*Modo Daltônico*/
+body.modo-daltonico {
+  --danger: #d95f02;
+  --danger-2: #cc4c02;
+  --brand: #1d2b53;
+}
+
+body.modo-daltonico .pill-ok {
+  background: #deebf7;
+  color: #3182bd;
+}
+
+body.modo-daltonico .pill-warn {
+  background: #fee6ce;
+  color: #d95f02;
+}
+
+body.modo-daltonico .dot-suspect {
+  background: #d95f02 !important;
+}
+
+/* --- AJUSTE DO TAMANHO DO VLIBRAS --- */
+div[vw-plugin-wrapper] {
+  transform: scale(0.8);
+  transform-origin: right center;
+}

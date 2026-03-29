@@ -11,13 +11,93 @@
 </head>
 
 <body>
+  <div id="loginOverlay"
+    style="position: fixed; inset: 0; background: var(--bg-0); z-index: 99999; display: flex; align-items: center; justify-content: center;">
+    <div class="panel"
+      style="max-width: 340px; width: 90%; text-align: center; box-shadow: var(--shadow); position: relative;">
+
+      <div id="boxLogin">
+        <h2 style="margin-bottom: 8px; color: var(--brand); font-size: 20px;" data-i18n="loginTitle">Acesso Restrito
+        </h2>
+        <p class="muted" style="margin-bottom: 24px;" data-i18n="loginDesc">Identifique-se para acessar o painel.</p>
+
+        <input type="text" id="identificadorLogin" placeholder="E-mail ou Nome de Usuário"
+          data-i18n-placeholder="phUserOrEmail" style="margin-bottom: 8px; text-align: center;" />
+        <input type="password" id="senhaLogin" placeholder="Senha" data-i18n-placeholder="phPassword"
+          style="margin-bottom: 8px; text-align: center;" />
+
+        <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 16px;">
+          <input type="checkbox" id="mostrarSenhaBtn" style="width: auto; height: auto;" />
+          <label for="mostrarSenhaBtn" class="muted" style="font-size: 12px; cursor: pointer;" data-i18n="showPass">Ver
+            senha</label>
+        </div>
+
+        <button class="btn" id="btnLogar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnEnter">Entrar no
+          Sistema</button>
+        <button class="btn2 btn-sm" id="btnIrCadastro" style="width: 100%; border: none; background: transparent;"
+          data-i18n="btnGoRegister">Não tem conta? Cadastre-se</button>
+
+        <div id="loginErro" class="muted alert" style="margin-top: 12px; display: none;" role="alert"
+          aria-live="assertive">⚠️ <span data-i18n="errLogin">Credenciais incorretas.</span></div>
+      </div>
+
+      <div id="boxCadastro" style="display: none;">
+        <h2 style="margin-bottom: 8px; color: var(--brand); font-size: 20px;" data-i18n="regTitle">Criar Conta</h2>
+        <p class="muted" style="margin-bottom: 24px;" data-i18n="regDesc">Preencha seus dados para começar.</p>
+
+        <input type="text" id="nomeCadastro" placeholder="Seu Nome" data-i18n-placeholder="phName"
+          style="margin-bottom: 8px; text-align: center;" />
+        <input type="email" id="emailCadastro" placeholder="Seu E-mail" data-i18n-placeholder="phEmail"
+          style="margin-bottom: 8px; text-align: center;" />
+        <input type="password" id="senhaCadastro" placeholder="Crie uma Senha" data-i18n-placeholder="phCreatePassword"
+          style="margin-bottom: 4px; text-align: center;" />
+
+        <p class="muted"
+          style="font-size: 11px; margin-top: 0; margin-bottom: 16px; text-align: center; line-height: 1.4;"
+          data-i18n="rulePass">
+          A senha deve ter no mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo especial (ex: *).
+        </p>
+
+        <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 16px;">
+          <input type="checkbox" id="mostrarSenhaCadastroBtn" style="width: auto; height: auto;" />
+          <label for="mostrarSenhaCadastroBtn" class="muted" style="font-size: 12px; cursor: pointer;"
+            data-i18n="showPass">Ver senha</label>
+        </div>
+
+        <button class="btn" id="btnCadastrar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnRegister">Criar
+          Minha Conta</button>
+        <button class="btn2 btn-sm" id="btnIrLogin" style="width: 100%; border: none; background: transparent;"
+          data-i18n="btnGoLogin">Já tem conta? Entrar</button>
+
+        <div id="cadastroMsg" class="muted" style="margin-top: 12px; display: none;" role="alert" aria-live="polite">
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="container">
     <header>
       <div>
         <h1 class="title" data-i18n="title">Detecção de Transações Suspeitas</h1>
       </div>
 
-      <div style="display: flex; gap: 8px; align-items: center;">
+      <div style="display: flex; gap: 8px; align-items: center; position: relative; z-index: 100000;">
+        <div id="userProfile"
+          style="display: none; align-items: center; gap: 8px; margin-right: 12px; text-align: right;">
+          <div style="display: flex; flex-direction: column; line-height: 1.2;">
+            <strong id="userNameDisplay" style="font-size: 13px; color: var(--text);">Usuário</strong>
+            <span id="userEmailDisplay" class="muted" style="font-size: 11px;">email</span>
+          </div>
+          <div id="userAvatar"
+            style="background: var(--brand); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">
+            U</div>
+        </div>
+
+        <button id="btnA11yLeitura" class="btn2 btn-sm" style="height: 36px; padding: 0 12px; border-radius: 999px;"
+          title="Leitura Confortável" aria-label="Ativar leitura confortável">A+</button>
+        <button id="btnA11yDaltonico" class="btn2 btn-sm" style="height: 36px; padding: 0 12px; border-radius: 999px;"
+          title="Modo Daltônico" aria-label="Ativar modo daltônico">👁️</button>
+        <button id="btnA11yAudio" class="btn2 btn-sm" style="height: 36px; padding: 0 12px; border-radius: 999px;"
+          title="Ouvir instruções" aria-label="Ler tela em voz alta">🔊</button>
 
         <select id="langSelect" class="btn2 btn-sm"
           style="width: auto; height: 36px; padding: 0 12px; border-radius: 999px; cursor: pointer; margin: 0; box-sizing: border-box;">
@@ -31,6 +111,9 @@
           <span id="themeIcon">☀️</span> <span id="themeText" data-i18n="themeLight">Tema Claro</span>
         </button>
 
+        <button id="btnSair" class="btn2 btn-sm"
+          style="height: 36px; padding: 0 16px; border-radius: 999px; display: none; margin: 0; box-sizing: border-box;"
+          data-i18n="btnLogout">Sair</button>
       </div>
     </header>
 
@@ -47,12 +130,15 @@
 
           <div class="field">
             <label for="dsFile" data-i18n="labelFile">Arquivo (.csv, .xlsx, .xls)</label>
-            <input id="dsFile" type="file" accept=".csv,.xlsx,.xls" style="display: none;" />
+
+            <input id="dsFile" type="file" accept=".csv,.xlsx,.xls"
+              style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;" />
 
             <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
-              <label for="dsFile" class="btn2 btn-sm"
+              <label id="lblDsFile" for="dsFile" class="btn2 btn-sm"
                 style="cursor: pointer; margin: 0; height: 40px; display: flex; align-items: center; justify-content: center; box-sizing: border-box;"
-                data-i18n="btnBrowse">Procurar...</label>
+                data-i18n="btnBrowse" tabindex="0" role="button"
+                aria-label="Procurar arquivo no computador">Procurar...</label>
 
               <span id="fileNameDisplay" class="muted"
                 style="flex: 1; height: 40px; display: flex; align-items: center; padding: 0 12px; border: 1px solid var(--panel-border); border-radius: var(--radius-sm); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-sizing: border-box;"
@@ -218,7 +304,7 @@
       <div class="panel"
         style="position: relative; max-width: 420px; width: 90%; text-align: center; animation: modalIn 0.3s ease; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
 
-        <button id="btnFecharX"
+        <button id="btnFecharX" aria-label="Fechar janela"
           style="position: absolute; top: 12px; right: 16px; background: transparent; border: none; color: var(--muted); font-size: 24px; cursor: pointer; padding: 0; line-height: 1; transition: color 0.2s;"
           onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--muted)'">&times;</button>
 
@@ -237,7 +323,18 @@
       Lucas
     </footer>
   </div>
+  <!-- Integração de Libras com o Vlibras do Governo -->
   <script src="/static/script.js"></script>
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+  </script>
 </body>
 
 </html>

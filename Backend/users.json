@@ -1,0 +1,22 @@
+{
+  "usuario@empresa.com": {
+    "nome": "Administrador",
+    "senha": "SenhaForte123*"
+  },
+  "visitante@gmail.com": {
+    "nome": "Visitante",
+    "senha": "123"
+  },
+  "deb": {
+    "nome": "deb",
+    "senha": "123"
+  },
+  "aaaa@gmail.com": {
+    "nome": "Hello",
+    "senha": "@Senha12"
+  },
+  "oi@gmail.com": {
+    "nome": "oi",
+    "senha": "@Aeiou123"
+  }
+}

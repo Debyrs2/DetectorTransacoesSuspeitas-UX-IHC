@@ -14,6 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel, Field
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile, Request, Response, Depends
 
 import storage
 
@@ -25,6 +26,84 @@ def utc_now_iso() -> str:
 
 app = FastAPI(title="Detecção de Transações Suspeitas")
 app.mount("/static", StaticFiles(directory=APP_DIR.parent / "Frontend"), name="static")
+
+#Sistema de Login com bd
+USERS_FILE = APP_DIR / "users.json"
+
+def _load_users() -> Dict[str, Any]:
+    if not USERS_FILE.exists():
+        return {}
+    return json.loads(USERS_FILE.read_text(encoding="utf-8"))
+
+def verifica_sessao(request: Request):
+    token = request.cookies.get("sessao_app")
+    if not token:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+    
+    users = _load_users()
+    if token not in users:
+        raise HTTPException(status_code=401, detail="Sessão inválida")
+    return token 
+
+class LoginOut(BaseModel):
+    status: str
+    nome: str
+    email: str
+
+@app.post("/login", response_model=LoginOut)
+def login(response: Response, identificador: str = Form(...), senha: str = Form(...)):
+    users = _load_users()
+    ident_limpo = identificador.strip().lower()
+
+    user_key = None
+    user_data = None
+    
+    for key, data in users.items():
+        if key.lower() == ident_limpo or data["nome"].strip().lower() == ident_limpo:
+            user_key = key
+            user_data = data
+            break
+    if not user_data:
+        raise HTTPException(status_code=404, detail="Usuário ou e-mail não cadastrado.")
+    if user_data["senha"] != senha:
+        raise HTTPException(status_code=401, detail="Senha incorreta.")
+
+    response.set_cookie(key="sessao_app", value=user_key, httponly=True, samesite="lax")
+    return {"status": "ok", "nome": user_data["nome"], "email": user_key}
+
+def _write_users(users_data: Dict[str, Any]) -> None:
+     USERS_FILE.write_text(json.dumps(users_data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+@app.post("/register")
+def register(nome: str = Form(...), email: str = Form(...), senha: str = Form(...)):
+    users = _load_users()
+    email_limpo = email.strip().lower()
+
+    if not email_limpo or not senha or not nome:
+        raise HTTPException(status_code=400, detail="Preencha todos os campos.")
+
+    if email_limpo in users:
+        raise HTTPException(status_code=400, detail="E-mail já cadastrado.")
+
+    users[email_limpo] = {
+        "nome": nome.strip(),
+        "senha": senha
+    }
+    _write_users(users)
+    
+    return {"status": "ok", "mensagem": "Conta criada com sucesso!"}
+
+@app.post("/logout", dependencies=[Depends(verifica_sessao)])
+def logout(response: Response):
+    response.delete_cookie("sessao_app")
+    return {"status": "deslogado"}
+
+@app.get("/me")
+def get_me(request: Request):
+    email = verifica_sessao(request)
+    users = _load_users()
+    user = users[email]
+    return {"status": "logado", "nome": user["nome"], "email": email}
 
 app.add_middleware(
     CORSMiddleware,
@@ -60,17 +139,17 @@ def _normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
 
 # Converte representações textuais localizadas para vetores de ponto flutuante, preparando o domínio matemático para cálculos aritméticos de precisão.
 def _coerce_ptbr_numeric(series: pd.Series) -> pd.Series:
-    # Converte números em formato brasileiro (ex: "R$ 1.234,56") para float
-    s = series
-    if s.dtype == "object":
-        s = (
-            s.astype(str)
-             .str.replace("R$", "", regex=False)
-             .str.replace(" ", "", regex=False)
-             .str.replace(".", "", regex=False)  
-             .str.replace(",", ".", regex=False) 
-             )
-    return pd.to_numeric(s, errors="coerce")
+    # Converte números de string para float considerando formatos PT-BR e EN.
+    if series.dtype == "object":
+        s = series.astype(str).str.strip()
+        s = s.str.replace("R$", "", regex=False).str.replace("\u00A0", "", regex=False).str.replace(" ", "", regex=False)
+        ptbr = s.str.contains(",").fillna(False)
+        s_ptbr = s.where(ptbr, "").str.replace(".", "", regex=False).str.replace(",", ".", regex=False)
+        s = s.where(~ptbr, s_ptbr)
+
+        return pd.to_numeric(s, errors="coerce")
+
+    return pd.to_numeric(series, errors="coerce")
 
 def _read_dataframe_from_bytes(filename: str, content: bytes) -> pd.DataFrame:
     name = (filename or "").lower()
@@ -140,7 +219,9 @@ def _threshold_mask(values: pd.Series, lower: Optional[float], upper: Optional[f
         return values > upper
     if lower is not None:
         return values < lower
-    return values.astype(bool) & False
+
+    # Sem limites definidos, nenhuma linha é suspeita
+    return pd.Series([False] * len(values), index=values.index)
 
 
 def _analyze_df(df: pd.DataFrame, req: AnalyzeRequest) -> Dict[str, Any]:
@@ -240,6 +321,9 @@ def _analyze_df(df: pd.DataFrame, req: AnalyzeRequest) -> Dict[str, Any]:
     df2 = df.copy()
     df2[col] = _coerce_ptbr_numeric(df2[col])
     df2 = df2.dropna(subset=[col])
+
+    # Reaplica máscara ao dataframe filtrado para alinhamento correto de índices
+    mask = _threshold_mask(df2[col], thresholds["lower"], thresholds["upper"])
     suspeitas_df = df2.loc[mask]
 
     total_suspeitas = int(len(suspeitas_df))
@@ -364,10 +448,9 @@ def _startup() -> None:
     storage.ensure_storage()
 
 
-@app.get("/health")
+@app.get("/health", dependencies=[Depends(verifica_sessao)])
 def health() -> Dict[str, str]:
     return {"status": "ok"}
-
 
 @app.get("/", response_class=HTMLResponse)
 def home() -> Any:
@@ -375,7 +458,7 @@ def home() -> Any:
         return FileResponse(INDEX_HTML)
     return "index.html não encontrado"
 
-@app.post("/datasets", response_model=DatasetOut)
+@app.post("/datasets", response_model=DatasetOut, dependencies=[Depends(verifica_sessao)])
 async def create_dataset(
     arquivo: UploadFile = File(...),
     name: Optional[str] = Form(default=None),
@@ -400,7 +483,7 @@ async def create_dataset(
     )
 
 
-@app.get("/datasets", response_model=List[DatasetOut])
+@app.get("/datasets", response_model=List[DatasetOut], dependencies=[Depends(verifica_sessao)])
 def list_datasets() -> List[DatasetOut]:
     datasets = storage.list_datasets().values()
     ordered = sorted(datasets, key=lambda m: m.uploaded_at, reverse=True)
@@ -420,7 +503,7 @@ def list_datasets() -> List[DatasetOut]:
         for m in ordered
     ]
 
-@app.get("/datasets/{dataset_id}", response_model=DatasetOut)
+@app.get("/datasets/{dataset_id}", response_model=DatasetOut, dependencies=[Depends(verifica_sessao)])
 def get_dataset(dataset_id: str) -> DatasetOut:
     meta = storage.get_dataset(dataset_id)
     if not meta:
@@ -438,7 +521,7 @@ def get_dataset(dataset_id: str) -> DatasetOut:
         last_thresholds=meta.last_thresholds,
     )
 
-@app.put("/datasets/{dataset_id}", response_model=DatasetOut)
+@app.put("/datasets/{dataset_id}", response_model=DatasetOut, dependencies=[Depends(verifica_sessao)])
 async def update_dataset(
     dataset_id: str,
     name: Optional[str] = Form(default=None),
@@ -469,7 +552,7 @@ async def update_dataset(
         last_thresholds=meta.last_thresholds,
     )
 
-@app.delete("/datasets/{dataset_id}")
+@app.delete("/datasets/{dataset_id}", dependencies=[Depends(verifica_sessao)])
 def delete_dataset(dataset_id: str) -> Dict[str, str]:
     try:
         storage.delete_dataset(dataset_id)
@@ -477,7 +560,7 @@ def delete_dataset(dataset_id: str) -> Dict[str, str]:
         raise HTTPException(status_code=404, detail="Dataset não encontrado")
     return {"status": "deleted"}
 
-@app.post("/datasets/{dataset_id}/analyze")
+@app.post("/datasets/{dataset_id}/analyze", dependencies=[Depends(verifica_sessao)])
 def analyze_dataset(dataset_id: str, req: AnalyzeRequest) -> Dict[str, Any]:
     meta = storage.get_dataset(dataset_id)
     if not meta:
@@ -498,7 +581,7 @@ def analyze_dataset(dataset_id: str, req: AnalyzeRequest) -> Dict[str, Any]:
     return result
 
 
-@app.get("/datasets/{dataset_id}/result")
+@app.get("/datasets/{dataset_id}/result", dependencies=[Depends(verifica_sessao)])
 def get_last_result(dataset_id: str) -> Dict[str, Any]:
     meta = storage.get_dataset(dataset_id)
     if not meta:
@@ -508,7 +591,7 @@ def get_last_result(dataset_id: str) -> Dict[str, Any]:
         raise HTTPException(status_code=404, detail="Nenhuma análise encontrada para este dataset")
     return result
 
-@app.post("/analisar")
+@app.post("/analisar", dependencies=[Depends(verifica_sessao)])
 async def analisar_planilha_legado(
     arquivo: UploadFile = File(...),
     method: Literal["sigma", "zscore", "iqr", "mad"] = "sigma",
