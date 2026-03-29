@@ -81,15 +81,28 @@
       </div>
 
       <div style="display: flex; gap: 8px; align-items: center; position: relative; z-index: 100000;">
-        <div id="userProfile"
-          style="display: none; align-items: center; gap: 8px; margin-right: 12px; text-align: right;">
-          <div style="display: flex; flex-direction: column; line-height: 1.2;">
-            <strong id="userNameDisplay" style="font-size: 13px; color: var(--text);">Usuário</strong>
-            <span id="userEmailDisplay" class="muted" style="font-size: 11px;">email</span>
+
+        <div id="userMenuContainer" style="display: none; position: relative; margin-right: 12px;">
+          <div id="userProfile" tabindex="0" role="button" aria-label="Abrir menu do usuário"
+            style="display: flex; align-items: center; gap: 8px; text-align: right; cursor: pointer; padding: 4px 8px; border-radius: 8px; transition: background 0.2s;"
+            onmouseover="this.style.background='var(--panel-border)'" onmouseout="this.style.background='transparent'">
+            <div style="display: flex; flex-direction: column; line-height: 1.2;">
+              <strong id="userNameDisplay" style="font-size: 13px; color: var(--text);">Usuário</strong>
+              <span id="userEmailDisplay" class="muted" style="font-size: 11px;">email</span>
+            </div>
+            <div id="userAvatar"
+              style="background: var(--brand); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">
+              U</div>
           </div>
-          <div id="userAvatar"
-            style="background: var(--brand); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">
-            U</div>
+
+          <div id="userDropdown" class="panel"
+            style="display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; width: 200px; padding: 12px; flex-direction: column; gap: 12px; box-shadow: var(--shadow);">
+            <div style="border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 4px;">
+              <strong style="font-size: 14px; display: block;" data-i18n="menuProfile">Meu Perfil</strong>
+              <span class="muted" style="font-size: 12px; word-break: break-all;" id="dropdownEmail">email</span>
+            </div>
+            <button id="btnSair" class="danger btn-sm" style="width: 100%;" data-i18n="btnLogout">Sair</button>
+          </div>
         </div>
 
         <button id="btnA11yLeitura" class="btn2 btn-sm" style="height: 36px; padding: 0 12px; border-radius: 999px;"
@@ -97,23 +110,19 @@
         <button id="btnA11yDaltonico" class="btn2 btn-sm" style="height: 36px; padding: 0 12px; border-radius: 999px;"
           title="Modo Daltônico" aria-label="Ativar modo daltônico">👁️</button>
         <button id="btnA11yAudio" class="btn2 btn-sm" style="height: 36px; padding: 0 12px; border-radius: 999px;"
-          title="Ouvir instruções" aria-label="Ler tela em voz alta">🔊</button>
+          title="Ouvir instruções" aria-label="Ler tela en voz alta">🔊</button>
 
         <select id="langSelect" class="btn2 btn-sm"
-          style="width: auto; height: 36px; padding: 0 12px; border-radius: 999px; cursor: pointer; margin: 0; box-sizing: border-box;">
+          style="width: auto; height: 36px; padding: 0 12px; border-radius: 999px; cursor: pointer; margin: 0;">
           <option value="pt">🇧🇷 PT</option>
           <option value="en">🇺🇸 EN</option>
           <option value="es">🇪🇸 ES</option>
         </select>
 
         <button id="btnThemeToggle" class="btn2 btn-sm"
-          style="height: 36px; padding: 0 16px; border-radius: 999px; display: flex; align-items: center; gap: 6px; margin: 0; box-sizing: border-box;">
+          style="height: 36px; padding: 0 16px; border-radius: 999px; display: flex; align-items: center; gap: 6px; margin: 0;">
           <span id="themeIcon">☀️</span> <span id="themeText" data-i18n="themeLight">Tema Claro</span>
         </button>
-
-        <button id="btnSair" class="btn2 btn-sm"
-          style="height: 36px; padding: 0 16px; border-radius: 999px; display: none; margin: 0; box-sizing: border-box;"
-          data-i18n="btnLogout">Sair</button>
       </div>
     </header>
 
@@ -274,7 +283,12 @@
         </table>
       </div>
 
-      <div class="muted" id="truncMsg" style="margin-top:10px;"></div>
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-top:10px; flex-wrap: wrap; gap: 12px;">
+        <div class="muted" id="truncMsg"></div>
+        <button id="btnDownTable" class="btn2 btn-sm" style="display: none;" data-i18n="btnDownTable">Baixar Tabela
+          (CSV)</button>
+      </div>
     </section>
 
     <section id="sessao-grafico" class="panel" style="margin-top:16px; display: none;">
@@ -294,6 +308,9 @@
       </div>
       <div style="position: relative; height: 400px; width: 100%; overflow-x: auto; overflow-y: hidden;">
         <div id="boxGrafico" style="position: relative; height: 100%; min-width: 100%;">
+          <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
+            <button id="btnDownChart" class="btn2 btn-sm" data-i18n="btnDownChart">Baixar Gráfico (PNG)</button>
+          </div>
           <canvas id="graficoLinha"></canvas>
         </div>
       </div>

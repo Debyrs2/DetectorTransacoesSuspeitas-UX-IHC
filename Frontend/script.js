@@ -74,6 +74,9 @@ const i18n = {
         thActions: "Ações",
         analysisIn: "Análise em",
         columnLabel: "coluna",
+        btnDownTable: "Baixar Tabela (CSV)",
+        btnDownChart: "Baixar Gráfico (PNG)",
+        menuProfile: "Meu Perfil",
         "data": "data",
         "id transação": "id transação",
         "nome": "nome",
@@ -185,6 +188,9 @@ const i18n = {
         thActions: "Actions",
         analysisIn: "Analyzed on",
         columnLabel: "column",
+        btnDownTable: "Download Table (CSV)",
+        btnDownChart: "Download Chart (PNG)",
+        menuProfile: "My Profile",
         "data": "date",
         "id transação": "transaction id",
         "nome": "name",
@@ -291,6 +297,9 @@ const i18n = {
         thActions: "Acciones",
         analysisIn: "Analizado el",
         columnLabel: "columna",
+        btnDownTable: "Descargar Tabla (CSV)",
+        btnDownChart: "Descargar Gráfico (PNG)",
+        menuProfile: "Mi Perfil",
         "data": "fecha",
         "id transação": "id de transacción",
         "nome": "nombre",
@@ -801,6 +810,7 @@ function renderResult(result, isReview = false, skipScroll = false) {
         $('truncMsg').textContent = result.truncated
             ? `⚠️ A lista de suspeitas foi limitada a ${$('maxSus').value}. Total real: ${result.quantidade_suspeitas}.`
             : '';
+        $('btnDownTable').style.display = result.quantidade_suspeitas > 0 ? 'block' : 'none';
 
         $('sessao-grafico').style.display = 'none';
 
@@ -1025,10 +1035,10 @@ async function checkLogin() {
         if (res.ok) {
             const data = await res.json();
             $('loginOverlay').style.display = 'none';
-            $('btnSair').style.display = 'block';
-            $('userProfile').style.display = 'flex';
+            $('userMenuContainer').style.display = 'block';
             $('userNameDisplay').textContent = data.nome;
             $('userEmailDisplay').textContent = data.email;
+            $('dropdownEmail').textContent = data.email;
             $('userAvatar').textContent = data.nome.charAt(0).toUpperCase();
 
             refreshDatasets().then(() => {
@@ -1261,5 +1271,42 @@ function falar(texto) {
 
     window.speechSynthesis.speak(utterance);
 }
+// MENU DO USUÁRIO
+$('userProfile').addEventListener('click', (e) => {
+    e.stopPropagation(); // Evita fechar na mesma hora
+    const drop = $('userDropdown');
+    drop.style.display = drop.style.display === 'none' ? 'flex' : 'none';
+});
+
+// Fecha o menu se clicar em qualquer outro lugar da tela
+document.addEventListener('click', () => {
+    if ($('userDropdown')) $('userDropdown').style.display = 'none';
+});
+
+// DOWNLOAD DA TABELA (Converte o JSON para CSV na hora)
+$('btnDownTable').addEventListener('click', () => {
+    if (!ultimoResultadoGlobal || !ultimoResultadoGlobal.suspeitas) return;
+    const rows = ultimoResultadoGlobal.suspeitas;
+    if (rows.length === 0) return;
+
+    const colunas = Object.keys(rows[0]);
+    const cabecalho = colunas.join(',') + '\n';
+    const corpo = rows.map(r => colunas.map(c => `"${r[c] || ''}"`).join(',')).join('\n');
+
+    const blob = new Blob([cabecalho + corpo], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'analise_suspeitas.csv';
+    link.click();
+});
+
+//DOWNLOAD DO GRÁFICO (Tira uma "foto" do Canvas)
+$('btnDownChart').addEventListener('click', () => {
+    const canvas = $('graficoLinha');
+    const link = document.createElement('a');
+    link.download = 'tendencia_anomalias.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+});
 // Inicializa o sistema verificando se o usuário já tem um acesso salvo
 checkLogin();
