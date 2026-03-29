@@ -608,3 +608,17 @@ async def analisar_planilha_legado(
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Falha ao analisar: {type(e).__name__}: {e}")
+
+@app.post("/reset-password")
+def reset_password(email: str = Form(...), nova_senha: str = Form(...)):
+    users = _load_users()
+    email_limpo = email.strip().lower()
+
+    if email_limpo not in users:
+        raise HTTPException(status_code=404, detail="E-mail não encontrado no sistema.")
+
+    # Atualiza a senha e salva no banco
+    users[email_limpo ][ "senha" ] = nova_senha
+    _write_users(users)
+    
+    return { "status": "ok", "mensagem": "Senha redefinida com sucesso!" }

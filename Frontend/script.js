@@ -28,6 +28,10 @@ const i18n = {
         phCreatePassword: "Crie uma Senha",
         errEmailFormat: "⚠️ Entre com um email válido (@gmail.com, @hotmail.com ou @outlook.com).",
         errPassFormat: "⚠️ A senha não cumpre os requisitos de segurança.",
+        forgotPass: "Esqueceu a senha?",
+        resetTitle: "Recuperar Senha",
+        resetDesc: "Ambiente de teste: digite seu e-mail cadastrado e a nova senha diretamente abaixo.",
+        btnReset: "Salvar Nova Senha",
         title: "Detecção de Transações Suspeitas",
         themeLight: "Tema Claro",
         themeDark: "Tema Escuro",
@@ -142,6 +146,10 @@ const i18n = {
         phCreatePassword: "Create a Password",
         errEmailFormat: "⚠️ Enter a valid email (@gmail.com, @hotmail.com, or @outlook.com).",
         errPassFormat: "⚠️ Password does not meet security requirements.",
+        forgotPass: "Forgot password?",
+        resetTitle: "Recover Password",
+        resetDesc: "Test environment: enter your registered e-mail and the new password directly below.",
+        btnReset: "Save New Password",
         title: "Suspicious Transaction Detection",
         themeLight: "Light Theme",
         themeDark: "Dark Theme",
@@ -251,6 +259,10 @@ const i18n = {
         rulePass: "La contraseña debe tener al menos 8 caracteres, incluir mayúscula, minúscula, número y un símbolo (ej: *).",
         errEmailFormat: "⚠️ Ingresa un correo válido (@gmail.com, @hotmail.com o @outlook.com).",
         errPassFormat: "⚠️ La contraseña no cumple con los requisitos de seguridad.",
+        forgotPass: "¿Olvidaste tu contraseña?",
+        resetTitle: "Recuperar Contraseña",
+        resetDesc: "Entorno de prueba: ingresa tu correo registrado y la nueva contraseña directamente abajo.",
+        btnReset: "Guardar Nueva Contraseña",
         title: "Detección de Transacciones Sospechosas",
         themeLight: "Tema Claro",
         themeDark: "Tema Oscuro",
@@ -1307,6 +1319,74 @@ $('btnDownChart').addEventListener('click', () => {
     link.download = 'tendencia_anomalias.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
+});
+
+// LÓGICA DE RECUPERAÇÃO DE SENHA
+$('btnOpenReset').addEventListener('click', (e) => {
+    e.preventDefault();
+    $('modalReset').style.display = 'flex';
+    $('emailReset').value = '';
+    $('senhaReset').value = '';
+    $('resetMsg').style.display = 'none';
+});
+
+$('btnFecharReset').addEventListener('click', () => {
+    $('modalReset').style.display = 'none';
+});
+
+// Fechar com ESC também
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && $('modalReset').style.display === 'flex') {
+        $('modalReset').style.display = 'none';
+    }
+});
+
+$('btnEnviarReset').addEventListener('click', async () => {
+    const email = $('emailReset').value.trim();
+    const senhaNova = $('senhaReset').value;
+    const msgBox = $('resetMsg');
+    const dictMsg = i18n[currentLang] || i18n['pt'];
+
+    // Validação de segurança parecida com a do cadastro
+    const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    if (!regexSenha.test(senhaNova)) {
+        msgBox.style.display = 'block';
+        msgBox.style.color = 'var(--danger)';
+        msgBox.textContent = dictMsg.errPassFormat;
+        return;
+    }
+
+    const btn = $('btnEnviarReset');
+    btn.textContent = 'Salvando...';
+    btn.disabled = true;
+
+    const fd = new FormData();
+    fd.append('email', email);
+    fd.append('nova_senha', senhaNova);
+
+    try {
+        const res = await fetch('/reset-password', { method: 'POST', body: fd });
+        const data = await res.json();
+
+        msgBox.style.display = 'block';
+        if (res.ok) {
+            msgBox.style.color = 'var(--brand)';
+            msgBox.textContent = data.mensagem;
+            setTimeout(() => {
+                $('modalReset').style.display = 'none';
+            }, 2000);
+        } else {
+            msgBox.style.color = 'var(--danger)';
+            msgBox.textContent = data.detail || 'Erro ao redefinir.';
+        }
+    } catch (e) {
+        msgBox.style.display = 'block';
+        msgBox.style.color = 'var(--danger)';
+        msgBox.textContent = 'Erro de conexão.';
+    }
+
+    btn.textContent = dictMsg.btnReset || 'Salvar Nova Senha';
+    btn.disabled = false;
 });
 // Inicializa o sistema verificando se o usuário já tem um acesso salvo
 checkLogin();

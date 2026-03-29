@@ -26,10 +26,17 @@
         <input type="password" id="senhaLogin" placeholder="Senha" data-i18n-placeholder="phPassword"
           style="margin-bottom: 8px; text-align: center;" />
 
-        <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 16px;">
-          <input type="checkbox" id="mostrarSenhaBtn" style="width: auto; height: auto;" />
-          <label for="mostrarSenhaBtn" class="muted" style="font-size: 12px; cursor: pointer;" data-i18n="showPass">Ver
-            senha</label>
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 4px;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <input type="checkbox" id="mostrarSenhaBtn" style="width: auto; height: auto; margin: 0;" />
+            <label for="mostrarSenhaBtn" class="muted" style="font-size: 12px; cursor: pointer;"
+              data-i18n="showPass">Ver senha</label>
+          </div>
+          <a href="#" id="btnOpenReset" class="muted"
+            style="font-size: 12px; text-decoration: none; transition: color 0.2s;" data-i18n="forgotPass"
+            onmouseover="this.style.color='var(--brand)'" onmouseout="this.style.color='var(--muted)'">Esqueceu a
+            senha?</a>
         </div>
 
         <button class="btn" id="btnLogar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnEnter">Entrar no
@@ -332,6 +339,31 @@
           <button class="btn2" id="btnNaoGrafico" style="flex: 1;" data-i18n="btnTableOnly">Apenas Tabela</button>
           <button class="btn" id="btnSimGrafico" style="flex: 1;" data-i18n="btnViewChart">📉 Ver Gráfico</button>
         </div>
+      </div>
+    </div>
+    <div id="modalReset"
+      style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 100000; align-items: center; justify-content: center;">
+      <div class="panel"
+        style="position: relative; max-width: 340px; width: 90%; text-align: center; animation: modalIn 0.3s ease; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+
+        <button id="btnFecharReset" aria-label="Fechar janela"
+          style="position: absolute; top: 12px; right: 16px; background: transparent; border: none; color: var(--muted); font-size: 24px; cursor: pointer; padding: 0; line-height: 1; transition: color 0.2s;"
+          onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--muted)'">&times;</button>
+
+        <h2 style="margin-top: 0; margin-bottom: 8px; font-size: 18px; color: var(--text);" data-i18n="resetTitle">
+          Recuperar Senha</h2>
+        <p class="muted" style="font-size: 12px; margin-bottom: 20px; line-height: 1.4;" data-i18n="resetDesc">Ambiente
+          de teste: digite seu e-mail cadastrado e a nova senha diretamente abaixo.</p>
+
+        <input type="email" id="emailReset" placeholder="Seu E-mail" data-i18n-placeholder="phEmail"
+          style="margin-bottom: 8px; text-align: center;" />
+        <input type="password" id="senhaReset" placeholder="Crie uma Senha" data-i18n-placeholder="phCreatePassword"
+          style="margin-bottom: 8px; text-align: center;" />
+
+        <div id="resetMsg" class="muted" style="margin-top: 8px; margin-bottom: 12px; display: none; font-size: 12px;"
+          role="alert" aria-live="polite"></div>
+
+        <button class="btn" id="btnEnviarReset" style="width: 100%;" data-i18n="btnReset">Salvar Nova Senha</button>
       </div>
     </div>
 
