@@ -551,8 +551,134 @@ body.modo-daltonico .dot-suspect {
   background: #d95f02 !important;
 }
 
-/* --- AJUSTE DO TAMANHO DO VLIBRAS --- */
+/*AJUSTE DO TAMANHO DO VLIBRAS*/
 div[vw-plugin-wrapper] {
   transform: scale(0.8);
   transform-origin: right center;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--panel-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--panel-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+#loginOverlay,
+#modalReset {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+[data-theme="light"] #loginOverlay,
+[data-theme="light"] #modalReset {
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 50%, #c7d2fe 100%) !important;
+}
+
+#modalGenerico {
+  background: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+[data-theme="light"] #modalGenerico {
+  background: rgba(248, 250, 252, 0.75) !important;
+}
+
+#loginOverlay .panel,
+#modalReset .panel,
+#userDropdown,
+#a11yDropdown,
+#modalGenerico .panel {
+  background: var(--bg-0) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--panel-border) !important;
+  backdrop-filter: none !important;
+}
+
+[data-theme="light"] #loginOverlay .panel,
+[data-theme="light"] #modalReset .panel,
+[data-theme="light"] #userDropdown,
+[data-theme="light"] #a11yDropdown,
+[data-theme="light"] #modalGenerico .panel {
+  background: #ffffff !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+#boxLogin,
+#boxCadastro {
+  animation: fadeInForm 0.4s ease forwards;
+}
+
+@keyframes fadeInForm {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- AJUSTES DO NOVO CABEÇALHO --- */
+.title-main {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.title-sub {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+[data-theme="light"] .title-sub {
+  color: var(--text);
+  opacity: 0.8;
+}
+
+/* Garante que os formulários de login/cadastro sejam sólidos sobre o gradiente */
+#loginOverlay .panel {
+  background: var(--bg-0) !important;
+  border: 1px solid var(--panel-border) !important;
+  backdrop-filter: none !important;
+}
+
+[data-theme="light"] #loginOverlay .panel {
+  background: #ffffff !important;
 }

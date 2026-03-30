@@ -10,6 +10,7 @@ const formatarMoeda = (valor) => {
 
 const i18n = {
     pt: {
+        menuA11y: "Acessibilidade", a11yRead: "Leitura Confortável", a11yColor: "Modo Daltônico", a11yAudio: "Leitor de Tela",
         loginTitle: "Entre na sua conta",
         loginDesc: "Identifique-se para acessar o painel.",
         showPass: "Ver senha",
@@ -33,9 +34,11 @@ const i18n = {
         resetDesc: "Ambiente de teste: digite seu e-mail cadastrado e a nova senha diretamente abaixo.",
         btnReset: "Salvar Nova Senha",
         title: "Detecção de Transações Suspeitas",
+        titleSlogan: "Detecção de Transações Suspeitas",
         themeLight: "Tema Claro",
         themeDark: "Tema Escuro",
         btnLogout: "Sair",
+        btnCancel: "Cancelar", btnConfirm: "Confirmar", logoutTitle: "Sair do Sistema", logoutMsg: "Deseja mesmo sair da sua conta?",
         dirUpper: "Apenas gastos muito altos",
         dirLower: "Apenas gastos muito baixos",
         dirBoth: "Qualquer anomalia (Altos ou Baixos)",
@@ -128,6 +131,7 @@ const i18n = {
         optMad: "Análise Rigorosa",
     },
     en: {
+        menuA11y: "Accessibility", a11yRead: "Comfortable Reading", a11yColor: "Colorblind Mode", a11yAudio: "Screen Reader",
         loginTitle: "Login to your account",
         loginDesc: "Identify yourself to access the dashboard.",
         showPass: "Show password",
@@ -151,9 +155,11 @@ const i18n = {
         resetDesc: "Test environment: enter your registered e-mail and the new password directly below.",
         btnReset: "Save New Password",
         title: "Suspicious Transaction Detection",
+        titleSlogan: "Suspicious Transaction Detection",
         themeLight: "Light Theme",
         themeDark: "Dark Theme",
         btnLogout: "Logout",
+        btnCancel: "Cancel", btnConfirm: "Confirm", logoutTitle: "Logout", logoutMsg: "Are you sure you want to log out?",
         dirUpper: "Only very high spending",
         dirLower: "Only very low spending",
         dirBoth: "Any anomaly (High or Low)",
@@ -246,6 +252,7 @@ const i18n = {
         optMad: "Strict Analysis",
     },
     es: {
+        menuA11y: "Accesibilidad", a11yRead: "Lectura Cómoda", a11yColor: "Modo Daltónico", a11yAudio: "Lector de Pantalla",
         loginTitle: "Inicia sesión",
         loginDesc: "Identifícate para acceder al sistema.",
         showPass: "Mostrar contraseña",
@@ -264,9 +271,11 @@ const i18n = {
         resetDesc: "Entorno de prueba: ingresa tu correo registrado y la nueva contraseña directamente abajo.",
         btnReset: "Guardar Nueva Contraseña",
         title: "Detección de Transacciones Sospechosas",
+        titleSlogan: "Detección de Transacciones Sospechosas",
         themeLight: "Tema Claro",
         themeDark: "Tema Oscuro",
         btnLogout: "Salir",
+        btnCancel: "Cancelar", btnConfirm: "Confirmar", logoutTitle: "Salir", logoutMsg: "¿Estás seguro de que deseas salir?",
         dirUpper: "Solo gastos excesivamente altos",
         dirLower: "Solo gastos inusualmente bajos",
         dirBoth: "Cualquier anomalía (Altos o Bajos)",
@@ -490,6 +499,7 @@ function getAnalyzeConfig() {
 
 // Implementa concorrência assíncrona (Non-blocking I/O) para garantir que cálculos matemáticos pesados no servidor não interrompam a thread principal da interface.
 async function apiJson(url, opts = {}) {
+    opts.credentials = 'same-origin';
     const res = await fetch(url, opts);
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
@@ -919,19 +929,19 @@ async function viewLast(id, skipScroll = false) {
 }
 async function renameDataset(id) {
     const dict = i18n[currentLang] || i18n['pt'];
-    const newName = prompt(dict.promptRename);
-    if (!newName) return;
-
-    clearMsg();
-    try {
-        const fd = new FormData();
-        fd.append('name', newName);
-        await apiJson(`/datasets/${id}`, { method: 'PUT', body: fd });
-        await refreshDatasets();
-        showOk(dict.msgRenamed);
-    } catch (e) {
-        showErr(e.message);
-    }
+    abrirModalGenerico(dict.btnRename, dict.promptRename, true, "Ex: Novo Nome", '', async (newName) => {
+        if (!newName) return;
+        clearMsg();
+        try {
+            const fd = new FormData();
+            fd.append('name', newName);
+            await apiJson(`/datasets/${id}`, { method: 'PUT', body: fd });
+            await refreshDatasets();
+            showOk(dict.msgRenamed);
+        } catch (e) {
+            showErr(e.message);
+        }
+    });
 }
 
 async function replaceFile(id) {
@@ -959,18 +969,17 @@ async function replaceFile(id) {
 
 async function deleteDataset(id) {
     const dict = i18n[currentLang] || i18n['pt'];
-    if (!confirm(dict.confirmDelete.replace('{id}', id))) return;
-
-    clearMsg();
-    try {
-        await apiJson(`/datasets/${id}`, { method: 'DELETE' });
-        await refreshDatasets();
-        showOk(dict.msgDeleted);
-    } catch (e) {
-        showErr(e.message);
-    }
+    abrirModalGenerico(dict.btnDelete, dict.confirmDelete.replace('{id}', id), false, "", 'danger', async () => {
+        clearMsg();
+        try {
+            await apiJson(`/datasets/${id}`, { method: 'DELETE' });
+            await refreshDatasets();
+            showOk(dict.msgDeleted);
+        } catch (e) {
+            showErr(e.message);
+        }
+    });
 }
-
 $('btnUpload').addEventListener('click', handleUpload);
 $('btnCloseErr').addEventListener('click', () => $('errBox').style.display = 'none');
 $('btnCloseOk').addEventListener('click', () => $('okBox').style.display = 'none');
@@ -1186,15 +1195,29 @@ $('btnCadastrar').addEventListener('click', async () => {
     btn.disabled = false;
 });
 
-// --- LÓGICA DE SAIR (LOGOUT) ---
-$('btnSair').addEventListener('click', async () => {
-    try {
-        await fetch('/logout', { method: 'POST' });
+//LÓGICA DE SAIR
+$('btnSair').addEventListener('click', async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const dict = i18n[currentLang] || i18n['pt'];
+    $('userDropdown').style.display = 'none';
+
+    abrirModalGenerico(dict.logoutTitle, dict.logoutMsg, false, "", 'danger', async () => {
+        const btn = $('btnSair');
+        btn.textContent = 'Saindo...';
+
+        try {
+            await fetch('/logout', { method: 'POST' });
+        } catch (error) {
+            console.error("Erro na API de logout", error);
+        }
+
         localStorage.removeItem('ultimo-dataset-id');
-        location.reload();
-    } catch (e) {
-        console.error("Erro ao sair", e);
-    }
+        $('loginOverlay').style.display = 'flex';
+        resetarResultado();
+        $('dsTbody').innerHTML = `<tr><td colspan="5">Sessão encerrada.</td></tr>`;
+        btn.textContent = dict.btnLogout || 'Sair';
+    });
 });
 //ACESSIBILIDADE
 document.addEventListener('keydown', (e) => {
@@ -1283,18 +1306,26 @@ function falar(texto) {
 
     window.speechSynthesis.speak(utterance);
 }
-// MENU DO USUÁRIO
+// MENU DO USUÁRIO E ACESSIBILIDADE
 $('userProfile').addEventListener('click', (e) => {
-    e.stopPropagation(); // Evita fechar na mesma hora
+    e.stopPropagation();
     const drop = $('userDropdown');
     drop.style.display = drop.style.display === 'none' ? 'flex' : 'none';
+    if ($('a11yDropdown')) $('a11yDropdown').style.display = 'none'; // Fecha o de acessibilidade
 });
 
-// Fecha o menu se clicar em qualquer outro lugar da tela
+$('btnA11yToggle').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const drop = $('a11yDropdown');
+    drop.style.display = drop.style.display === 'none' ? 'flex' : 'none';
+    if ($('userDropdown')) $('userDropdown').style.display = 'none'; // Fecha o do usuário
+});
+
+// Fecha os menus se clicar em qualquer outro lugar da tela
 document.addEventListener('click', () => {
     if ($('userDropdown')) $('userDropdown').style.display = 'none';
+    if ($('a11yDropdown')) $('a11yDropdown').style.display = 'none';
 });
-
 // DOWNLOAD DA TABELA (Converte o JSON para CSV na hora)
 $('btnDownTable').addEventListener('click', () => {
     if (!ultimoResultadoGlobal || !ultimoResultadoGlobal.suspeitas) return;
@@ -1388,5 +1419,48 @@ $('btnEnviarReset').addEventListener('click', async () => {
     btn.textContent = dictMsg.btnReset || 'Salvar Nova Senha';
     btn.disabled = false;
 });
+
+//SISTEMA DE POP-UP GENÉRICO (CONFIRMAÇÕES E INPUTS)
+function abrirModalGenerico(titulo, mensagem, isInput, placeholder, tipoBotaoConfirmar, callbackConfirmacao) {
+    $('modalGenTitle').textContent = titulo;
+    $('modalGenMsg').innerHTML = mensagem;
+
+    const inputEl = $('modalGenInput');
+    if (isInput) {
+        inputEl.style.display = 'block';
+        inputEl.value = '';
+        inputEl.placeholder = placeholder || '';
+        setTimeout(() => inputEl.focus(), 100);
+    } else {
+        inputEl.style.display = 'none';
+    }
+
+    const btnConfirm = $('btnGenConfirm');
+    btnConfirm.className = 'btn';
+    if (tipoBotaoConfirmar === 'danger') {
+        btnConfirm.classList.add('danger');
+    }
+
+    $('modalGenerico').style.display = 'flex';
+
+    // Truque para limpar eventos de cliques antigos clonando os botões
+    const novoBtnCancel = $('btnGenCancel').cloneNode(true);
+    $('btnGenCancel').replaceWith(novoBtnCancel);
+    const novoBtnConfirm = btnConfirm.cloneNode(true);
+    btnConfirm.replaceWith(novoBtnConfirm);
+
+    $('btnGenCancel').addEventListener('click', () => {
+        $('modalGenerico').style.display = 'none';
+    });
+
+    $('btnGenConfirm').addEventListener('click', () => {
+        $('modalGenerico').style.display = 'none';
+        if (isInput) {
+            callbackConfirmacao($('modalGenInput').value.trim());
+        } else {
+            callbackConfirmacao();
+        }
+    });
+}
 // Inicializa o sistema verificando se o usuário já tem um acesso salvo
 checkLogin();

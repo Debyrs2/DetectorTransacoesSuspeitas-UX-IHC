@@ -4,120 +4,199 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Detecção de Transações Suspeitas</title>
+  <title>DataGuard - Detecção de Transações Suspeitas</title>
   <link rel="stylesheet" href="/static/style.css" />
-
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
+  <div id="landingPage"
+    style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 20px; position: relative; z-index: 10;">
+    <div style="animation: modalIn 0.8s ease;">
+      <img src="/static/imagens/Logo.png" alt="DataGuard"
+        style="width: 140px; margin-bottom: 24px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.4);"
+        onerror="this.src='/static/imagens/Logo.jpg'" />
+
+      <h1
+        style="font-size: 3.5rem; font-weight: 900; margin: 0; background: linear-gradient(to right, #818cf8, #38bdf8); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -1px;">
+        DataGuard</h1>
+
+      <h2 style="font-size: 1.5rem; color: var(--text); font-weight: 500; margin: 8px 0 24px;">Detecção de Transações
+        Suspeitas</h2>
+
+      <p class="muted" style="max-width: 550px; margin: 0 auto 40px; font-size: 1.1rem; line-height: 1.6;">
+        A plataforma definitiva de análise em Big Data. Identifique anomalias financeiras em segundos, proteja os ativos
+        e garanta a integridade das operações.
+      </p>
+
+      <button id="btnAcessarLanding" class="btn"
+        style="font-size: 1.1rem; padding: 16px 36px; border-radius: 30px; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4); font-weight: 800;">Conhecer
+        e Acessar</button>
+    </div>
+  </div>
   <div id="loginOverlay"
-    style="position: fixed; inset: 0; background: var(--bg-0); z-index: 99999; display: flex; align-items: center; justify-content: center;">
-    <div class="panel"
-      style="max-width: 340px; width: 90%; text-align: center; box-shadow: var(--shadow); position: relative;">
+    style="display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; z-index: 100000;">
+    <video autoplay muted loop playsinline
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; opacity: 0.6;">
+      <source src="/static/imagens/video.mp4" type="video/mp4">
+    </video>
+    <div
+      style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(30,27,75,0.85) 100%); z-index: -1;">
+    </div>
+    <div style="display: flex; max-width: 900px; width: 90%; align-items: stretch; gap: 40px; flex-wrap: wrap;">
 
-      <div id="boxLogin">
-        <h2 style="margin-bottom: 8px; color: var(--brand); font-size: 20px;" data-i18n="loginTitle">Acesso Restrito
-        </h2>
-        <p class="muted" style="margin-bottom: 24px;" data-i18n="loginDesc">Identifique-se para acessar o painel.</p>
-
-        <input type="text" id="identificadorLogin" placeholder="E-mail ou Nome de Usuário"
-          data-i18n-placeholder="phUserOrEmail" style="margin-bottom: 8px; text-align: center;" />
-        <input type="password" id="senhaLogin" placeholder="Senha" data-i18n-placeholder="phPassword"
-          style="margin-bottom: 8px; text-align: center;" />
+      <div
+        style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: white;">
+        <img src="/static/imagens/Logo.png" alt="Logo DataGuard Gigante"
+          style="width: 280px; height: auto; border-radius: 16px; box-shadow: var(--shadow); margin-bottom: 30px;"
+          onerror="this.src='/static/imagens/Logo.jpg'" />
 
         <div
-          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 4px;">
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <input type="checkbox" id="mostrarSenhaBtn" style="width: auto; height: auto; margin: 0;" />
-            <label for="mostrarSenhaBtn" class="muted" style="font-size: 12px; cursor: pointer;"
-              data-i18n="showPass">Ver senha</label>
-          </div>
-          <a href="#" id="btnOpenReset" class="muted"
-            style="font-size: 12px; text-decoration: none; transition: color 0.2s;" data-i18n="forgotPass"
-            onmouseover="this.style.color='var(--brand)'" onmouseout="this.style.color='var(--muted)'">Esqueceu a
-            senha?</a>
+          style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); width: 100%;">
+          <h3 style="font-size: 18px; font-weight: 700; margin-top: 0; margin-bottom: 8px;">Sistema DataGuard</h3>
+          <p style="font-size: 13px; opacity: 0.9; line-height: 1.5; margin: 0;">Plataforma inteligente de Detecção de
+            Transações Suspeitas.<br>Proteja os seus ativos e garanta a integridade financeira com a nossa análise
+            avançada de anomalias.</p>
         </div>
-
-        <button class="btn" id="btnLogar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnEnter">Entrar no
-          Sistema</button>
-        <button class="btn2 btn-sm" id="btnIrCadastro" style="width: 100%; border: none; background: transparent;"
-          data-i18n="btnGoRegister">Não tem conta? Cadastre-se</button>
-
-        <div id="loginErro" class="muted alert" style="margin-top: 12px; display: none;" role="alert"
-          aria-live="assertive">⚠️ <span data-i18n="errLogin">Credenciais incorretas.</span></div>
       </div>
 
-      <div id="boxCadastro" style="display: none;">
-        <h2 style="margin-bottom: 8px; color: var(--brand); font-size: 20px;" data-i18n="regTitle">Criar Conta</h2>
-        <p class="muted" style="margin-bottom: 24px;" data-i18n="regDesc">Preencha seus dados para começar.</p>
+      <div style="flex: 1; display: flex; align-items: center; justify-content: center; min-width: 320px;">
 
-        <input type="text" id="nomeCadastro" placeholder="Seu Nome" data-i18n-placeholder="phName"
-          style="margin-bottom: 8px; text-align: center;" />
-        <input type="email" id="emailCadastro" placeholder="Seu E-mail" data-i18n-placeholder="phEmail"
-          style="margin-bottom: 8px; text-align: center;" />
-        <input type="password" id="senhaCadastro" placeholder="Crie uma Senha" data-i18n-placeholder="phCreatePassword"
-          style="margin-bottom: 4px; text-align: center;" />
+        <div class="panel" id="boxLogin" style="width: 100%; max-width: 340px;">
+          <h2 class="form-title" data-i18n="loginTitle">Entre na sua conta</h2>
+          <p class="form-subtitle muted" style="margin-bottom: 24px;" data-i18n="loginDesc">Identifique-se para aceder
+            ao painel.</p>
 
-        <p class="muted"
-          style="font-size: 11px; margin-top: 0; margin-bottom: 16px; text-align: center; line-height: 1.4;"
-          data-i18n="rulePass">
-          A senha deve ter no mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo especial (ex: *).
-        </p>
+          <div id="loginErro" class="muted"
+            style="margin-bottom: 12px; display: none; text-align: center; font-size: 13px; color: var(--danger);"
+            role="alert" aria-live="polite"></div>
 
-        <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 16px;">
-          <input type="checkbox" id="mostrarSenhaCadastroBtn" style="width: auto; height: auto;" />
-          <label for="mostrarSenhaCadastroBtn" class="muted" style="font-size: 12px; cursor: pointer;"
-            data-i18n="showPass">Ver senha</label>
+          <input type="text" id="identificadorLogin" placeholder="E-mail ou Usuário"
+            data-i18n-placeholder="phUserOrEmail" style="margin-bottom: 8px;" />
+          <input type="password" id="senhaLogin" placeholder="A sua Palavra-passe" data-i18n-placeholder="phPassword"
+            style="margin-bottom: 8px;" />
+
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 4px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <input type="checkbox" id="mostrarSenhaBtn" style="width: auto; height: auto; margin: 0;" />
+              <label for="mostrarSenhaBtn" class="muted" style="font-size: 12px; cursor: pointer;"
+                data-i18n="showPass">Ver palavra-passe</label>
+            </div>
+            <a href="#" id="btnOpenReset" class="muted"
+              style="font-size: 12px; text-decoration: none; transition: color 0.2s;" data-i18n="forgotPass"
+              onmouseover="this.style.color='var(--brand)'" onmouseout="this.style.color='var(--muted)'">Esqueceu a
+              palavra-passe?</a>
+          </div>
+
+          <button class="btn" id="btnLogar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnEnter">Entrar no
+            Sistema</button>
+          <button class="btn-link muted" id="btnIrCadastro"
+            style="font-size: 12px; display: block; width: 100%; background: none; border: none; cursor: pointer; text-decoration: underline;"
+            data-i18n="btnGoRegister">Não tem conta? Registe-se</button>
+          <button id="btnVoltarLanding" class="muted"
+            style="background: none; border: none; font-size: 12px; width: 100%; margin-top: 16px; cursor: pointer; text-decoration: underline;">←
+            Voltar ao Início</button>
         </div>
 
-        <button class="btn" id="btnCadastrar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnRegister">Criar
-          Minha Conta</button>
-        <button class="btn2 btn-sm" id="btnIrLogin" style="width: 100%; border: none; background: transparent;"
-          data-i18n="btnGoLogin">Já tem conta? Entrar</button>
+        <div class="panel" id="boxCadastro" style="width: 100%; max-width: 340px; display: none;">
+          <h2 class="form-title" data-i18n="regTitle">Criar Conta</h2>
+          <p class="form-subtitle muted" style="margin-bottom: 24px;" data-i18n="regDesc">Preencha os seus dados para
+            começar.</p>
 
-        <div id="cadastroMsg" class="muted" style="margin-top: 12px; display: none;" role="alert" aria-live="polite">
+          <div id="cadastroMsg" class="muted"
+            style="margin-bottom: 12px; display: none; text-align: center; font-size: 13px;" role="alert"
+            aria-live="polite"></div>
+
+          <input type="text" id="nomeCadastro" placeholder="O seu Nome" data-i18n-placeholder="phName"
+            style="margin-bottom: 8px;" />
+          <input type="email" id="emailCadastro" placeholder="O seu E-mail" data-i18n-placeholder="phEmail"
+            style="margin-bottom: 8px;" />
+          <input type="password" id="senhaCadastro" placeholder="Crie uma Palavra-passe"
+            data-i18n-placeholder="phCreatePassword" style="margin-bottom: 8px;" />
+
+          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px; padding: 0 4px;">
+            <input type="checkbox" id="mostrarSenhaCadastroBtn" style="width: auto; height: auto; margin: 0;" />
+            <label for="mostrarSenhaCadastroBtn" class="muted" style="font-size: 12px; cursor: pointer;"
+              data-i18n="showPass">Ver palavra-passe</label>
+          </div>
+
+          <p class="muted" style="font-size: 11px; margin-bottom: 16px; line-height: 1.4;" data-i18n="rulePass">A
+            palavra-passe deve ter no mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo especial (ex: *).
+          </p>
+
+          <button class="btn" id="btnCadastrar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnRegister">Criar
+            Minha Conta</button>
+          <button class="btn-link muted" id="btnIrLogin"
+            style="font-size: 12px; display: block; width: 100%; background: none; border: none; cursor: pointer; text-decoration: underline;"
+            data-i18n="btnGoLogin">Já tem conta? Inicie sessão</button>
         </div>
       </div>
     </div>
   </div>
-  <div class="container">
+  <div class="container" id="dashboardApp" style="display: none;">
     <header>
-      <div>
-        <h1 class="title" data-i18n="title">Detecção de Transações Suspeitas</h1>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <img src="/static/imagens/Logo.png" alt="Logo DataGuard" id="logoSistemaHeader"
+          style="height: 80px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);"
+          onerror="this.src='/static/imagens/Logo.jpg'" />
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <h1 class="title-main">DataGuard</h1>
+          <h2 class="title-sub muted" data-i18n="titleSlogan">Detecção de Transações Suspeitas</h2>
+        </div>
       </div>
 
       <div style="display: flex; gap: 8px; align-items: center; position: relative; z-index: 100000;">
-
-        <div id="userMenuContainer" style="display: none; position: relative; margin-right: 12px;">
-          <div id="userProfile" tabindex="0" role="button" aria-label="Abrir menu do usuário"
+        <div id="userMenuContainer" style="display: none; position: relative; margin-right: 8px;">
+          <div id="userProfile" tabindex="0" role="button" aria-label="Abrir menu do utilizador"
             style="display: flex; align-items: center; gap: 8px; text-align: right; cursor: pointer; padding: 4px 8px; border-radius: 8px; transition: background 0.2s;"
             onmouseover="this.style.background='var(--panel-border)'" onmouseout="this.style.background='transparent'">
             <div style="display: flex; flex-direction: column; line-height: 1.2;">
-              <strong id="userNameDisplay" style="font-size: 13px; color: var(--text);">Usuário</strong>
+              <strong id="userNameDisplay" style="font-size: 13px; color: var(--text);">Utilizador</strong>
               <span id="userEmailDisplay" class="muted" style="font-size: 11px;">email</span>
             </div>
             <div id="userAvatar"
               style="background: var(--brand); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">
               U</div>
           </div>
-
           <div id="userDropdown" class="panel"
-            style="display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; width: 200px; padding: 12px; flex-direction: column; gap: 12px; box-shadow: var(--shadow);">
+            style="display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; width: 200px; flex-direction: column; gap: 12px; box-shadow: var(--shadow);">
             <div style="border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 4px;">
-              <strong style="font-size: 14px; display: block;" data-i18n="menuProfile">Meu Perfil</strong>
+              <strong style="font-size: 14px; display: block;" data-i18n="menuProfile">O Meu Perfil</strong>
               <span class="muted" style="font-size: 12px; word-break: break-all;" id="dropdownEmail">email</span>
             </div>
             <button id="btnSair" class="danger btn-sm" style="width: 100%;" data-i18n="btnLogout">Sair</button>
           </div>
         </div>
 
-        <button id="btnA11yLeitura" class="btn2 btn-sm" style="height: 36px; padding: 0 12px; border-radius: 999px;"
-          title="Leitura Confortável" aria-label="Ativar leitura confortável">A+</button>
-        <button id="btnA11yDaltonico" class="btn2 btn-sm" style="height: 36px; padding: 0 12px; border-radius: 999px;"
-          title="Modo Daltônico" aria-label="Ativar modo daltônico">👁️</button>
-        <button id="btnA11yAudio" class="btn2 btn-sm" style="height: 36px; padding: 0 12px; border-radius: 999px;"
-          title="Ouvir instruções" aria-label="Ler tela en voz alta">🔊</button>
+        <div id="a11yMenuContainer" style="position: relative;">
+          <button id="btnA11yToggle" class="btn2 btn-sm"
+            style="height: 36px; padding: 0 12px; border-radius: 999px; display: flex; align-items: center; justify-content: center;"
+            title="Acessibilidade" aria-label="Abrir menu de acessibilidade">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="4" r="2"></circle>
+              <path d="M12 6v8"></path>
+              <path d="M5 8h14"></path>
+              <path d="M12 14l-4 6"></path>
+              <path d="M12 14l4 6"></path>
+            </svg>
+          </button>
+          <div id="a11yDropdown" class="panel"
+            style="display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; width: 200px; flex-direction: column; gap: 8px; box-shadow: var(--shadow);">
+            <strong
+              style="font-size: 13px; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--line);"
+              data-i18n="menuA11y">Acessibilidade</strong>
+            <button id="btnA11yLeitura" class="btn2 btn-sm"
+              style="display: flex; justify-content: flex-start; gap: 8px;" title="Leitura Confortável"><span>A+</span>
+              <span data-i18n="a11yRead">Leitura Confortável</span></button>
+            <button id="btnA11yDaltonico" class="btn2 btn-sm"
+              style="display: flex; justify-content: flex-start; gap: 8px;" title="Modo Daltónico"><span>👁️</span>
+              <span data-i18n="a11yColor">Modo Daltónico</span></button>
+            <button id="btnA11yAudio" class="btn2 btn-sm" style="display: flex; justify-content: flex-start; gap: 8px;"
+              title="Ouvir instruções"><span>🔊</span> <span data-i18n="a11yAudio">Lector de Ecrã</span></button>
+          </div>
+        </div>
 
         <select id="langSelect" class="btn2 btn-sm"
           style="width: auto; height: 36px; padding: 0 12px; border-radius: 999px; cursor: pointer; margin: 0;">
@@ -364,6 +443,25 @@
           role="alert" aria-live="polite"></div>
 
         <button class="btn" id="btnEnviarReset" style="width: 100%;" data-i18n="btnReset">Salvar Nova Senha</button>
+      </div>
+    </div>
+
+    <div id="modalGenerico"
+      style="display: none; position: fixed; inset: 0; z-index: 100000; align-items: center; justify-content: center;">
+      <div class="panel"
+        style="position: relative; max-width: 340px; width: 90%; text-align: center; animation: modalIn 0.3s ease;">
+
+        <h2 id="modalGenTitle" style="margin-top: 0; margin-bottom: 8px; font-size: 18px; color: var(--text);">Título
+        </h2>
+        <p id="modalGenMsg" class="muted" style="font-size: 13px; margin-bottom: 20px; line-height: 1.4;">Mensagem
+          principal aqui.</p>
+
+        <input type="text" id="modalGenInput" style="display: none; margin-bottom: 20px; text-align: center;" />
+
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button class="btn2" id="btnGenCancel" style="flex: 1;" data-i18n="btnCancel">Cancelar</button>
+          <button class="btn" id="btnGenConfirm" style="flex: 1;" data-i18n="btnConfirm">Confirmar</button>
+        </div>
       </div>
     </div>
 
