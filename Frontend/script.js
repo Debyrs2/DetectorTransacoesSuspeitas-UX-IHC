@@ -1474,6 +1474,15 @@ function abrirModalGenerico(titulo, mensagem, isInput, placeholder, tipoBotaoCon
 $('btnAcessarLanding').addEventListener('click', () => {
     $('landingPage').style.display = 'none';
     $('loginOverlay').style.display = 'flex';
+
+    // Código Anti-Bloqueio de Navegador
+    const vid = $('bgVideo');
+    if (vid) {
+        vid.muted = true;
+        vid.play().catch((err) => {
+            console.error("O Navegador bloqueou o vídeo:", err);
+        });
+    }
 });
 
 $('btnVoltarLanding').addEventListener('click', () => {
