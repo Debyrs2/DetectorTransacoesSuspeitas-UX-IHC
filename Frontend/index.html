@@ -73,27 +73,36 @@
     </button>
   </div>
   <div id="landingPage"
-    style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 20px; position: relative; z-index: 10;">
-    <div style="animation: modalIn 0.8s ease;">
+    style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; text-align: center; padding: 40px 20px 20px; position: relative; z-index: 10; overflow: hidden;">
+
+    <video id="bgVideoLanding" muted playsinline
+      style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; opacity: 1; filter: blur(25px) scale(1.15);">
+      <source src="/static/imagens/video.mp4" type="video/mp4">
+    </video>
+
+    <div
+      style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(30,27,75,0.85) 100%); z-index: -1;">
+    </div>
+
+    <div style="animation: modalIn 0.8s ease; z-index: 1;">
+
       <img src="/static/imagens/Logo.png" alt="DataGuard"
-        style="width: 140px; margin-bottom: 24px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.4);"
+        style="width: 380px; margin-bottom: -70px; margin-top: -30px; position: relative; z-index: 1;"
         onerror="this.src='/static/imagens/Logo.jpg'" />
 
       <h1
-        style="font-size: 3.5rem; font-weight: 900; margin: 0; background: linear-gradient(to right, #818cf8, #38bdf8); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -1px;">
-        DataGuard</h1>
+        style="font-size: 3.5rem; font-weight: 900; margin: 0 0 24px 0; color: #3b82f6; line-height: 1.1; letter-spacing: -1px; text-shadow: 0 0 25px rgba(59, 130, 246, 0.5), 0 4px 10px rgba(0,0,0,0.8); position: relative; z-index: 2;"
+        data-i18n="landSubtitle">Detecção de Transações Suspeitas</h1>
 
-      <h2 style="font-size: 1.5rem; color: var(--text); font-weight: 500; margin: 8px 0 24px;">Detecção de Transações
-        Suspeitas</h2>
-
-      <p class="muted" style="max-width: 550px; margin: 0 auto 40px; font-size: 1.1rem; line-height: 1.6;">
+      <p style="max-width: 600px; margin: 0 auto 40px; font-size: 1.1rem; line-height: 1.6; color: rgba(255,255,255,0.9);"
+        data-i18n="landDesc">
         A plataforma definitiva de análise em Big Data. Identifique anomalias financeiras em segundos, proteja os ativos
-        e garanta a integridade das operações.
+        da sua empresa e garanta a integridade das suas operações.
       </p>
 
       <button id="btnAcessarLanding" class="btn"
-        style="font-size: 1.1rem; padding: 16px 36px; border-radius: 30px; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4); font-weight: 800;">Conhecer
-        e Acessar</button>
+        style="font-size: 1.1rem; padding: 16px 36px; border-radius: 30px; box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4); font-weight: 800; letter-spacing: 0.5px;"
+        data-i18n="btnLandEnter">Acessar a Plataforma</button>
     </div>
   </div>
   <div id="loginOverlay"
