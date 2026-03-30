@@ -1055,7 +1055,12 @@ async function checkLogin() {
         const res = await fetch('/me');
         if (res.ok) {
             const data = await res.json();
+
+            // Logado: Esconde Apresentação/Login e mostra o Sistema
+            $('landingPage').style.display = 'none';
             $('loginOverlay').style.display = 'none';
+            $('dashboardApp').style.display = 'block';
+
             $('userMenuContainer').style.display = 'block';
             $('userNameDisplay').textContent = data.nome;
             $('userEmailDisplay').textContent = data.email;
@@ -1064,16 +1069,18 @@ async function checkLogin() {
 
             refreshDatasets().then(() => {
                 const lastId = localStorage.getItem('ultimo-dataset-id');
-                if (lastId) {
-                    viewLast(lastId, true);
-                }
+                if (lastId) viewLast(lastId, true);
             }).catch(e => showErr(e.message));
         } else {
-            $('loginOverlay').style.display = 'flex';
-            $('btnSair').style.display = 'none';
+            // Deslogado: Mostra a Landing Page
+            $('dashboardApp').style.display = 'none';
+            $('loginOverlay').style.display = 'none';
+            $('landingPage').style.display = 'flex';
         }
     } catch (e) {
-        $('loginOverlay').style.display = 'flex';
+        $('dashboardApp').style.display = 'none';
+        $('loginOverlay').style.display = 'none';
+        $('landingPage').style.display = 'flex';
     }
 }
 
@@ -1213,7 +1220,8 @@ $('btnSair').addEventListener('click', async (e) => {
         }
 
         localStorage.removeItem('ultimo-dataset-id');
-        $('loginOverlay').style.display = 'flex';
+        $('dashboardApp').style.display = 'none';
+        $('landingPage').style.display = 'flex';
         resetarResultado();
         $('dsTbody').innerHTML = `<tr><td colspan="5">Sessão encerrada.</td></tr>`;
         btn.textContent = dict.btnLogout || 'Sair';
@@ -1462,5 +1470,15 @@ function abrirModalGenerico(titulo, mensagem, isInput, placeholder, tipoBotaoCon
         }
     });
 }
+// Navegação entre Landing Page e Login
+$('btnAcessarLanding').addEventListener('click', () => {
+    $('landingPage').style.display = 'none';
+    $('loginOverlay').style.display = 'flex';
+});
+
+$('btnVoltarLanding').addEventListener('click', () => {
+    $('loginOverlay').style.display = 'none';
+    $('landingPage').style.display = 'flex';
+});
 // Inicializa o sistema verificando se o usuário já tem um acesso salvo
 checkLogin();
