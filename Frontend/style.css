@@ -683,7 +683,8 @@ div[vw-plugin-wrapper] {
   background: #ffffff !important;
 }
 
-#loginOverlay {
+#loginOverlay,
+[data-theme="light"] #loginOverlay {
   background: transparent !important;
   backdrop-filter: none !important;
 }
