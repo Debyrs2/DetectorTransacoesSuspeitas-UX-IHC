@@ -118,388 +118,379 @@
     </div>
 
     <div
-      style="display: flex; max-width: 900px; width: 90%; align-items: stretch; gap: 40px; flex-wrap: wrap; z-index: 2; position: relative;">
+      style="display: flex; max-width: 1100px; width: 90%; align-items: flex-start; justify-content: space-between; gap: 40px; flex-wrap: wrap; z-index: 2; position: relative; padding-top: 40px;">
 
-      <div
-        style="display: flex; max-width: 900px; width: 90%; align-items: stretch; gap: 40px; flex-wrap: wrap; z-index: 2; position: relative;">
+      <div class="login-info-column">
 
-        <div
-          style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: white;">
-          <img src="/static/imagens/Logo.png" alt="Logo DataGuard Gigante"
-            style="width: 280px; height: auto; border-radius: 16px; box-shadow: var(--shadow); margin-bottom: 30px;"
-            onerror="this.src='/static/imagens/Logo.jpg'" />
+        <img src="/static/imagens/Logo.png" alt="Logo DataGuard" class="login-logo-pro"
+          onerror="this.src='/static/imagens/Logo.jpg'" />
 
-          <div
-            style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); width: 100%;">
-            <h3 style="font-size: 18px; font-weight: 700; margin-top: 0; margin-bottom: 8px;">Sistema DataGuard</h3>
-            <p style="font-size: 13px; opacity: 0.9; line-height: 1.5; margin: 0;">Plataforma inteligente de Detecção de
-              Transações Suspeitas.<br>Proteja os seus ativos e garanta a integridade financeira com a nossa análise
-              avançada de anomalias.</p>
-          </div>
-        </div>
-
-        <div style="flex: 1; display: flex; align-items: center; justify-content: center; min-width: 320px;">
-
-          <div class="panel" id="boxLogin" style="width: 100%; max-width: 340px;">
-            <h2 class="form-title" data-i18n="loginTitle">Entre na sua conta</h2>
-            <p class="form-subtitle muted" style="margin-bottom: 24px;" data-i18n="loginDesc">Identifique-se para aceder
-              ao painel.</p>
-
-            <div id="loginErro" class="muted"
-              style="margin-bottom: 12px; display: none; text-align: center; font-size: 13px; color: var(--danger);"
-              role="alert" aria-live="polite"></div>
-
-            <input type="text" id="identificadorLogin" placeholder="E-mail ou Usuário"
-              data-i18n-placeholder="phUserOrEmail" style="margin-bottom: 8px;" />
-            <input type="password" id="senhaLogin" placeholder="A sua Palavra-passe" data-i18n-placeholder="phPassword"
-              style="margin-bottom: 8px;" />
-
-            <div
-              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 4px;">
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <input type="checkbox" id="mostrarSenhaBtn" style="width: auto; height: auto; margin: 0;" />
-                <label for="mostrarSenhaBtn" class="muted" style="font-size: 12px; cursor: pointer;"
-                  data-i18n="showPass">Ver palavra-passe</label>
-              </div>
-              <a href="#" id="btnOpenReset" class="muted"
-                style="font-size: 12px; text-decoration: none; transition: color 0.2s;" data-i18n="forgotPass"
-                onmouseover="this.style.color='var(--brand)'" onmouseout="this.style.color='var(--muted)'">Esqueceu a
-                palavra-passe?</a>
-            </div>
-
-            <button class="btn" id="btnLogar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnEnter">Entrar no
-              Sistema</button>
-            <button class="btn-link muted" id="btnIrCadastro"
-              style="font-size: 12px; display: block; width: 100%; background: none; border: none; cursor: pointer; text-decoration: underline;"
-              data-i18n="btnGoRegister">Não tem conta? Registe-se</button>
-            <button id="btnVoltarLanding" class="muted"
-              style="background: none; border: none; font-size: 12px; width: 100%; margin-top: 16px; cursor: pointer; text-decoration: underline;">←
-              Voltar ao Início</button>
-          </div>
-
-          <div class="panel" id="boxCadastro" style="width: 100%; max-width: 340px; display: none;">
-            <h2 class="form-title" data-i18n="regTitle">Criar Conta</h2>
-            <p class="form-subtitle muted" style="margin-bottom: 24px;" data-i18n="regDesc">Preencha os seus dados para
-              começar.</p>
-
-            <div id="cadastroMsg" class="muted"
-              style="margin-bottom: 12px; display: none; text-align: center; font-size: 13px;" role="alert"
-              aria-live="polite"></div>
-
-            <input type="text" id="nomeCadastro" placeholder="O seu Nome" data-i18n-placeholder="phName"
-              style="margin-bottom: 8px;" />
-            <input type="email" id="emailCadastro" placeholder="O seu E-mail" data-i18n-placeholder="phEmail"
-              style="margin-bottom: 8px;" />
-            <input type="password" id="senhaCadastro" placeholder="Crie uma Palavra-passe"
-              data-i18n-placeholder="phCreatePassword" style="margin-bottom: 8px;" />
-
-            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px; padding: 0 4px;">
-              <input type="checkbox" id="mostrarSenhaCadastroBtn" style="width: auto; height: auto; margin: 0;" />
-              <label for="mostrarSenhaCadastroBtn" class="muted" style="font-size: 12px; cursor: pointer;"
-                data-i18n="showPass">Ver palavra-passe</label>
-            </div>
-
-            <p class="muted" style="font-size: 11px; margin-bottom: 16px; line-height: 1.4;" data-i18n="rulePass">A
-              palavra-passe deve ter no mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo especial (ex:
-              *).
-            </p>
-
-            <button class="btn" id="btnCadastrar" style="width: 100%; margin-bottom: 12px;"
-              data-i18n="btnRegister">Criar
-              Minha Conta</button>
-            <button class="btn-link muted" id="btnIrLogin"
-              style="font-size: 12px; display: block; width: 100%; background: none; border: none; cursor: pointer; text-decoration: underline;"
-              data-i18n="btnGoLogin">Já tem conta? Inicie sessão</button>
-          </div>
+        <div class="info-glass-card">
+          <p data-i18n-html="loginSysDesc">Plataforma inteligente de Detecção de Transações Suspeitas.<br><br>Proteja os
+            seus ativos e garanta a integridade financeira com a nossa análise avançada de anomalias.</p>
         </div>
       </div>
-    </div>
-    <div class="container" id="dashboardApp" style="display: none;">
-      <header>
-        <div style="display: flex; align-items: center; gap: 16px;">
-          <img src="/static/imagens/Logo.png" alt="Logo DataGuard" id="logoSistemaHeader"
-            style="height: 80px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);"
-            onerror="this.src='/static/imagens/Logo.jpg'" />
-          <div style="display: flex; flex-direction: column; gap: 4px;">
-            <h1 class="title-main">DataGuard</h1>
-            <h2 class="title-sub muted" data-i18n="titleSlogan">Detecção de Transações Suspeitas</h2>
-          </div>
-        </div>
-      </header>
 
-      <div class="grid">
-        <section class="panel">
-          <h2 data-i18n="secUpload"> Enviar Arquivo </h2>
+      <div style="flex: 1; display: flex; align-items: center; justify-content: flex-end; min-width: 320px;">
+        <div class="panel" id="boxLogin" style="width: 100%; max-width: 340px;">
+          <h2 class="form-title" data-i18n="loginTitle">Entre na sua conta</h2>
+          <p class="form-subtitle muted" style="margin-bottom: 24px;" data-i18n="loginDesc">Identifique-se para aceder
+            ao painel.</p>
 
-          <div class="form-grid">
-            <div class="field">
-              <label for="dsName" data-i18n="labelName">Nome da base de dados (opcional)</label>
-              <input id="dsName" type="text" placeholder="Ex.: Semana 02 - Pagamentos"
-                data-i18n-placeholder="placeholderName" />
-            </div>
-
-            <div class="field">
-              <label for="dsFile" data-i18n="labelFile">Arquivo (.csv, .xlsx, .xls)</label>
-
-              <input id="dsFile" type="file" accept=".csv,.xlsx,.xls"
-                style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;" />
-
-              <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
-                <label id="lblDsFile" for="dsFile" class="btn2 btn-sm"
-                  style="cursor: pointer; margin: 0; height: 40px; display: flex; align-items: center; justify-content: center; box-sizing: border-box;"
-                  data-i18n="btnBrowse" tabindex="0" role="button"
-                  aria-label="Procurar arquivo no computador">Procurar...</label>
-
-                <span id="fileNameDisplay" class="muted"
-                  style="flex: 1; height: 40px; display: flex; align-items: center; padding: 0 12px; border: 1px solid var(--panel-border); border-radius: var(--radius-sm); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-sizing: border-box;"
-                  data-i18n="noFileChosen">Nenhum arquivo selecionado.</span>
-              </div>
-            </div>
-            <div class="field" style="grid-column: 1 / -1;">
-              <div class="btn-row">
-                <span class="muted" style="margin-right:auto;" data-i18n-html="hintUpload">
-                  Dica: a coluna padrão é <b>valor</b> (você pode trocar em “Coluna”).
-                </span>
-                <button class="btn" id="btnUpload" data-i18n="btnUpload">Salvar base de dados</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="msg error" id="errBox" role="alert" aria-live="polite">
-            <div class="msg-row">
-              <div id="errText"></div>
-              <button class="btn2 btn-sm" id="btnCloseErr" type="button" data-i18n="btnClose">Fechar</button>
-            </div>
-          </div>
-
-          <div class="msg success" id="okBox" aria-live="polite">
-            <div class="msg-row">
-              <div id="okText"></div>
-              <button class="btn2 btn-sm" id="btnCloseOk" type="button" data-i18n="btnClose">Fechar</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="panel">
-          <h2 data-i18n="secConfig">Configuração da Análise</h2>
-          <div class="form-grid">
-
-            <div class="field">
-              <label for="method" data-i18n="labelMethod">Método</label>
-              <select id="method">
-                <option value="sigma" data-i18n="optSigma">Sigma (média ± k·desvio)</option>
-                <option value="zscore" data-i18n="optZscore">Z-score (|z| > k)</option>
-                <option value="iqr" data-i18n="optIqr">IQR (Q1/Q3 ± k·IQR)</option>
-                <option value="mad" data-i18n="optMad">MAD (mediana ± k·MAD)</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="k" data-i18n="labelK">Sensibilidade (k)</label>
-              <input id="k" type="number" step="0.1" value="3" />
-            </div>
-
-            <div class="field">
-              <label for="direction" data-i18n="labelDirection">Direção</label>
-              <select id="direction">
-                <option value="upper" data-i18n="dirUpper">Somente acima</option>
-                <option value="lower" data-i18n="dirLower">Somente abaixo</option>
-                <option value="both" data-i18n="dirBoth">Ambos</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="column" data-i18n="labelColumn">Coluna</label>
-              <input id="column" type="text" value="valor" data-i18n-val="defColumn" />
-            </div>
-
-            <div class="field">
-              <label for="streaming" data-i18n="labelStreaming" data-i18n="labelStreaming">Leitura em Lotes
-                (CSV)</label>
-              <select id="streaming">
-                <option value="false" data-i18n="optNo">Não</option>
-                <option value="true" data-i18n="optYesBatch">Sim (média/desvio)</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="maxSus" data-i18n="labelMaxSus">Máx. suspeitas</label>
-              <input id="maxSus" type="number" value="500" min="1" max="5000" />
-            </div>
-          </div>
-
-          <p class="muted" style="margin: 10px 0 0;" data-i18n-html="hintBatch">
-            Leitura em Lotes ajuda em CSV grande, mas só vale para <b>Sigma</b> e <b>Z-score</b>.
-          </p>
-        </section>
-      </div>
-
-      <section class="panel" style="margin-top:16px;">
-        <h2 data-i18n="secDatabase"> Base de dados </h2>
-
-        <div class="table-box">
-          <table>
-            <thead>
-              <tr>
-                <th data-i18n="thName">Nome</th>
-                <th data-i18n="thFile">Arquivo</th>
-                <th data-i18n="thDate">Data de Envio</th>
-                <th data-i18n="thLast">Última análise</th>
-                <th data-i18n="thActions">Ações</th>
-              </tr>
-            </thead>
-            <tbody id="dsTbody"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="panel" style="margin-top:16px;">
-        <h2 data-i18n="secResult">Resultado da Análise</h2>
-        <div class="muted" id="resultHint" data-i18n-html="resultHint">Selecione <b>Analisar</b> em alguma base de
-          dados.
-        </div>
-
-        <div class="cards">
-          <div class="card">
-            <h3 data-i18n="cardMethod">Método</h3>
-            <div class="value" id="rMethod">--</div>
-          </div>
-          <div class="card">
-            <h3 data-i18n="cardStats">Estatísticas</h3>
-            <div class="value" id="rStats">--</div>
-          </div>
-          <div class="card">
-            <h3 data-i18n="cardLimits">Limites</h3>
-            <div class="value" id="rThresh">--</div>
-          </div>
-          <div class="card">
-            <h3 data-i18n="cardSuspects">Suspeitas</h3>
-            <div class="value alert"><span id="rCount">--</span></div>
-          </div>
-        </div>
-
-        <div class="table-box" style="margin-top:12px;">
-          <table>
-            <thead>
-              <tr id="susHead"></tr>
-            </thead>
-            <tbody id="susBody"></tbody>
-          </table>
-        </div>
-
-        <div
-          style="display: flex; justify-content: space-between; align-items: center; margin-top:10px; flex-wrap: wrap; gap: 12px;">
-          <div class="muted" id="truncMsg"></div>
-          <button id="btnDownTable" class="btn2 btn-sm" style="display: none;" data-i18n="btnDownTable">Baixar Tabela
-            (CSV)</button>
-        </div>
-      </section>
-
-      <section id="sessao-grafico" class="panel" style="margin-top:16px; display: none;">
-        <h2 data-i18n="secChart">Gráfico de Tendência e Anomalias</h2>
-        <p class="muted" data-i18n="chartSubtitle">Os pontos a vermelho destacam os valores considerados suspeitos.</p>
-
-        <div style="display: flex; gap: 16px; margin-bottom: 12px; align-items: center; font-size: 13px;">
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <span style="display: inline-block; width: 16px; height: 3px; background: var(--brand);"></span>
-            <span data-i18n="legendNormal">Transações Normais</span>
-          </div>
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <span
-              style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ef4444;"></span>
-            <span data-i18n="legendSuspect">Transações Suspeitas</span>
-          </div>
-        </div>
-        <div style="position: relative; height: 400px; width: 100%; overflow-x: auto; overflow-y: hidden;">
-          <div id="boxGrafico" style="position: relative; height: 100%; min-width: 100%;">
-            <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
-              <button id="btnDownChart" class="btn2 btn-sm" data-i18n="btnDownChart">Baixar Gráfico (PNG)</button>
-            </div>
-            <canvas id="graficoLinha"></canvas>
-          </div>
-        </div>
-      </section>
-
-      <div id="modalGrafico"
-        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center;">
-        <div class="panel"
-          style="position: relative; max-width: 420px; width: 90%; text-align: center; animation: modalIn 0.3s ease; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
-
-          <button id="btnFecharX" aria-label="Fechar janela"
-            style="position: absolute; top: 12px; right: 16px; background: transparent; border: none; color: var(--muted); font-size: 24px; cursor: pointer; padding: 0; line-height: 1; transition: color 0.2s;"
-            onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--muted)'">&times;</button>
-
-          <h2 style="margin-top: 0; font-size: 18px; color: var(--brand);" data-i18n="modalTitle">Análise Concluída! 🚀
-          </h2>
-          <p id="modalMsg" style="color: var(--text); font-size: 14px; margin-bottom: 24px; line-height: 1.5;"></p>
-          <div style="display: flex; gap: 12px; justify-content: center;">
-            <button class="btn2" id="btnNaoGrafico" style="flex: 1;" data-i18n="btnTableOnly">Apenas Tabela</button>
-            <button class="btn" id="btnSimGrafico" style="flex: 1;" data-i18n="btnViewChart">📉 Ver Gráfico</button>
-          </div>
-        </div>
-      </div>
-      <div id="modalReset"
-        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 100000; align-items: center; justify-content: center;">
-        <div class="panel"
-          style="position: relative; max-width: 340px; width: 90%; text-align: center; animation: modalIn 0.3s ease; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
-
-          <button id="btnFecharReset" aria-label="Fechar janela"
-            style="position: absolute; top: 12px; right: 16px; background: transparent; border: none; color: var(--muted); font-size: 24px; cursor: pointer; padding: 0; line-height: 1; transition: color 0.2s;"
-            onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--muted)'">&times;</button>
-
-          <h2 style="margin-top: 0; margin-bottom: 8px; font-size: 18px; color: var(--text);" data-i18n="resetTitle">
-            Recuperar Senha</h2>
-          <p class="muted" style="font-size: 12px; margin-bottom: 20px; line-height: 1.4;" data-i18n="resetDesc">
-            Ambiente
-            de teste: digite seu e-mail cadastrado e a nova senha diretamente abaixo.</p>
-
-          <input type="email" id="emailReset" placeholder="Seu E-mail" data-i18n-placeholder="phEmail"
-            style="margin-bottom: 8px; text-align: center;" />
-          <input type="password" id="senhaReset" placeholder="Crie uma Senha" data-i18n-placeholder="phCreatePassword"
-            style="margin-bottom: 8px; text-align: center;" />
-
-          <div id="resetMsg" class="muted" style="margin-top: 8px; margin-bottom: 12px; display: none; font-size: 12px;"
+          <div id="loginErro" class="muted"
+            style="margin-bottom: 12px; display: none; text-align: center; font-size: 13px; color: var(--danger);"
             role="alert" aria-live="polite"></div>
 
-          <button class="btn" id="btnEnviarReset" style="width: 100%;" data-i18n="btnReset">Salvar Nova Senha</button>
+          <input type="text" id="identificadorLogin" placeholder="E-mail ou Usuário"
+            data-i18n-placeholder="phUserOrEmail" style="margin-bottom: 8px;" />
+          <input type="password" id="senhaLogin" placeholder="A sua Palavra-passe" data-i18n-placeholder="phPassword"
+            style="margin-bottom: 8px;" />
+
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 4px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <input type="checkbox" id="mostrarSenhaBtn" style="width: auto; height: auto; margin: 0;" />
+              <label for="mostrarSenhaBtn" class="muted" style="font-size: 12px; cursor: pointer;"
+                data-i18n="showPass">Ver palavra-passe</label>
+            </div>
+            <a href="#" id="btnOpenReset" class="muted"
+              style="font-size: 12px; text-decoration: none; transition: color 0.2s;" data-i18n="forgotPass"
+              onmouseover="this.style.color='var(--brand)'" onmouseout="this.style.color='var(--muted)'">Esqueceu a
+              palavra-passe?</a>
+          </div>
+
+          <button class="btn" id="btnLogar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnEnter">Entrar no
+            Sistema</button>
+          <button class="btn-link muted" id="btnIrCadastro"
+            style="font-size: 12px; display: block; width: 100%; background: none; border: none; cursor: pointer; text-decoration: underline;"
+            data-i18n="btnGoRegister">Não tem conta? Registe-se</button>
+          <button id="btnVoltarLanding" class="muted"
+            style="background: none; border: none; font-size: 12px; width: 100%; margin-top: 16px; cursor: pointer; text-decoration: underline;">←
+            Voltar ao Início</button>
+        </div>
+
+        <div class="panel" id="boxCadastro" style="width: 100%; max-width: 340px; display: none;">
+          <h2 class="form-title" data-i18n="regTitle">Criar Conta</h2>
+          <p class="form-subtitle muted" style="margin-bottom: 24px;" data-i18n="regDesc">Preencha os seus dados para
+            começar.</p>
+
+          <div id="cadastroMsg" class="muted"
+            style="margin-bottom: 12px; display: none; text-align: center; font-size: 13px;" role="alert"
+            aria-live="polite"></div>
+
+          <input type="text" id="nomeCadastro" placeholder="O seu Nome" data-i18n-placeholder="phName"
+            style="margin-bottom: 8px;" />
+          <input type="email" id="emailCadastro" placeholder="O seu E-mail" data-i18n-placeholder="phEmail"
+            style="margin-bottom: 8px;" />
+          <input type="password" id="senhaCadastro" placeholder="Crie uma Palavra-passe"
+            data-i18n-placeholder="phCreatePassword" style="margin-bottom: 8px;" />
+
+          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px; padding: 0 4px;">
+            <input type="checkbox" id="mostrarSenhaCadastroBtn" style="width: auto; height: auto; margin: 0;" />
+            <label for="mostrarSenhaCadastroBtn" class="muted" style="font-size: 12px; cursor: pointer;"
+              data-i18n="showPass">Ver palavra-passe</label>
+          </div>
+
+          <p class="muted" style="font-size: 11px; margin-bottom: 16px; line-height: 1.4;" data-i18n="rulePass">A
+            palavra-passe deve ter no mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo especial (ex: *).
+          </p>
+
+          <button class="btn" id="btnCadastrar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnRegister">Criar
+            Minha Conta</button>
+          <button class="btn-link muted" id="btnIrLogin"
+            style="font-size: 12px; display: block; width: 100%; background: none; border: none; cursor: pointer; text-decoration: underline;"
+            data-i18n="btnGoLogin">Já tem conta? Inicie sessão</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="container" id="dashboardApp" style="display: none;">
+    <header>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <img src="/static/imagens/Logo.png" alt="Logo DataGuard" id="logoSistemaHeader"
+          style="height: 80px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);"
+          onerror="this.src='/static/imagens/Logo.jpg'" />
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <h1 class="title-main">DataGuard</h1>
+          <h2 class="title-sub muted" data-i18n="titleSlogan">Detecção de Transações Suspeitas</h2>
         </div>
       </div>
+    </header>
 
-      <div id="modalGenerico"
-        style="display: none; position: fixed; inset: 0; z-index: 100000; align-items: center; justify-content: center;">
-        <div class="panel"
-          style="position: relative; max-width: 340px; width: 90%; text-align: center; animation: modalIn 0.3s ease;">
+    <div class="grid">
+      <section class="panel">
+        <h2 data-i18n="secUpload"> Enviar Arquivo </h2>
 
-          <h2 id="modalGenTitle" style="margin-top: 0; margin-bottom: 8px; font-size: 18px; color: var(--text);">Título
-          </h2>
-          <p id="modalGenMsg" class="muted" style="font-size: 13px; margin-bottom: 20px; line-height: 1.4;">Mensagem
-            principal aqui.</p>
+        <div class="form-grid">
+          <div class="field">
+            <label for="dsName" data-i18n="labelName">Nome da base de dados (opcional)</label>
+            <input id="dsName" type="text" placeholder="Ex.: Semana 02 - Pagamentos"
+              data-i18n-placeholder="placeholderName" />
+          </div>
 
-          <input type="text" id="modalGenInput" style="display: none; margin-bottom: 20px; text-align: center;" />
+          <div class="field">
+            <label for="dsFile" data-i18n="labelFile">Arquivo (.csv, .xlsx, .xls)</label>
 
-          <div style="display: flex; gap: 12px; justify-content: center;">
-            <button class="btn2" id="btnGenCancel" style="flex: 1;" data-i18n="btnCancel">Cancelar</button>
-            <button class="btn" id="btnGenConfirm" style="flex: 1;" data-i18n="btnConfirm">Confirmar</button>
+            <input id="dsFile" type="file" accept=".csv,.xlsx,.xls"
+              style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;" />
+
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+              <label id="lblDsFile" for="dsFile" class="btn2 btn-sm"
+                style="cursor: pointer; margin: 0; height: 40px; display: flex; align-items: center; justify-content: center; box-sizing: border-box;"
+                data-i18n="btnBrowse" tabindex="0" role="button"
+                aria-label="Procurar arquivo no computador">Procurar...</label>
+
+              <span id="fileNameDisplay" class="muted"
+                style="flex: 1; height: 40px; display: flex; align-items: center; padding: 0 12px; border: 1px solid var(--panel-border); border-radius: var(--radius-sm); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-sizing: border-box;"
+                data-i18n="noFileChosen">Nenhum arquivo selecionado.</span>
+            </div>
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <div class="btn-row">
+              <span class="muted" style="margin-right:auto;" data-i18n-html="hintUpload">
+                Dica: a coluna padrão é <b>valor</b> (você pode trocar em “Coluna”).
+              </span>
+              <button class="btn" id="btnUpload" data-i18n="btnUpload">Salvar base de dados</button>
+            </div>
           </div>
         </div>
+
+        <div class="msg error" id="errBox" role="alert" aria-live="polite">
+          <div class="msg-row">
+            <div id="errText"></div>
+            <button class="btn2 btn-sm" id="btnCloseErr" type="button" data-i18n="btnClose">Fechar</button>
+          </div>
+        </div>
+
+        <div class="msg success" id="okBox" aria-live="polite">
+          <div class="msg-row">
+            <div id="okText"></div>
+            <button class="btn2 btn-sm" id="btnCloseOk" type="button" data-i18n="btnClose">Fechar</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 data-i18n="secConfig">Configuração da Análise</h2>
+        <div class="form-grid">
+
+          <div class="field">
+            <label for="method" data-i18n="labelMethod">Método</label>
+            <select id="method">
+              <option value="sigma" data-i18n="optSigma">Sigma (média ± k·desvio)</option>
+              <option value="zscore" data-i18n="optZscore">Z-score (|z| > k)</option>
+              <option value="iqr" data-i18n="optIqr">IQR (Q1/Q3 ± k·IQR)</option>
+              <option value="mad" data-i18n="optMad">MAD (mediana ± k·MAD)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="k" data-i18n="labelK">Sensibilidade (k)</label>
+            <input id="k" type="number" step="0.1" value="3" />
+          </div>
+
+          <div class="field">
+            <label for="direction" data-i18n="labelDirection">Direção</label>
+            <select id="direction">
+              <option value="upper" data-i18n="dirUpper">Somente acima</option>
+              <option value="lower" data-i18n="dirLower">Somente abaixo</option>
+              <option value="both" data-i18n="dirBoth">Ambos</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="column" data-i18n="labelColumn">Coluna</label>
+            <input id="column" type="text" value="valor" data-i18n-val="defColumn" />
+          </div>
+
+          <div class="field">
+            <label for="streaming" data-i18n="labelStreaming" data-i18n="labelStreaming">Leitura em Lotes
+              (CSV)</label>
+            <select id="streaming">
+              <option value="false" data-i18n="optNo">Não</option>
+              <option value="true" data-i18n="optYesBatch">Sim (média/desvio)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="maxSus" data-i18n="labelMaxSus">Máx. suspeitas</label>
+            <input id="maxSus" type="number" value="500" min="1" max="5000" />
+          </div>
+        </div>
+
+        <p class="muted" style="margin: 10px 0 0;" data-i18n-html="hintBatch">
+          Leitura em Lotes ajuda em CSV grande, mas só vale para <b>Sigma</b> e <b>Z-score</b>.
+        </p>
+      </section>
+    </div>
+
+    <section class="panel" style="margin-top:16px;">
+      <h2 data-i18n="secDatabase"> Base de dados </h2>
+
+      <div class="table-box">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="thName">Nome</th>
+              <th data-i18n="thFile">Arquivo</th>
+              <th data-i18n="thDate">Data de Envio</th>
+              <th data-i18n="thLast">Última análise</th>
+              <th data-i18n="thActions">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="dsTbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:16px;">
+      <h2 data-i18n="secResult">Resultado da Análise</h2>
+      <div class="muted" id="resultHint" data-i18n-html="resultHint">Selecione <b>Analisar</b> em alguma base de
+        dados.
       </div>
 
-      <footer>
-        <span data-i18n="footerText">Detecção de Transações Suspeitas - Por</span> Débora Ribeiro, Esdras Vitor, Tiago
-        Lucas
-      </footer>
-    </div>
-    <!-- Integração de Libras com o Vlibras do Governo -->
-    <script src="/static/script.js"></script>
-    <div vw class="enabled">
-      <div vw-access-button class="active"></div>
-      <div vw-plugin-wrapper>
-        <div class="vw-plugin-top-wrapper"></div>
+      <div class="cards">
+        <div class="card">
+          <h3 data-i18n="cardMethod">Método</h3>
+          <div class="value" id="rMethod">--</div>
+        </div>
+        <div class="card">
+          <h3 data-i18n="cardStats">Estatísticas</h3>
+          <div class="value" id="rStats">--</div>
+        </div>
+        <div class="card">
+          <h3 data-i18n="cardLimits">Limites</h3>
+          <div class="value" id="rThresh">--</div>
+        </div>
+        <div class="card">
+          <h3 data-i18n="cardSuspects">Suspeitas</h3>
+          <div class="value alert"><span id="rCount">--</span></div>
+        </div>
+      </div>
+
+      <div class="table-box" style="margin-top:12px;">
+        <table>
+          <thead>
+            <tr id="susHead"></tr>
+          </thead>
+          <tbody id="susBody"></tbody>
+        </table>
+      </div>
+
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-top:10px; flex-wrap: wrap; gap: 12px;">
+        <div class="muted" id="truncMsg"></div>
+        <button id="btnDownTable" class="btn2 btn-sm" style="display: none;" data-i18n="btnDownTable">Baixar Tabela
+          (CSV)</button>
+      </div>
+    </section>
+
+    <section id="sessao-grafico" class="panel" style="margin-top:16px; display: none;">
+      <h2 data-i18n="secChart">Gráfico de Tendência e Anomalias</h2>
+      <p class="muted" data-i18n="chartSubtitle">Os pontos a vermelho destacam os valores considerados suspeitos.</p>
+
+      <div style="display: flex; gap: 16px; margin-bottom: 12px; align-items: center; font-size: 13px;">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span style="display: inline-block; width: 16px; height: 3px; background: var(--brand);"></span>
+          <span data-i18n="legendNormal">Transações Normais</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span
+            style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ef4444;"></span>
+          <span data-i18n="legendSuspect">Transações Suspeitas</span>
+        </div>
+      </div>
+      <div style="position: relative; height: 400px; width: 100%; overflow-x: auto; overflow-y: hidden;">
+        <div id="boxGrafico" style="position: relative; height: 100%; min-width: 100%;">
+          <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
+            <button id="btnDownChart" class="btn2 btn-sm" data-i18n="btnDownChart">Baixar Gráfico (PNG)</button>
+          </div>
+          <canvas id="graficoLinha"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <div id="modalGrafico"
+      style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center;">
+      <div class="panel"
+        style="position: relative; max-width: 420px; width: 90%; text-align: center; animation: modalIn 0.3s ease; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+
+        <button id="btnFecharX" aria-label="Fechar janela"
+          style="position: absolute; top: 12px; right: 16px; background: transparent; border: none; color: var(--muted); font-size: 24px; cursor: pointer; padding: 0; line-height: 1; transition: color 0.2s;"
+          onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--muted)'">&times;</button>
+
+        <h2 style="margin-top: 0; font-size: 18px; color: var(--brand);" data-i18n="modalTitle">Análise Concluída! 🚀
+        </h2>
+        <p id="modalMsg" style="color: var(--text); font-size: 14px; margin-bottom: 24px; line-height: 1.5;"></p>
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button class="btn2" id="btnNaoGrafico" style="flex: 1;" data-i18n="btnTableOnly">Apenas Tabela</button>
+          <button class="btn" id="btnSimGrafico" style="flex: 1;" data-i18n="btnViewChart">📉 Ver Gráfico</button>
+        </div>
       </div>
     </div>
-    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-    <script>
-      new window.VLibras.Widget('https://vlibras.gov.br/app');
-    </script>
+    <div id="modalReset"
+      style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 100000; align-items: center; justify-content: center;">
+      <div class="panel"
+        style="position: relative; max-width: 340px; width: 90%; text-align: center; animation: modalIn 0.3s ease; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+
+        <button id="btnFecharReset" aria-label="Fechar janela"
+          style="position: absolute; top: 12px; right: 16px; background: transparent; border: none; color: var(--muted); font-size: 24px; cursor: pointer; padding: 0; line-height: 1; transition: color 0.2s;"
+          onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--muted)'">&times;</button>
+
+        <h2 style="margin-top: 0; margin-bottom: 8px; font-size: 18px; color: var(--text);" data-i18n="resetTitle">
+          Recuperar Senha</h2>
+        <p class="muted" style="font-size: 12px; margin-bottom: 20px; line-height: 1.4;" data-i18n="resetDesc">
+          Ambiente
+          de teste: digite seu e-mail cadastrado e a nova senha diretamente abaixo.</p>
+
+        <input type="email" id="emailReset" placeholder="Seu E-mail" data-i18n-placeholder="phEmail"
+          style="margin-bottom: 8px; text-align: center;" />
+        <input type="password" id="senhaReset" placeholder="Crie uma Senha" data-i18n-placeholder="phCreatePassword"
+          style="margin-bottom: 8px; text-align: center;" />
+
+        <div id="resetMsg" class="muted" style="margin-top: 8px; margin-bottom: 12px; display: none; font-size: 12px;"
+          role="alert" aria-live="polite"></div>
+
+        <button class="btn" id="btnEnviarReset" style="width: 100%;" data-i18n="btnReset">Salvar Nova Senha</button>
+      </div>
+    </div>
+
+    <div id="modalGenerico"
+      style="display: none; position: fixed; inset: 0; z-index: 100000; align-items: center; justify-content: center;">
+      <div class="panel"
+        style="position: relative; max-width: 340px; width: 90%; text-align: center; animation: modalIn 0.3s ease;">
+
+        <h2 id="modalGenTitle" style="margin-top: 0; margin-bottom: 8px; font-size: 18px; color: var(--text);">Título
+        </h2>
+        <p id="modalGenMsg" class="muted" style="font-size: 13px; margin-bottom: 20px; line-height: 1.4;">Mensagem
+          principal aqui.</p>
+
+        <input type="text" id="modalGenInput" style="display: none; margin-bottom: 20px; text-align: center;" />
+
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button class="btn2" id="btnGenCancel" style="flex: 1;" data-i18n="btnCancel">Cancelar</button>
+          <button class="btn" id="btnGenConfirm" style="flex: 1;" data-i18n="btnConfirm">Confirmar</button>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <span data-i18n="footerText">Detecção de Transações Suspeitas - Por</span> Débora Ribeiro, Esdras Vitor, Tiago
+      Lucas
+    </footer>
+  </div>
+  <!-- Integração de Libras com o Vlibras do Governo -->
+  <script src="/static/script.js"></script>
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+  </script>
 </body>
 
 </html>
