@@ -682,3 +682,16 @@ div[vw-plugin-wrapper] {
 [data-theme="light"] #loginOverlay .panel {
   background: #ffffff !important;
 }
+
+#loginOverlay {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+#landingPage {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%) !important;
+}
+
+[data-theme="light"] #landingPage {
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 50%, #c7d2fe 100%) !important;
+}
