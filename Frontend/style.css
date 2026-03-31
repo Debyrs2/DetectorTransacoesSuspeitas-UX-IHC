@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap');
+
 :root {
   --bg-0: #0f172a;
   --bg-1: #1e293b;
@@ -60,7 +62,7 @@ body {
   margin: 0;
   min-height: 100vh;
   color: var(--text);
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background: linear-gradient(180deg, var(--bg-0), var(--bg-1));
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -716,17 +718,17 @@ div[vw-plugin-wrapper] {
   z-index: 3;
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
   object-fit: contain;
+  align-self: center;
 }
 
 .info-glass-card {
-  background: linear-gradient(145deg, rgba(15, 23, 42, 0.4), rgba(30, 41, 59, 0.2));
+  background: rgba(15, 23, 42, 0.45);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  padding: 35px;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-left: 6px solid #3b82f6;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   max-width: 480px;
   position: relative;
   z-index: 2;
@@ -734,24 +736,20 @@ div[vw-plugin-wrapper] {
 }
 
 .info-glass-card h3 {
-  font-size: 30px;
-  font-weight: 900;
-  margin: 0 0 15px 0;
-  background: linear-gradient(to right, #60a5fa, #38bdf8);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  letter-spacing: -1px;
-  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 16px 0;
+  color: #f8fafc;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
 }
 
 .info-glass-card p {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.8;
+  color: #94a3b8;
+  line-height: 1.7;
   margin: 0;
-  font-weight: 300;
-  letter-spacing: 0.2px;
+  font-weight: 400;
 }
 
 /* Animação de Entrada */
