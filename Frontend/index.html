@@ -10,7 +10,8 @@
 </head>
 
 <body>
-  <div style="position: fixed; top: 20px; right: 24px; z-index: 999999; display: flex; gap: 8px; align-items: center;">
+  <div
+    style="position: absolute; top: 16px; right: 24px; z-index: 9999; display: flex; gap: 12px; align-items: center;">
 
     <div id="userMenuContainer" style="display: none; position: relative; margin-right: 8px;">
       <div id="userProfile" tabindex="0" role="button" aria-label="Abrir menu do usuário"
@@ -233,7 +234,7 @@
     <header>
       <div style="display: flex; align-items: center; gap: 16px;">
         <img src="/static/imagens/Logo.png" alt="Logo DataGuard" id="logoSistemaHeader"
-          style="height: 80px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);"
+          style="height: 90px; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));"
           onerror="this.src='/static/imagens/Logo.jpg'" />
         <div style="display: flex; flex-direction: column; gap: 4px;">
           <h1 class="title-main">DataGuard</h1>
@@ -424,11 +425,12 @@
           <span data-i18n="legendSuspect">Transações Suspeitas</span>
         </div>
       </div>
-      <div style="position: relative; height: 400px; width: 100%; overflow-x: auto; overflow-y: hidden;">
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
+        <button id="btnDownChart" class="btn2 btn-sm" data-i18n="btnDownChart">Baixar Gráfico (PNG)</button>
+      </div>
+      <div
+        style="position: relative; height: 400px; width: 100%; overflow-x: auto; overflow-y: hidden; padding-bottom: 16px;">
         <div id="boxGrafico" style="position: relative; height: 100%; min-width: 100%;">
-          <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
-            <button id="btnDownChart" class="btn2 btn-sm" data-i18n="btnDownChart">Baixar Gráfico (PNG)</button>
-          </div>
           <canvas id="graficoLinha"></canvas>
         </div>
       </div>
