@@ -287,7 +287,7 @@ const i18n = {
         landSubtitle: "Detección de Transacciones Sospechosas",
         landDesc: "La plataforma definitiva de análisis de Big Data. Identifique anomalías financieras en segundos, proteja sus activos y garantice la integridad de sus operaciones.",
         btnLandEnter: "Descubrir y Acceder",
-        loginSysDesc:"<h3>Plataforma inteligente de Detección de Transacciones Sospechosas.</h3><p>Proteja sus activos y garantice la integridad financiera con nuestro análisis avanzado de anomalías.</p>",
+        loginSysDesc: "<h3>Plataforma inteligente de Detección de Transacciones Sospechosas.</h3><p>Proteja sus activos y garantice la integridad financiera con nuestro análisis avanzado de anomalías.</p>",
         themeLight: "Tema Claro",
         themeDark: "Tema Oscuro",
         btnLogout: "Salir",
@@ -1379,14 +1379,17 @@ $('btnDownChart').addEventListener('click', () => {
 // LÓGICA DE RECUPERAÇÃO DE SENHA
 $('btnOpenReset').addEventListener('click', (e) => {
     e.preventDefault();
-    $('modalReset').style.display = 'flex';
+    $('boxLogin').style.display = 'none';
+    $('boxReset').style.display = 'block';
     $('emailReset').value = '';
     $('senhaReset').value = '';
     $('resetMsg').style.display = 'none';
 });
 
-$('btnFecharReset').addEventListener('click', () => {
-    $('modalReset').style.display = 'none';
+$('btnVoltarLoginReset').addEventListener('click', (e) => {
+    e.preventDefault();
+    $('boxReset').style.display = 'none';
+    $('boxLogin').style.display = 'block';
 });
 
 // Fechar com ESC também
@@ -1428,7 +1431,8 @@ $('btnEnviarReset').addEventListener('click', async () => {
             msgBox.style.color = 'var(--brand)';
             msgBox.textContent = data.mensagem;
             setTimeout(() => {
-                $('modalReset').style.display = 'none';
+                $('boxReset').style.display = 'none';
+                $('boxLogin').style.display = 'block';
             }, 2000);
         } else {
             msgBox.style.color = 'var(--danger)';
