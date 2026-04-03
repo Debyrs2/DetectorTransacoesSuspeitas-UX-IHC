@@ -1,3 +1,4 @@
+const API_URL = "https://dataguard-4cpi.onrender.com";
 const $ = (id) => document.getElementById(id);
 const formatarMoeda = (valor) => {
     if (valor === null || valor === undefined || isNaN(valor)) return valor;
@@ -515,8 +516,8 @@ function getAnalyzeConfig() {
 
 // Implementa concorrência assíncrona (Non-blocking I/O) para garantir que cálculos matemáticos pesados no servidor não interrompam a thread principal da interface.
 async function apiJson(url, opts = {}) {
-    opts.credentials = 'same-origin';
-    const res = await fetch(url, opts);
+    opts.credentials = 'include';
+    const res = await fetch(API_URL + url, opts);
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
         let msg = data.detail || data.erro || ('Erro HTTP ' + res.status);
@@ -1068,7 +1069,7 @@ $('dsFile').addEventListener('change', (e) => {
 //Sistema de Login
 async function checkLogin() {
     try {
-        const res = await fetch('/me');
+        const res = await fetch(API_URL + '/me', { credentials: 'include' });
         if (res.ok) {
             const data = await res.json();
 
@@ -1122,7 +1123,7 @@ $('btnLogar').addEventListener('click', async () => {
     fd.append('senha', senha);
 
     try {
-        const res = await fetch('/login', { method: 'POST', body: fd });
+        const res = await fetch(API_URL + '/login', { method: 'POST', body: fd, credentials: 'include' });
         const data = await res.json();
 
         if (res.ok) {
@@ -1199,7 +1200,7 @@ $('btnCadastrar').addEventListener('click', async () => {
     fd.append('senha', senha);
 
     try {
-        const res = await fetch('/register', { method: 'POST', body: fd });
+        const res = await fetch(API_URL + '/register', { method: 'POST', body: fd });
         const data = await res.json();
 
         msgBox.style.display = 'block';
@@ -1232,7 +1233,7 @@ $('btnSair').addEventListener('click', async (e) => {
         btn.textContent = 'Saindo...';
 
         try {
-            await fetch('/logout', { method: 'POST' });
+            await fetch(API_URL + '/logout', { method: 'POST', credentials: 'include' });
         } catch (error) {
             console.error("Erro na API de logout", error);
         }
@@ -1425,7 +1426,7 @@ $('btnEnviarReset').addEventListener('click', async () => {
     fd.append('nova_senha', senhaNova);
 
     try {
-        const res = await fetch('/reset-password', { method: 'POST', body: fd });
+        const res = await fetch(API_URL + '/reset-password', { method: 'POST', body: fd });
         const data = await res.json();
 
         msgBox.style.display = 'block';
