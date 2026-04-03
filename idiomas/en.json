@@ -137,8 +137,12 @@
     "tourS4Desc": "Your database will appear in this table. Just click 'Analyze' to generate charts and identify fraud.",
     "tourS5Title": "Export Results 📊",
     "tourS5Desc": "Once the analysis is complete, buttons to download the Table (CSV) and Chart (PNG) will appear here.",
-    "tourS6Title": "Accessibility ♿",
-    "tourS6Desc": "Need high contrast, colorblind mode, or a screen reader? The options are right here.",
-    "tourS7Title": "Your Profile 🎉",
-    "tourS7Desc": "Here you can view your details, change the language, and log out. Enjoy the system!"
+   "tourS6Title": "Accessibility ♿",
+  "tourS6Desc": "Need high contrast, colorblind mode, or a screen reader? The options are right here.",
+  "tourS7Title": "Language 🌍",
+  "tourS7Desc": "You might already know this, but here you can change the system language at any time.",
+  "tourS8Title": "Theme 🌓",
+  "tourS8Desc": "Prefer working in the dark? Toggle between Light and Dark themes right here.",
+  "tourS9Title": "Your Profile 🎉",
+  "tourS9Desc": "Finally, here you can view your details and log out. Enjoy the system!"
 }

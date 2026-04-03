@@ -137,8 +137,12 @@
     "tourS4Desc": "Sua base vai aparecer nesta tabela. É só clicar em 'Analisar' para o sistema gerar os gráficos e identificar fraudes.",
     "tourS5Title": "Exportar Resultados 📊",
     "tourS5Desc": "Assim que a análise terminar, é nesta área que aparecerão os botões para baixar a Tabela (CSV) e o Gráfico (PNG).",
-    "tourS6Title": "Acessibilidade ♿",
-    "tourS6Desc": "Precisa de alto contraste, modo daltônico ou leitor de tela? As opções ficam aqui.",
-    "tourS7Title": "Seu Perfil 🎉",
-    "tourS7Desc": "Aqui você pode ver seus dados, alterar o idioma e sair do sistema. Aproveite!"
+   "tourS6Title": "Acessibilidade ♿",
+  "tourS6Desc": "Precisa de alto contraste, modo daltônico ou leitor de tela? As opções ficam aqui.",
+  "tourS7Title": "Idioma 🌍",
+  "tourS7Desc": "Talvez você já conheça, mas aqui você pode alterar o idioma do sistema a qualquer momento.",
+  "tourS8Title": "Tema 🌓",
+  "tourS8Desc": "Prefere trabalhar no escuro? Alterne entre o tema Claro e Escuro clicando aqui.",
+  "tourS9Title": "Seu Perfil 🎉",
+  "tourS9Desc": "Por fim, aqui você pode ver seus dados e sair do sistema. Aproveite!"
 }

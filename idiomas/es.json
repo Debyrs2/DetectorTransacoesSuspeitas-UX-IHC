@@ -139,6 +139,10 @@
     "tourS5Desc": "Una vez que termine el análisis, aquí aparecerán los botones para descargar la Tabla (CSV) y el Gráfico (PNG).",
     "tourS6Title": "Accesibilidad ♿",
     "tourS6Desc": "¿Necesitas alto contraste, modo daltónico o lector de pantalla? Las opciones están aquí.",
-    "tourS7Title": "Tu Perfil 🎉",
-    "tourS7Desc": "Aquí puedes ver tus datos, cambiar el idioma y salir del sistema. ¡Disfruta!"
+    "tourS7Title": "Idioma 🌍",
+    "tourS7Desc": "Tal vez ya lo sepas, pero aquí puedes cambiar el idioma del sistema en cualquier momento.",
+    "tourS8Title": "Tema 🌓",
+    "tourS8Desc": "¿Prefieres trabajar en la oscuridad? Alterna entre el tema Claro y Oscuro aquí.",
+    "tourS9Title": "Tu Perfil 🎉",
+    "tourS9Desc": "Por último, aquí puedes ver tus datos y salir del sistema. ¡Disfruta!"
 }
