@@ -19,13 +19,13 @@ from fastapi import FastAPI, File, Form, HTTPException, UploadFile, Request, Res
 import storage
 
 APP_DIR = Path(__file__).resolve().parent
-INDEX_HTML = APP_DIR.parent / "Frontend" / "index.html"
+#INDEX_HTML = APP_DIR.parent / "Frontend" / "index.html"
 
 def utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 app = FastAPI(title="Detecção de Transações Suspeitas")
-app.mount("/static", StaticFiles(directory=APP_DIR.parent / "Frontend"), name="static")
+#app.mount("/static", StaticFiles(directory=APP_DIR.parent / "Frontend"), name="static")
 
 #Sistema de Login com bd
 USERS_FILE = APP_DIR / "users.json"
@@ -452,11 +452,9 @@ def _startup() -> None:
 def health() -> Dict[str, str]:
     return {"status": "ok"}
 
-@app.get("/", response_class=HTMLResponse)
-def home() -> Any:
-    if INDEX_HTML.exists():
-        return FileResponse(INDEX_HTML)
-    return "index.html não encontrado"
+@app.get("/")
+def home() -> Dict[str, str]:
+    return {"status": "A API do DataGuard está ONLINE na nuvem!"}
 
 @app.post("/datasets", response_model=DatasetOut, dependencies=[Depends(verifica_sessao)])
 async def create_dataset(
