@@ -710,7 +710,7 @@ async function checkLogin() {
             $('loginOverlay').style.display = 'none';
             $('dashboardApp').style.display = 'block';
 
-            startTutorial();
+            startTutorial(data.email);
 
             $('userMenuContainer').style.display = 'block';
             $('userNameDisplay').textContent = data.nome;
@@ -1146,81 +1146,42 @@ $('btnVoltarLanding').addEventListener('click', () => {
 });
 
 // Gatilho para iniciar o tutorial com Driver.js
-function startTutorial() {
-    // Verifica se o usuário já viu o tutorial (só roda no primeiro login)
-    if (localStorage.getItem('tutorialVisto') === 'true') return;
+function startTutorial(userEmail) {
+    // Cria uma chave única para esse usuário (ex: tutorialVisto_teste@gmail.com)
+    const storageKey = 'tutorialVisto_' + userEmail;
 
-    // Puxa as palavras do idioma que foi carregado no arquivo JSON
+    // Verifica a chave ESPECÍFICA deste usuário
+    if (localStorage.getItem(storageKey) === 'true') return;
+
     const dict = dicionarioAtual;
-
-    // Inicializa a biblioteca
     const driver = window.driver.js.driver;
 
     const driverObj = driver({
         showProgress: true,
-        // Usamos o '||' (ou) como segurança. Se o JSON falhar, ele usa o texto em português por padrão
         nextBtnText: dict.tourNext || 'Próximo →',
         prevBtnText: dict.tourPrev || '← Anterior',
         doneBtnText: dict.tourDone || 'Mãos à obra!',
         progressText: dict.tourProgress || 'Passo {{current}} de {{total}}',
 
-        // lista de elementos que o tutorial vai destacar na tela
         steps: [
-            {
-                element: '#logoSistemaHeader',
-                popover: { title: dict.tourS1Title, description: dict.tourS1Desc, side: "bottom", align: 'start' }
-            },
-            {
-                element: '#dsFile',
-                popover: { title: dict.tourS2Title, description: dict.tourS2Desc, side: "top", align: 'start' }
-            },
-            {
-                element: '#method',
-                popover: { title: dict.tourS3Title, description: dict.tourS3Desc, side: "left", align: 'start' }
-            },
-            {
-                element: '#dsTbody',
-                popover: { title: dict.tourS4Title, description: dict.tourS4Desc, side: "top", align: 'start' }
-            },
-            {
-                element: '#rMethod',
-                popover: {
-                    title: dict.tourS5Title || 'Exportar Resultados 📊',
-                    description: dict.tourS5Desc || 'Assim que a análise terminar, é nesta área que aparecerão os botões para baixar a Tabela (CSV) e o Gráfico (PNG).',
-                    side: "bottom",
-                    align: 'start'
-                }
-            },
-            {
-                element: '#btnA11yToggle',
-                popover: {
-                    title: dict.tourS6Title || 'Acessibilidade ♿',
-                    description: dict.tourS6Desc || 'Precisa de alto contraste, modo daltônico ou leitor de tela? As opções ficam aqui.',
-                    side: "bottom",
-                    align: 'end'
-                }
-            },
-            {
-                element: '#userProfile',
-                popover: {
-                    title: dict.tourS7Title || 'Seu Perfil 🎉',
-                    description: dict.tourS7Desc || 'Aqui você pode ver seus dados, alterar o idioma e sair do sistema. Aproveite!',
-                    side: "bottom",
-                    align: 'end'
-                }
-            }
+            { element: '#logoSistemaHeader', popover: { title: dict.tourS1Title, description: dict.tourS1Desc, side: "bottom", align: 'start' } },
+            { element: '#dsFile', popover: { title: dict.tourS2Title, description: dict.tourS2Desc, side: "top", align: 'start' } },
+            { element: '#method', popover: { title: dict.tourS3Title, description: dict.tourS3Desc, side: "left", align: 'start' } },
+            { element: '#dsTbody', popover: { title: dict.tourS4Title, description: dict.tourS4Desc, side: "top", align: 'start' } },
+            { element: '#rMethod', popover: { title: dict.tourS5Title || 'Exportar Resultados 📊', description: dict.tourS5Desc || 'Assim que a análise terminar, é nesta área que aparecerão os botões para baixar a Tabela (CSV) e o Gráfico (PNG).', side: "bottom", align: 'start' } },
+            { element: '#btnA11yToggle', popover: { title: dict.tourS6Title || 'Acessibilidade ♿', description: dict.tourS6Desc || 'Precisa de alto contraste, modo daltônico ou leitor de tela? As opções ficam aqui.', side: "bottom", align: 'end' } },
+            { element: '#userProfile', popover: { title: dict.tourS7Title || 'Seu Perfil 🎉', description: dict.tourS7Desc || 'Aqui você pode ver seus dados, alterar o idioma e sair do sistema. Aproveite!', side: "bottom", align: 'end' } }
         ],
 
-        // Salva no localStorage quando o usuário terminar ou fechar o tutorial
         onDestroyStarted: () => {
             if (!driverObj.hasNextStep() || confirm(dict.tourSkip || "Deseja pular o tutorial?")) {
                 driverObj.destroy();
-                localStorage.setItem('tutorialVisto', 'true');
+                // Salva a confirmação na chave ÚNICA do usuário
+                localStorage.setItem(storageKey, 'true');
             }
         }
     });
 
-    // Inicia o tour visual
     driverObj.drive();
 }
 
