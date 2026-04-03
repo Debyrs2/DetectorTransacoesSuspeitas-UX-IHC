@@ -41,8 +41,25 @@
       "stored_filename": "dbd5067194c6.xlsx",
       "size_bytes": 12266,
       "uploaded_at": "2026-03-27T12:43:35.460705+00:00",
-      "updated_at": "2026-03-31T02:37:31.271975+00:00",
-      "last_analysis_at": "2026-03-31T02:37:31.183897+00:00",
+      "updated_at": "2026-03-31T03:29:04.318726+00:00",
+      "last_analysis_at": "2026-03-31T03:29:04.305821+00:00",
+      "last_analysis_method": "sigma",
+      "last_suspeitas_count": 3,
+      "last_thresholds": {
+        "lower": null,
+        "upper": 6596.8
+      },
+      "notes": {}
+    },
+    "88627a5e20d7": {
+      "id": "88627a5e20d7",
+      "name": "gastos2",
+      "original_filename": "gastos_ficticios.xlsx",
+      "stored_filename": "88627a5e20d7.xlsx",
+      "size_bytes": 12266,
+      "uploaded_at": "2026-03-31T12:49:56.657749+00:00",
+      "updated_at": "2026-03-31T13:39:49.672911+00:00",
+      "last_analysis_at": "2026-03-31T13:39:49.663827+00:00",
       "last_analysis_method": "sigma",
       "last_suspeitas_count": 3,
       "last_thresholds": {
