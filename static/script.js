@@ -1,4 +1,3 @@
-carregarIdioma(currentLang);
 const API_URL = "https://dataguard-4cpi.onrender.com";
 const $ = (id) => document.getElementById(id);
 const formatarMoeda = (valor) => {
@@ -12,6 +11,8 @@ const formatarMoeda = (valor) => {
 
 let dicionarioAtual = {};
 let currentLang = localStorage.getItem('app-lang') || 'pt';
+
+carregarIdioma(currentLang);
 
 // função para carregar o arquivo JSON
 async function carregarIdioma(lang) {
