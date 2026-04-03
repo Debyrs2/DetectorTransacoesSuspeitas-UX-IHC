@@ -17,7 +17,7 @@ carregarIdioma(currentLang);
 // função para carregar o arquivo JSON
 async function carregarIdioma(lang) {
     try {
-        const res = await fetch(`locales/${lang}.json`);
+        const res = await fetch(`idiomas/${lang}.json`);
         dicionarioAtual = await res.json();
         updateUI(); // Atualiza a tela depois de carregar as palavras
     } catch (e) {
