@@ -754,3 +754,70 @@ div[vw-plugin-wrapper] {
     transform: translateX(0);
   }
 }
+
+/* --- TUTORIAL ONBOARDING --- */
+.tutorial-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(8px);
+    z-index: 200000; 
+    display: none; 
+    align-items: center;
+    justify-content: center;
+}
+
+.tutorial-card {
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    animation: zoomIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tutorial-card h2 {
+    color: #60a5fa;
+    font-weight: 900;
+    margin-bottom: 15px;
+}
+
+.tutorial-card p {
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.tutorial-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.step-indicator {
+    display: flex;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.dot.active {
+    background: #3b82f6;
+    width: 20px;
+    border-radius: 4px;
+}
+
+@keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}

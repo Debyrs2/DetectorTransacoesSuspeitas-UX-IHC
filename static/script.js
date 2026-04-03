@@ -1077,6 +1077,8 @@ async function checkLogin() {
             $('loginOverlay').style.display = 'none';
             $('dashboardApp').style.display = 'block';
 
+            startTutorial();
+
             $('userMenuContainer').style.display = 'block';
             $('userNameDisplay').textContent = data.nome;
             $('userEmailDisplay').textContent = data.email;
@@ -1509,5 +1511,73 @@ $('btnVoltarLanding').addEventListener('click', () => {
     $('loginOverlay').style.display = 'none';
     $('landingPage').style.display = 'flex';
 });
+
+// Definição dos passos do tutorial
+const tutorialSteps = [
+    {
+        title: "Bem-vindo ao DataGuard!",
+        desc: "Sua nova central de inteligência para detecção de fraudes em Big Data. Vamos te mostrar como funciona em 30 segundos.",
+        icon: "🚀"
+    },
+    {
+        title: "Upload de Dados",
+        desc: "Basta arrastar seus arquivos CSV ou JSON para a área de upload. Nossa IA começará a processar os padrões imediatamente.",
+        icon: "📁"
+    },
+    {
+        title: "Análise Preditiva",
+        desc: "Visualize transações suspeitas marcadas em vermelho. O sistema aprende com cada decisão que você toma.",
+        icon: "🧠"
+    }
+];
+
+let currentStep = 0;
+
+// Função para renderizar o passo atual
+function renderStep(stepIndex) {
+    const step = tutorialSteps[stepIndex];
+    const content = document.getElementById('tutorialContent');
+    const dots = document.getElementById('stepDots');
+
+    content.innerHTML = `
+        <div style="font-size: 50px; margin-bottom: 20px;">${step.icon}</div>
+        <h2>${step.title}</h2>
+        <p>${step.desc}</p>
+    `;
+
+    // Atualiza os pontinhos (dots)
+    dots.innerHTML = tutorialSteps.map((_, i) =>
+        `<div class="dot ${i === stepIndex ? 'active' : ''}"></div>`
+    ).join('');
+
+    const btnNext = document.getElementById('btnNextStep');
+    btnNext.innerText = stepIndex === tutorialSteps.length - 1 ? "Começar Agora!" : "Próximo";
+}
+
+// Gatilho para iniciar o tutorial
+function startTutorial() {
+    // Verifica se o usuário já viu o tutorial
+    if (localStorage.getItem('tutorialVisto') === 'true') return;
+
+    document.getElementById('tutorialOverlay').style.display = 'flex';
+    renderStep(0);
+}
+
+// Listeners dos botões
+document.getElementById('btnNextStep').addEventListener('click', () => {
+    if (currentStep < tutorialSteps.length - 1) {
+        currentStep++;
+        renderStep(currentStep);
+    } else {
+        finishTutorial();
+    }
+});
+
+function finishTutorial() {
+    document.getElementById('tutorialOverlay').style.display = 'none';
+    localStorage.setItem('tutorialVisto', 'true');
+}
+
+document.getElementById('btnSkipTutorial').addEventListener('click', finishTutorial);
 // Inicializa o sistema verificando se o usuário já tem um acesso salvo
 checkLogin();
