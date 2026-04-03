@@ -66,7 +66,7 @@ if (langSelectElem) {
     langSelectElem.addEventListener('change', async (e) => {
         currentLang = e.target.value;
         localStorage.setItem('app-lang', currentLang);
-        updateUI();
+        await carregarIdioma(currentLang);
 
         await refreshDatasets();
 
