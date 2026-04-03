@@ -451,7 +451,7 @@ def _startup() -> None:
 @app.get("/health", dependencies=[Depends(verifica_sessao)])
 def health() -> Dict[str, str]:
     return {"status": "ok"}
-
+""
 @app.get("/")
 def home() -> Dict[str, str]:
     return {"status": "A API do DataGuard está ONLINE na nuvem!"}
