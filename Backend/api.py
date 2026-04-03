@@ -107,7 +107,12 @@ def get_me(request: Request):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://debyrs2.github.io", 
+        "http://localhost:5500", 
+        "http://127.0.0.1:5500"
+    ],
+    allow_credentials=True, 
     allow_methods=["*"],
     allow_headers=["*"]
 )
