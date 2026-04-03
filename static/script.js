@@ -73,7 +73,7 @@ if (langSelectElem) {
         if (ultimoResultadoGlobal) {
             renderResult(ultimoResultadoGlobal, true, true);
         } else {
-            const dict = i18n[currentLang] || i18n['pt'];
+            const dict = dicionarioAtual;
             $('resultHint').innerHTML = dict.resultHint;
             resetarResultado();
         }
@@ -153,7 +153,7 @@ async function apiJson(url, opts = {}) {
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
         let msg = data.detail || data.erro || ('Erro HTTP ' + res.status);
-        const dict = i18n[currentLang] || i18n['pt'];
+        const dict = dicionarioAtual;
         if (msg.startsWith('ERR_MISSING_COLUMN|')) {
             msg = dict.errMissingCol.replace('{col}', msg.split('|')[1]);
         } else if (msg.startsWith('ERR_FEW_DATA|')) {
@@ -168,7 +168,7 @@ async function apiJson(url, opts = {}) {
 }
 async function refreshDatasets() {
     const tbody = $('dsTbody');
-    const dict = i18n[currentLang] || i18n['pt'];
+    const dict = dicionarioAtual;
     tbody.innerHTML = `<tr><td colspan="5">${dict.tblLoading}</td></tr>`;
 
     try {
@@ -239,7 +239,7 @@ let ultimoResultadoGlobal = null;
 // Renderiza os vetores de dados através de projeção geométrica no Canvas, otimizando o uso de memória da GPU ao plotar milhares de pontos.
 function desenharGrafico(chartData) {
     const sessaoGrafico = $('sessao-grafico');
-    const dict = i18n[currentLang] || i18n['pt'];
+    const dict = dicionarioAtual;
 
     if (!chartData) {
         sessaoGrafico.style.display = 'none';
@@ -390,7 +390,7 @@ function resetarResultado() {
 
 function renderResult(result, isReview = false, skipScroll = false) {
     ultimoResultadoGlobal = result;
-    const dictMsg = i18n[currentLang] || i18n['pt'];
+    const dictMsg = dicionarioAtual;
     const dataObj = new Date(result.analysis_at);
     const dataFormatada = dataObj.toLocaleDateString(currentLang, {
         day: '2-digit', month: 'short', year: 'numeric'
@@ -417,7 +417,7 @@ function renderResult(result, isReview = false, skipScroll = false) {
         .join(' • ');
     $('rStats').textContent = statsPairs || '--';
     const th = result.thresholds || {};
-    const dict = i18n[currentLang] || i18n['pt'];
+    const dict = dicionarioAtual;
 
     const minFmt = (th.lower !== null && th.lower !== undefined) ? formatarMoeda(th.lower) : '--';
     const maxFmt = (th.upper !== null && th.upper !== undefined) ? formatarMoeda(th.upper) : '--';
@@ -505,7 +505,7 @@ function renderResult(result, isReview = false, skipScroll = false) {
                 const btnNao = $('btnNaoGrafico');
                 const btnX = $('btnFecharX');
 
-                const dictMsg = i18n[currentLang] || i18n['pt'];
+                const dictMsg = dicionarioAtual;
                 msg.innerHTML = `${dictMsg.modalMsg1}<b style="color: var(--danger); font-size: 16px;">${result.quantidade_suspeitas}</b>${dictMsg.modalMsg2}`;
 
                 modal.style.display = 'flex';
@@ -519,7 +519,7 @@ function renderResult(result, isReview = false, skipScroll = false) {
 }
 
 async function handleUpload() {
-    const dict = i18n[currentLang] || i18n['pt'];
+    const dict = dicionarioAtual;
     const file = $('dsFile').files[0];
     if (!file) {
         showErr(dict.errNoFile);
@@ -577,7 +577,7 @@ async function viewLast(id, skipScroll = false) {
     }
 }
 async function renameDataset(id) {
-    const dict = i18n[currentLang] || i18n['pt'];
+    const dict = dicionarioAtual;
     abrirModalGenerico(dict.btnRename, dict.promptRename, true, "Ex: Novo Nome", '', async (newName) => {
         if (!newName) return;
         clearMsg();
@@ -600,7 +600,7 @@ async function replaceFile(id) {
         const file = input.files[0];
         if (!file) return;
 
-        const dict = i18n[currentLang] || i18n['pt'];
+        const dict = dicionarioAtual;
         clearMsg();
         try {
             const fd = new FormData();
@@ -617,7 +617,7 @@ async function replaceFile(id) {
 }
 
 async function deleteDataset(id) {
-    const dict = i18n[currentLang] || i18n['pt'];
+    const dict = dicionarioAtual;
     abrirModalGenerico(dict.btnDelete, dict.confirmDelete.replace('{id}', id), false, "", 'danger', async () => {
         clearMsg();
         try {
@@ -802,7 +802,7 @@ $('btnCadastrar').addEventListener('click', async () => {
     const email = $('emailCadastro').value;
     const senha = $('senhaCadastro').value;
 
-    const dictMsg = i18n[currentLang] || i18n['pt']; // Puxa o idioma atual
+    const dictMsg = dicionarioAtual; // Puxa o idioma atual
 
     // --- VALIDAÇÃO DE E-MAIL ---
     const dominios = ['@gmail.com', '@hotmail.com', '@outlook.com'];
@@ -857,7 +857,7 @@ $('btnCadastrar').addEventListener('click', async () => {
 $('btnSair').addEventListener('click', async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const dict = i18n[currentLang] || i18n['pt'];
+    const dict = dicionarioAtual;
     $('userDropdown').style.display = 'none';
 
     abrirModalGenerico(dict.logoutTitle, dict.logoutMsg, false, "", 'danger', async () => {
@@ -904,7 +904,7 @@ let leitorAtivo = false;
 $('btnA11yAudio').addEventListener('click', () => {
     leitorAtivo = !leitorAtivo;
     const btn = $('btnA11yAudio');
-    const dictMsg = i18n[currentLang] || i18n['pt'];
+    const dictMsg = dicionarioAtual;
 
     if (leitorAtivo) {
         // Deixa o botão pintado para mostrar que está ligado
@@ -1038,7 +1038,7 @@ $('btnEnviarReset').addEventListener('click', async () => {
     const email = $('emailReset').value.trim();
     const senhaNova = $('senhaReset').value;
     const msgBox = $('resetMsg');
-    const dictMsg = i18n[currentLang] || i18n['pt'];
+    const dictMsg = dicionarioAtual;
 
     // Validação de segurança parecida com a do cadastro
     const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
