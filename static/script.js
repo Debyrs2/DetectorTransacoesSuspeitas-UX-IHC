@@ -1,3 +1,4 @@
+carregarIdioma(currentLang);
 const API_URL = "https://dataguard-4cpi.onrender.com";
 const $ = (id) => document.getElementById(id);
 const formatarMoeda = (valor) => {
@@ -9,392 +10,22 @@ const formatarMoeda = (valor) => {
     }).format(valor);
 };
 
-const i18n = {
-    pt: {
-        menuA11y: "Acessibilidade", a11yRead: "Leitura Confortável", a11yColor: "Modo Daltônico", a11yAudio: "Leitor de Tela",
-        loginTitle: "Entre na sua conta",
-        loginDesc: "Identifique-se para acessar o painel.",
-        showPass: "Ver senha",
-        btnEnter: "Entrar no Sistema",
-        btnGoRegister: "Não tem conta? Cadastre-se",
-        errLogin: "Credenciais incorretas.",
-        regTitle: "Criar Conta",
-        regDesc: "Preencha seus dados para começar.",
-        btnRegister: "Criar Minha Conta",
-        btnGoLogin: "Já tem conta? Entrar",
-        rulePass: "A senha deve ter no mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo especial (ex: *).",
-        phUserOrEmail: "E-mail ou Nome de Usuário",
-        phPassword: "Senha",
-        phName: "Seu Nome",
-        phEmail: "Seu E-mail",
-        phCreatePassword: "Crie uma Senha",
-        errEmailFormat: "⚠️ Entre com um email válido (@gmail.com, @hotmail.com ou @outlook.com).",
-        errPassFormat: "⚠️ A senha não cumpre os requisitos de segurança.",
-        forgotPass: "Esqueceu a senha?",
-        resetTitle: "Recuperar Senha",
-        resetDesc: "Ambiente de teste: digite seu e-mail cadastrado e a nova senha diretamente abaixo.",
-        btnReset: "Salvar Nova Senha",
-        title: "Detecção de Transações Suspeitas",
-        titleSlogan: "Detecção de Transações Suspeitas",
-        landSubtitle: "Detecção de Transações Suspeitas",
-        landDesc: "A plataforma definitiva de análise em Big Data. Identifique anomalias financeiras em segundos, proteja os ativos e garanta a integridade das operações.",
-        btnLandEnter: "Conhecer e Acessar",
-        loginSysDesc: "<h3>Plataforma inteligente de Detecção de Transações Suspeitas.</h3><p>Proteja os seus ativos e garanta a integridade financeira com a nossa análise avançada de anomalias.</p>",
-        themeLight: "Tema Claro",
-        themeDark: "Tema Escuro",
-        btnLogout: "Sair",
-        btnCancel: "Cancelar", btnConfirm: "Confirmar", logoutTitle: "Sair do Sistema", logoutMsg: "Deseja mesmo sair da sua conta?",
-        dirUpper: "Apenas gastos muito altos",
-        dirLower: "Apenas gastos muito baixos",
-        dirBoth: "Qualquer anomalia (Altos ou Baixos)",
-        lower: "Mínimo esperado",
-        upper: "Máximo esperado",
-        secUpload: "Enviar Arquivo",
-        secConfig: "Configuração da Análise",
-        secDatabase: "Base de dados",
-        secResult: "Resultado da Análise",
-        secChart: "Gráfico de Tendência e Anomalias",
-        labelName: "Nome da base de dados (opcional)",
-        labelFile: "Arquivo (.csv, .xlsx, .xls)",
-        btnUpload: "Salvar base de dados",
-        labelMethod: "Método",
-        labelDirection: "O que procurar?",
-        labelColumn: "Coluna",
-        labelStreaming: "Modo Arquivos Pesados (CSV)",
-        labelMaxSus: "Máx. suspeitas",
-        placeholderName: "Ex.: Semana 02 - Pagamentos",
-        hintUpload: "Dica: a coluna padrão é <b>valor</b> (você pode trocar em “Coluna”).",
-        hintBatch: "Dica: Ative para evitar travamentos ao analisar planilhas gigantes.",
-        resultHint: "Selecione <b>Analisar</b> em alguma base de dados.",
-        chartSubtitle: "Os pontos a vermelho destacam os valores considerados suspeitos.",
-        legendNormal: "Transações Normais",
-        legendSuspect: "Transações Suspeitas",
-        modalTitle: "Análise Concluída! 🚀",
-        btnTableOnly: "Apenas Tabela",
-        btnViewChart: "📉 Ver Gráfico",
-        chartAll: "Todos os Valores",
-        chartNormalSingle: "Transação Normal",
-        chartSuspectSingle: "Transação Suspeita",
-        modalMsg1: "Foram encontradas ",
-        modalMsg2: " transações suspeitas.<br><br>Deseja visualizar o gráfico de tendência agora?",
-        thID: "ID",
-        thName: "Nome",
-        thFile: "Arquivo",
-        thSize: "Tamanho",
-        thDate: "Data de Envio",
-        thLast: "Última análise",
-        thActions: "Ações",
-        analysisIn: "Análise em",
-        columnLabel: "coluna",
-        btnDownTable: "Baixar Tabela (CSV)",
-        btnDownChart: "Baixar Gráfico (PNG)",
-        menuProfile: "Meu Perfil",
-        "data": "data",
-        "id transação": "id transação",
-        "nome": "nome",
-        "categoria": "categoria",
-        "estabelecimento": "estabelecimento",
-        "método de pagamento": "método de pagamento",
-        "cidade/uf": "cidade/uf",
-        "valor": "valor",
-        btnClose: "Fechar",
-        btnAnalyze: "Analisar",
-        btnReview: "Rever análise",
-        btnRename: "Renomear",
-        btnReplace: "Substituir",
-        btnDelete: "Excluir",
-        tblLoading: "Carregando...",
-        tblEmpty: "Nenhum dataset salvo ainda.",
-        tblNoAnalysis: "sem análise",
-        tblSuspects: "suspeitas",
-        cardMethod: "Método",
-        cardStats: "Estatísticas",
-        cardLimits: "Limites",
-        cardSuspects: "Suspeitas",
-        stat_mean: "Média de gastos",
-        stat_std: "Variação comum",
-        stat_median: "Valor central",
-        btnBrowse: "Procurar...",
-        noFileChosen: "Nenhum arquivo selecionado.",
-        optNo: "Não",
-        optYesBatch: "Sim (média/desvio)",
-        defColumn: "valor",
-        footerText: "Detecção de Transações Suspeitas - Por",
-        errMissingCol: "A planilha precisa ter uma coluna chamada '{col}'.",
-        errFewData: "Poucos dados na coluna '{col}' para calcular estatísticas.",
-        errFewDataStd: "Poucos dados na coluna para calcular desvio padrão.",
-        promptRename: "Novo nome do dataset:",
-        confirmDelete: "Tem certeza que deseja excluir esta base de dados?",
-        msgRenamed: "Nome atualizado.",
-        msgReplaced: "Arquivo substituído. (Resultado anterior limpo)",
-        msgDeleted: "Dataset excluído.",
-        msgSaved: "Dataset salvo:",
-        errNoFile: "Escolha um arquivo.",
-        optSigma: "Análise Padrão (Recomendado)",
-        optZscore: "Análise Direta (Z-score)",
-        optIqr: "Análise por Faixa Esperada",
-        optMad: "Análise Rigorosa",
-    },
-    en: {
-        menuA11y: "Accessibility", a11yRead: "Comfortable Reading", a11yColor: "Colorblind Mode", a11yAudio: "Screen Reader",
-        loginTitle: "Login to your account",
-        loginDesc: "Identify yourself to access the dashboard.",
-        showPass: "Show password",
-        btnEnter: "Enter System",
-        btnGoRegister: "No account? Register",
-        errLogin: "Invalid credentials.",
-        regTitle: "Create Account",
-        regDesc: "Fill in your details to start.",
-        btnRegister: "Create My Account",
-        btnGoLogin: "Already have an account? Login",
-        rulePass: "Password must have at least 8 characters, with uppercase, lowercase, number, and special symbol.",
-        phUserOrEmail: "E-mail or Username",
-        phPassword: "Password",
-        phName: "Your Name",
-        phEmail: "Your E-mail",
-        phCreatePassword: "Create a Password",
-        errEmailFormat: "⚠️ Enter a valid email (@gmail.com, @hotmail.com, or @outlook.com).",
-        errPassFormat: "⚠️ Password does not meet security requirements.",
-        forgotPass: "Forgot password?",
-        resetTitle: "Recover Password",
-        resetDesc: "Test environment: enter your registered e-mail and the new password directly below.",
-        btnReset: "Save New Password",
-        title: "Suspicious Transaction Detection",
-        titleSlogan: "Suspicious Transaction Detection",
-        title: "DataGuard Analysis",
-        titleSlogan: "Suspicious Transaction Detection",
-        landSubtitle: "Suspicious Transaction Detection",
-        landDesc: "The ultimate Big Data analysis platform. Identify financial anomalies in seconds, protect your assets, and ensure the integrity of your operations.",
-        btnLandEnter: "Discover & Access",
-        loginSysDesc: "<h3>Intelligent Suspicious Transaction Detection platform.</h3><p>Protect your assets and ensure financial integrity with our advanced anomaly analysis.</p>",
-        themeLight: "Light Theme",
-        themeDark: "Dark Theme",
-        btnLogout: "Logout",
-        btnCancel: "Cancel", btnConfirm: "Confirm", logoutTitle: "Logout", logoutMsg: "Are you sure you want to log out?",
-        dirUpper: "Only very high spending",
-        dirLower: "Only very low spending",
-        dirBoth: "Any anomaly (High or Low)",
-        lower: "Expected minimum",
-        upper: "Maximum expected",
-        secUpload: "Upload File",
-        secConfig: "Analysis Configuration",
-        secDatabase: "Database",
-        secResult: "Analysis Result",
-        secChart: "Trend and Anomalies Chart",
-        labelName: "Dataset name (optional)",
-        labelFile: "File (.csv, .xlsx, .xls)",
-        btnUpload: "Save dataset",
-        labelMethod: "Method",
-        labelDirection: "What to look for?",
-        labelColumn: "Column",
-        labelStreaming: "Heavy Files Mode (CSV)",
-        labelMaxSus: "Max. suspects",
-        placeholderName: "e.g., Week 02 - Payments",
-        hintUpload: "Tip: the default column is <b>value</b> (you can change it under “Column”).",
-        hintBatch: "Tip: Enable to avoid crashes when analyzing large spreadsheets.",
-        resultHint: "Select <b>Analyze</b> in a database.",
-        chartSubtitle: "Red dots highlight values considered suspicious.",
-        legendNormal: "Normal Transactions",
-        legendSuspect: "Suspicious Transactions",
-        modalTitle: "Analysis Completed! 🚀",
-        btnTableOnly: "Table Only",
-        btnViewChart: "📉 View Chart",
-        chartAll: "All Values",
-        chartNormalSingle: "Normal Transaction",
-        chartSuspectSingle: "Suspicious Transaction",
-        modalMsg1: "Found ",
-        modalMsg2: " suspicious transactions.<br><br>Would you like to view the trend chart now?",
-        thID: "ID",
-        thName: "Name",
-        thFile: "File",
-        thSize: "Size",
-        thDate: "Upload Date",
-        thLast: "Last Analysis",
-        thActions: "Actions",
-        analysisIn: "Analyzed on",
-        columnLabel: "column",
-        btnDownTable: "Download Table (CSV)",
-        btnDownChart: "Download Chart (PNG)",
-        menuProfile: "My Profile",
-        "data": "date",
-        "id transação": "transaction id",
-        "nome": "name",
-        "categoria": "category",
-        "estabelecimento": "establishment",
-        "método de pagamento": "payment method",
-        "cidade/uf": "city/state",
-        "valor": "value",
-        btnClose: "Close",
-        btnAnalyze: "Analyze",
-        btnReview: "Review analysis",
-        btnRename: "Rename",
-        btnReplace: "Replace",
-        btnDelete: "Delete",
-        tblLoading: "Loading...",
-        tblEmpty: "No dataset saved yet.",
-        tblNoAnalysis: "no analysis",
-        tblSuspects: "suspects",
-        cardMethod: "Method",
-        cardStats: "Statistics",
-        cardLimits: "Limits",
-        cardSuspects: "Suspects",
-        stat_mean: "Average spending",
-        stat_std: "Common variation",
-        stat_median: "Central value",
-        btnBrowse: "Browse...",
-        noFileChosen: "No file chosen.",
-        optNo: "No",
-        optYesBatch: "Yes (mean/std)",
-        defColumn: "value",
-        footerText: "Suspicious Transaction Detection - By",
-        errMissingCol: "The spreadsheet must have a column named '{col}'.",
-        errFewData: "Not enough data in column '{col}' to calculate statistics.",
-        errFewDataStd: "Not enough data to calculate standard deviation.",
-        promptRename: "New dataset name:",
-        confirmDelete: "Are you sure you want to delete this database?",
-        msgRenamed: "Name updated.",
-        msgReplaced: "File replaced. (Previous result cleared)",
-        msgDeleted: "Dataset deleted.",
-        msgSaved: "Dataset saved:",
-        errNoFile: "Please choose a file.",
-        optSigma: "Standard Analysis",
-        optZscore: "Direct Analysis",
-        optIqr: "Expected Range Analysis",
-        optMad: "Strict Analysis",
-    },
-    es: {
-        menuA11y: "Accesibilidad", a11yRead: "Lectura Cómoda", a11yColor: "Modo Daltónico", a11yAudio: "Lector de Pantalla",
-        loginTitle: "Inicia sesión",
-        loginDesc: "Identifícate para acceder al sistema.",
-        showPass: "Mostrar contraseña",
-        btnEnter: "Ingresar al Sistema",
-        btnGoRegister: "¿No tienes cuenta? Regístrate",
-        errLogin: "Credenciales incorrectas.",
-        regTitle: "Crear Cuenta",
-        regDesc: "Ingresa tus datos para comenzar.",
-        btnRegister: "Crear Mi Cuenta",
-        btnGoLogin: "¿Ya tienes cuenta? Inicia sesión",
-        rulePass: "La contraseña debe tener al menos 8 caracteres, incluir mayúscula, minúscula, número y un símbolo (ej: *).",
-        errEmailFormat: "⚠️ Ingresa un correo válido (@gmail.com, @hotmail.com o @outlook.com).",
-        errPassFormat: "⚠️ La contraseña no cumple con los requisitos de seguridad.",
-        forgotPass: "¿Olvidaste tu contraseña?",
-        resetTitle: "Recuperar Contraseña",
-        resetDesc: "Entorno de prueba: ingresa tu correo registrado y la nueva contraseña directamente abajo.",
-        btnReset: "Guardar Nueva Contraseña",
-        title: "Detección de Transacciones Sospechosas",
-        titleSlogan: "Detección de Transacciones Sospechosas",
-        title: "Análisis DataGuard",
-        titleSlogan: "Detección de Transacciones Sospechosas",
-        landSubtitle: "Detección de Transacciones Sospechosas",
-        landDesc: "La plataforma definitiva de análisis de Big Data. Identifique anomalías financieras en segundos, proteja sus activos y garantice la integridad de sus operaciones.",
-        btnLandEnter: "Descubrir y Acceder",
-        loginSysDesc: "<h3>Plataforma inteligente de Detección de Transacciones Sospechosas.</h3><p>Proteja sus activos y garantice la integridad financiera con nuestro análisis avanzado de anomalías.</p>",
-        themeLight: "Tema Claro",
-        themeDark: "Tema Oscuro",
-        btnLogout: "Salir",
-        btnCancel: "Cancelar", btnConfirm: "Confirmar", logoutTitle: "Salir", logoutMsg: "¿Estás seguro de que deseas salir?",
-        dirUpper: "Solo gastos excesivamente altos",
-        dirLower: "Solo gastos inusualmente bajos",
-        dirBoth: "Cualquier anomalía (Altos o Bajos)",
-        lower: "Mínimo esperado",
-        upper: "Máximo esperado",
-        secUpload: "Subir Archivo",
-        secConfig: "Configuración del Análisis",
-        secDatabase: "Base de Datos",
-        secResult: "Resultados del Análisis",
-        secChart: "Gráfico de Tendencias y Anomalías",
-        labelName: "Nombre del conjunto de datos (opcional)",
-        labelFile: "Archivo (.csv, .xlsx, .xls)",
-        btnUpload: "Guardar base de datos",
-        labelMethod: "Método de cálculo",
-        labelDirection: "¿Qué buscar?",
-        labelColumn: "Columna a analizar",
-        labelStreaming: "Modo para archivos pesados (CSV)",
-        labelMaxSus: "Límite de sospechas",
-        placeholderName: "Ej.: Semana 02 - Pagos",
-        hintUpload: "Consejo: la columna por defecto es <b>valor</b> (puedes cambiarla en “Columna a analizar”).",
-        hintBatch: "Consejo: Actívalo para evitar bloqueos al analizar hojas de cálculo gigantes.",
-        resultHint: "Selecciona <b>Analizar</b> en alguna base de datos.",
-        chartSubtitle: "Los puntos rojos resaltan los valores considerados sospechosos.",
-        legendNormal: "Transacciones Normales",
-        legendSuspect: "Transacciones Sospechosas",
-        modalTitle: "¡Análisis Completado! 🚀",
-        btnTableOnly: "Ver solo la tabla",
-        btnViewChart: "📉 Ver el Gráfico",
-        chartAll: "Todos los valores",
-        chartNormalSingle: "Transacción Normal",
-        chartSuspectSingle: "Transacción Sospechosa",
-        modalMsg1: "Se encontraron ",
-        modalMsg2: " transacciones sospechosas.<br><br>¿Deseas ver el gráfico de tendencias ahora?",
-        thID: "ID",
-        thName: "Nombre",
-        thFile: "Archivo",
-        thSize: "Tamaño",
-        thDate: "Fecha de Subida",
-        thLast: "Último Análisis",
-        thActions: "Acciones",
-        analysisIn: "Analizado el",
-        columnLabel: "columna",
-        btnDownTable: "Descargar Tabla (CSV)",
-        btnDownChart: "Descargar Gráfico (PNG)",
-        menuProfile: "Mi Perfil",
-        "data": "fecha",
-        "id transação": "id de transacción",
-        "nome": "nombre",
-        "categoria": "categoría",
-        "estabelecimento": "establecimiento",
-        "método de pagamento": "método de pago",
-        "cidade/uf": "ciudad/estado",
-        "valor": "valor",
-        btnClose: "Cerrar",
-        btnAnalyze: "Analizar",
-        btnReview: "Revisar análisis",
-        btnRename: "Renombrar",
-        btnReplace: "Reemplazar",
-        btnDelete: "Eliminar",
-        tblLoading: "Cargando...",
-        tblEmpty: "Aún no hay datos guardados.",
-        tblNoAnalysis: "sin analizar",
-        tblSuspects: "sospechas",
-        cardMethod: "Método usado",
-        cardStats: "Estadísticas",
-        cardLimits: "Límites calculados",
-        cardSuspects: "Total Sospechosas",
-        stat_mean: "Gasto promedio",
-        stat_std: "Variación común",
-        stat_median: "Valor central",
-        btnBrowse: "Examinar...",
-        noFileChosen: "Ningún archivo seleccionado.",
-        optNo: "No",
-        optYesBatch: "Sí (media/desviación)",
-        defColumn: "valor",
-        footerText: "Detección de Transacciones Sospechosas - Por",
-        errMissingCol: "La hoja de cálculo debe tener una columna llamada '{col}'.",
-        errFewData: "No hay suficientes datos en la columna '{col}' para calcular estadísticas.",
-        errFewDataStd: "No hay suficientes datos para calcular la desviación estándar.",
-        promptRename: "Nuevo nombre del archivo:",
-        confirmDelete: "¿Estás seguro de que deseas eliminar esta base de datos?",
-        msgRenamed: "Nombre actualizado.",
-        msgReplaced: "Archivo reemplazado. (Resultados anteriores borrados)",
-        msgDeleted: "Archivo eliminado.",
-        msgSaved: "Archivo guardado exitosamente:",
-        errNoFile: "Por favor, elige un archivo.",
-        optSigma: "Análisis Estándar (Recomendado)",
-        optZscore: "Análisis Directo (Z-score)",
-        optIqr: "Análisis por Rango Esperado",
-        optMad: "Análisis Riguroso",
-        phUserOrEmail: "Correo o Usuario",
-        phPassword: "Contraseña",
-        phName: "Tu Nombre",
-        phEmail: "Tu Correo",
-        phCreatePassword: "Crea una Contraseña",
-    },
-};
-
+let dicionarioAtual = {};
 let currentLang = localStorage.getItem('app-lang') || 'pt';
 
+// função para carregar o arquivo JSON
+async function carregarIdioma(lang) {
+    try {
+        const res = await fetch(`locales/${lang}.json`);
+        dicionarioAtual = await res.json();
+        updateUI(); // Atualiza a tela depois de carregar as palavras
+    } catch (e) {
+        console.error("Erro ao carregar o idioma:", e);
+    }
+}
+
 function updateUI() {
-    const dict = i18n[currentLang] || i18n['pt'];
+    const dict = dicionarioAtual;
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (dict[key]) {
@@ -1513,72 +1144,84 @@ $('btnVoltarLanding').addEventListener('click', () => {
     $('landingPage').style.display = 'flex';
 });
 
-// Definição dos passos do tutorial
-const tutorialSteps = [
-    {
-        title: "Bem-vindo ao DataGuard!",
-        desc: "Sua nova central de inteligência para detecção de fraudes em Big Data. Vamos te mostrar como funciona em 30 segundos.",
-        icon: "🚀"
-    },
-    {
-        title: "Upload de Dados",
-        desc: "Basta arrastar seus arquivos CSV ou JSON para a área de upload. Nossa IA começará a processar os padrões imediatamente.",
-        icon: "📁"
-    },
-    {
-        title: "Análise Preditiva",
-        desc: "Visualize transações suspeitas marcadas em vermelho. O sistema aprende com cada decisão que você toma.",
-        icon: "🧠"
-    }
-];
-
-let currentStep = 0;
-
-// Função para renderizar o passo atual
-function renderStep(stepIndex) {
-    const step = tutorialSteps[stepIndex];
-    const content = document.getElementById('tutorialContent');
-    const dots = document.getElementById('stepDots');
-
-    content.innerHTML = `
-        <div style="font-size: 50px; margin-bottom: 20px;">${step.icon}</div>
-        <h2>${step.title}</h2>
-        <p>${step.desc}</p>
-    `;
-
-    // Atualiza os pontinhos (dots)
-    dots.innerHTML = tutorialSteps.map((_, i) =>
-        `<div class="dot ${i === stepIndex ? 'active' : ''}"></div>`
-    ).join('');
-
-    const btnNext = document.getElementById('btnNextStep');
-    btnNext.innerText = stepIndex === tutorialSteps.length - 1 ? "Começar Agora!" : "Próximo";
-}
-
-// Gatilho para iniciar o tutorial
+// Gatilho para iniciar o tutorial com Driver.js
 function startTutorial() {
-    // Verifica se o usuário já viu o tutorial
+    // Verifica se o usuário já viu o tutorial (só roda no primeiro login)
     if (localStorage.getItem('tutorialVisto') === 'true') return;
 
-    document.getElementById('tutorialOverlay').style.display = 'flex';
-    renderStep(0);
+    // Puxa as palavras do idioma que foi carregado no arquivo JSON
+    const dict = dicionarioAtual;
+
+    // Inicializa a biblioteca
+    const driver = window.driver.js.driver;
+
+    const driverObj = driver({
+        showProgress: true,
+        // Usamos o '||' (ou) como segurança. Se o JSON falhar, ele usa o texto em português por padrão
+        nextBtnText: dict.tourNext || 'Próximo →',
+        prevBtnText: dict.tourPrev || '← Anterior',
+        doneBtnText: dict.tourDone || 'Mãos à obra!',
+        progressText: dict.tourProgress || 'Passo {{current}} de {{total}}',
+
+        // lista de elementos que o tutorial vai destacar na tela
+        steps: [
+            {
+                element: '#logoSistemaHeader',
+                popover: { title: dict.tourS1Title, description: dict.tourS1Desc, side: "bottom", align: 'start' }
+            },
+            {
+                element: '#dsFile',
+                popover: { title: dict.tourS2Title, description: dict.tourS2Desc, side: "top", align: 'start' }
+            },
+            {
+                element: '#method',
+                popover: { title: dict.tourS3Title, description: dict.tourS3Desc, side: "left", align: 'start' }
+            },
+            {
+                element: '#dsTbody',
+                popover: { title: dict.tourS4Title, description: dict.tourS4Desc, side: "top", align: 'start' }
+            },
+            {
+                element: '#rMethod',
+                popover: {
+                    title: dict.tourS5Title || 'Exportar Resultados 📊',
+                    description: dict.tourS5Desc || 'Assim que a análise terminar, é nesta área que aparecerão os botões para baixar a Tabela (CSV) e o Gráfico (PNG).',
+                    side: "bottom",
+                    align: 'start'
+                }
+            },
+            {
+                element: '#btnA11yToggle',
+                popover: {
+                    title: dict.tourS6Title || 'Acessibilidade ♿',
+                    description: dict.tourS6Desc || 'Precisa de alto contraste, modo daltônico ou leitor de tela? As opções ficam aqui.',
+                    side: "bottom",
+                    align: 'end'
+                }
+            },
+            {
+                element: '#userProfile',
+                popover: {
+                    title: dict.tourS7Title || 'Seu Perfil 🎉',
+                    description: dict.tourS7Desc || 'Aqui você pode ver seus dados, alterar o idioma e sair do sistema. Aproveite!',
+                    side: "bottom",
+                    align: 'end'
+                }
+            }
+        ],
+
+        // Salva no localStorage quando o usuário terminar ou fechar o tutorial
+        onDestroyStarted: () => {
+            if (!driverObj.hasNextStep() || confirm(dict.tourSkip || "Deseja pular o tutorial?")) {
+                driverObj.destroy();
+                localStorage.setItem('tutorialVisto', 'true');
+            }
+        }
+    });
+
+    // Inicia o tour visual
+    driverObj.drive();
 }
 
-// Listeners dos botões
-document.getElementById('btnNextStep').addEventListener('click', () => {
-    if (currentStep < tutorialSteps.length - 1) {
-        currentStep++;
-        renderStep(currentStep);
-    } else {
-        finishTutorial();
-    }
-});
-
-function finishTutorial() {
-    document.getElementById('tutorialOverlay').style.display = 'none';
-    localStorage.setItem('tutorialVisto', 'true');
-}
-
-document.getElementById('btnSkipTutorial').addEventListener('click', finishTutorial);
 // Inicializa o sistema verificando se o usuário já tem um acesso salvo
 checkLogin();
