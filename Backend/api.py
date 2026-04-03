@@ -68,7 +68,7 @@ def login(response: Response, identificador: str = Form(...), senha: str = Form(
     if user_data["senha"] != senha:
         raise HTTPException(status_code=401, detail="Senha incorreta.")
 
-    response.set_cookie(key="sessao_app", value=user_key, httponly=True, samesite="lax")
+    response.set_cookie(key="sessao_app", value=user_key, httponly=True, samesite="none", secure=True)
     return {"status": "ok", "nome": user_data["nome"], "email": user_key}
 
 def _write_users(users_data: Dict[str, Any]) -> None:
