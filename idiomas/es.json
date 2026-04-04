@@ -144,5 +144,8 @@
     "tourS8Title": "Tema 🌓",
     "tourS8Desc": "¿Prefieres trabajar en la oscuridad? Alterna entre el tema Claro y Oscuro aquí.",
     "tourS9Title": "Tu Perfil 🎉",
-    "tourS9Desc": "Por último, aquí puedes ver tus datos y salir del sistema. ¡Disfruta!"
+    "tourS9Desc": "Por último, aquí puedes ver tus datos y salir del sistema. ¡Disfruta!",
+    "regDob": "Fecha de Nacimiento",
+    "errNoDob": "Por favor, introduzca su fecha de nacimiento.",
+    "errUnder18": "Acceso denegado: Debes tener 18 años o más para utilizar el sistema de análisis financiero."
 }

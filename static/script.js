@@ -797,6 +797,30 @@ $('mostrarSenhaCadastroBtn').addEventListener('change', (e) => {
 });
 // Enviar Cadastro
 $('btnCadastrar').addEventListener('click', async () => {
+    // VALIDAÇÃO DE IDADE (+18) 
+    const inputDataNasc = document.getElementById('regDataNasc').value;
+
+    if (!inputDataNasc) {
+        alert("Por favor, preencha sua data de nascimento.");
+        return;
+    }
+
+    // Faz o cálculo exato da idade
+    const dataNascimento = new Date(inputDataNasc);
+    const hoje = new Date();
+    let idade = hoje.getFullYear() - dataNascimento.getFullYear();
+    const diferencaMes = hoje.getMonth() - dataNascimento.getMonth();
+
+    // Se o mês atual for menor que o mês do aniversário, ou se for o mesmo mês mas o dia ainda não chegou, diminui 1 ano
+    if (diferencaMes < 0 || (diferencaMes === 0 && hoje.getDate() < dataNascimento.getDate())) {
+        idade--;
+    }
+
+    // Verifica a restrição
+    if (idade < 18) {
+        alert(dicionarioAtual.errUnder18 || "Acesso negado: Você precisa ter 18 anos ou mais para utilizar o sistema de análise financeira.");
+        return;
+    }
     const msgBox = $('cadastroMsg');
     const nome = $('nomeCadastro').value;
     const email = $('emailCadastro').value;
