@@ -12,8 +12,8 @@
 </head>
 
 <body>
-  <div
-    style="position: absolute; top: 16px; right: 24px; z-index: 999999; display: flex; gap: 12px; align-items: center;">
+  <div <div
+    style="position: absolute; top: 16px; right: 24px; z-index: 999999; display: flex; gap: 12px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
 
     <div id="userMenuContainer" style="display: none; position: relative; margin-right: 8px;">
       <div id="userProfile" tabindex="0" role="button" aria-label="Abrir menu do usuário"
@@ -62,22 +62,6 @@
           title="Ouvir instruções"><span>🔊</span> <span data-i18n="a11yAudio">Leitor de Tela</span></button>
       </div>
     </div>
-
-    <div class="panel" id="boxReset" style="width: 100%; max-width: 340px; display: none;">
-          <h2 class="form-title" data-i18n="resetTitle">Recuperar Senha</h2>
-          <p class="form-subtitle muted" style="margin-bottom: 24px;" data-i18n="resetDesc">Ambiente de teste: digite seu e-mail e a nova senha abaixo.</p>
-
-          <div id="resetMsg" class="muted" style="margin-bottom: 12px; display: none; text-align: center; font-size: 13px;" role="alert" aria-live="polite"></div>
-
-          <input type="email" id="emailReset" placeholder="Seu E-mail" data-i18n-placeholder="phEmail" style="margin-bottom: 8px; width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);" />
-          <input type="password" id="senhaReset" placeholder="Crie uma Senha" data-i18n-placeholder="phCreatePassword" style="margin-bottom: 16px; width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);" />
-
-          <button class="btn" id="btnEnviarReset" style="width: 100%; margin-bottom: 12px;" data-i18n="btnReset">Salvar Nova Senha</button>
-
-          <button class="btn-link muted" id="btnVoltarLoginReset" style="font-size: 12px; display: block; width: 100%; background: none; border: none; cursor: pointer; text-decoration: underline;" data-i18n="btnGoLogin">← Voltar ao Login</button>
-        </div>
-
-      </div>
 
     <select id="langSelect" class="btn2 btn-sm"
       style="width: auto; height: 36px; padding: 0 12px; border-radius: 999px; cursor: pointer; margin: 0; box-shadow: var(--shadow-soft);">
@@ -151,6 +135,37 @@
       </div>
 
       <div style="flex: 1; display: flex; align-items: center; justify-content: flex-end; min-width: 320px;">
+        <div class="panel" id="boxLogin" style="width: 100%; max-width: 340px;">
+          <h2 class="form-title" data-i18n="loginTitle">Entrar no Sistema</h2>
+          <p class="form-subtitle muted" style="margin-bottom: 24px;" data-i18n="loginDesc">Bem-vindo de volta! Insira as suas credenciais.</p>
+
+          <div id="loginErro" class="muted" style="margin-bottom: 12px; display: none; color: var(--danger); text-align: center; font-size: 13px;" role="alert" aria-live="assertive"></div>
+
+          <div style="margin-bottom: 16px; text-align: left;">
+            <label for="identificadorLogin" style="display: block; margin-bottom: 6px; font-size: 14px; color: var(--text);">
+              <span data-i18n="loginIdTitle">E-mail ou Usuário</span> <span style="color: var(--danger);">*</span>
+            </label>
+            <input type="text" id="identificadorLogin" placeholder="ex: maria@gmail.com" data-i18n-placeholder="phLogin" style="width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);" />
+          </div>
+
+          <div style="margin-bottom: 12px; text-align: left;">
+            <label for="senhaLogin" style="display: block; margin-bottom: 6px; font-size: 14px; color: var(--text);">
+              <span data-i18n="loginPassTitle">Senha</span> <span style="color: var(--danger);">*</span>
+            </label>
+            <input type="password" id="senhaLogin" placeholder="Palavra-passe" data-i18n-placeholder="phPassword" style="width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);" />
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding: 0 4px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <input type="checkbox" id="mostrarSenhaBtn" style="width: auto; height: auto; margin: 0; cursor: pointer;" />
+              <label for="mostrarSenhaBtn" class="muted" style="font-size: 12px; cursor: pointer;" data-i18n="showPass">Ver senha</label>
+            </div>
+            <a href="#" id="btnOpenReset" style="font-size: 12px; color: var(--brand); text-decoration: none;" data-i18n="forgotPass">Esqueceu a senha?</a>
+          </div>
+
+          <button class="btn" id="btnLogar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnLogin">Entrar no Sistema</button>
+          <button class="btn-link muted" id="btnIrCadastro" style="font-size: 12px; display: block; width: 100%; background: none; border: none; cursor: pointer; text-decoration: underline;" data-i18n="btnGoRegister">Não tem conta? Crie uma</button>
+        </div>
         <div class="panel" id="boxCadastro"
           style="width: 100%; max-width: 340px; display: none; max-height: 85vh; overflow-y: auto;">
           <h2 class="form-title" data-i18n="regTitle">Criar Conta</h2>
@@ -190,8 +205,8 @@
             <label for="senhaCadastro" style="display: block; margin-bottom: 6px; font-size: 14px; color: var(--text);">
               <span data-i18n="regPassTitle">Senha</span> <span style="color: var(--danger);">*</span>
             </label>
-            <input type="password" id="senhaCadastro" placeholder="ex: @Maria0000" data-i18n-placeholder="phPassword"
-              required
+            <input type="password" id="senhaCadastro" placeholder="Crie uma Palavra-passe"
+              data-i18n-placeholder="phCreatePassword" required
               style="width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);" />
           </div>
 
