@@ -899,7 +899,7 @@ document.getElementById('linkTermos')?.addEventListener('click', function (e) {
     const modalInput = document.getElementById('modalGenInput');
     const btnCancel = document.getElementById('btnGenCancel');
     const btnConfirm = document.getElementById('btnGenConfirm');
-    const overlay = document.getElementById('modalGenOverlay');
+    const overlay = document.getElementById('modalGenerico');
 
     modalTitle.textContent = dicionarioAtual.termsTitle || 'Termos de Privacidade';
     modalMsg.innerText = termoTexto;
@@ -1207,11 +1207,6 @@ $('btnAcessarLanding').addEventListener('click', () => {
             console.error("O Navegador bloqueou o vídeo:", err);
         });
     }
-});
-
-$('btnVoltarLanding').addEventListener('click', () => {
-    $('loginOverlay').style.display = 'none';
-    $('landingPage').style.display = 'flex';
 });
 
 // Gatilho para iniciar o tutorial com Driver.js
