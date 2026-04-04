@@ -820,6 +820,11 @@ $('btnCadastrar').addEventListener('click', async () => {
         alert(dicionarioAtual.errUnder18 || "Acesso negado: Você precisa ter 18 anos ou mais para utilizar o sistema de análise financeira.");
         return;
     }
+    const aceiteLgpd = document.getElementById('regLgpd').checked;
+    if (!aceiteLgpd) {
+        alert(dicionarioAtual.errLgpd || "Você precisa aceitar os Termos de Privacidade para criar uma conta.");
+        return;
+    }
     const msgBox = $('cadastroMsg');
     const nome = $('nomeCadastro').value;
     const email = $('emailCadastro').value;
@@ -914,12 +919,6 @@ document.getElementById('linkTermos')?.addEventListener('click', function (e) {
         modalMsg.style.whiteSpace = 'normal';
     };
 });
-
-const aceiteLgpd = document.getElementById('regLgpd').checked;
-if (!aceiteLgpd) {
-    alert(dicionarioAtual.errLgpd || "Você precisa aceitar os Termos de Privacidade para criar uma conta.");
-    return;
-}
 
 //LÓGICA DE SAIR
 $('btnSair').addEventListener('click', async (e) => {
