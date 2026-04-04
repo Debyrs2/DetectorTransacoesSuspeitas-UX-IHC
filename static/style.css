@@ -630,7 +630,15 @@ div[vw-plugin-wrapper] {
 #boxLogin,
 #boxCadastro {
   animation: fadeInForm 0.4s ease forwards;
+  max-height: 60vh !important;
+  overflow-y: auto;
+  padding-right: 8px;
 }
+
+#loginOverlay>div {
+  align-items: stretch !important;
+}
+
 
 @keyframes fadeInForm {
   from {
