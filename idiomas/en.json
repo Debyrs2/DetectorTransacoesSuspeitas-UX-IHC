@@ -12,6 +12,7 @@
   "btnGoLogin": "Already have an account? Login",
   "rulePass": "Password must have at least 8 characters, with uppercase, lowercase, number, and special symbol.",
   "phUserOrEmail": "E-mail or Username",
+  "loginPassTitle": "Password",
   "phPassword": "e.g., @Mary0000",
   "phName": "e.g., Mary Smith",
   "phEmail": "e.g., Mary@gmail.com",

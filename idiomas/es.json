@@ -4,6 +4,7 @@
     "loginDesc": "Identifícate para acceder al sistema.",
     "showPass": "Mostrar contraseña",
     "btnLogin": "Ingresar",
+    "loginPassTitle": "Contraseña",
     "btnGoRegister": "¿No tienes cuenta? Regístrate",
     "errLogin": "Credenciales incorrectas.",
     "regTitle": "Crear Cuenta",

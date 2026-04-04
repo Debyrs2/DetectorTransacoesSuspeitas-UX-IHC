@@ -4,6 +4,7 @@
   "loginDesc": "Identifique-se para acessar o painel.",
   "showPass": "Ver senha",
   "btnLogin": "Entrar",
+  "loginPassTitle": "Senha",
   "btnGoRegister": "Não tem conta? Cadastre-se",
   "errLogin": "Credenciais incorretas.",
   "regTitle": "Criar Conta",
