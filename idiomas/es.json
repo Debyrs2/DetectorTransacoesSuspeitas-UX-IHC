@@ -147,5 +147,10 @@
     "tourS9Desc": "Por último, aquí puedes ver tus datos y salir del sistema. ¡Disfruta!",
     "regDob": "Fecha de Nacimiento",
     "errNoDob": "Por favor, introduzca su fecha de nacimiento.",
-    "errUnder18": "Acceso denegado: Debes tener 18 años o más para utilizar el sistema de análisis financiero."
+    "errUnder18": "Acceso denegado: Debes tener 18 años o más para utilizar el sistema de análisis financiero.",
+    "regLgpdText": "He leído y acepto los",
+    "regLgpdLink": "Términos de Privacidad (LGPD)",
+    "termsTitle": "Términos de Privacidad",
+    "errLgpd": "Debes aceptar los Términos de Privacidad para crear una cuenta.",
+    "termsContent": "TÉRMINOS DE PRIVACIDAD Y PROCESAMIENTO DE DATOS\n\n1. Recopilación de Datos: Recopilamos solo la información estrictamente necesaria para la creación de la cuenta.\n2. Propósito: Sus datos se utilizarán exclusivamente para autenticación, control de acceso y validación de mayoría de edad en el sistema DataGuard.\n3. Procesamiento de Archivos: Los datos financieros y las hojas de cálculo enviadas para análisis se procesan en memoria y/o se almacenan temporalmente de forma confidencial, y no se utilizan para otros fines.\n4. Sus Derechos: De acuerdo con las leyes de protección de datos, puede solicitar la eliminación de su cuenta y de todos sus datos en cualquier momento.\n\n* Este es un proyecto académico sin fines comerciales."
 }

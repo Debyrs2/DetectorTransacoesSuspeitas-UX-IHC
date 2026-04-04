@@ -182,9 +182,9 @@
             aria-live="polite"></div>
 
           <input type="text" id="nomeCadastro" placeholder="O seu Nome" data-i18n-placeholder="phName"
-            style="margin-bottom: 8px;" />
+            style="margin-bottom: 8px;" <span style="color: var(--danger);">*</span> />
           <input type="email" id="emailCadastro" placeholder="O seu E-mail" data-i18n-placeholder="phEmail"
-            style="margin-bottom: 8px;" />
+            style="margin-bottom: 8px;" <span style="color: var(--danger);">*</span> />
           <div style="margin-bottom: 16px; text-align: left;">
             <label for="regDataNasc" style="display: block; margin-bottom: 6px; font-size: 14px; color: var(--text);">
               <span data-i18n="regDob">Data de Nascimento</span> <span style="color: var(--danger);">*</span>
@@ -204,6 +204,16 @@
           <p class="muted" style="font-size: 11px; margin-bottom: 16px; line-height: 1.4;" data-i18n="rulePass">A
             palavra-passe deve ter no mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo especial (ex: *).
           </p>
+
+          <div style="margin-bottom: 24px; text-align: left; display: flex; align-items: flex-start; gap: 8px;">
+            <input type="checkbox" id="regLgpd" required style="cursor: pointer; margin-top: 4px;" />
+            <label for="regLgpd" style="font-size: 13px; color: var(--text); cursor: pointer; line-height: 1.4;">
+              <span data-i18n="regLgpdText">Li e concordo com os</span>
+              <a href="#" id="linkTermos" style="color: var(--brand); text-decoration: underline;"
+                data-i18n="regLgpdLink">Termos de Privacidade (LGPD)</a>
+              <span style="color: var(--danger);">*</span>
+            </label>
+          </div>
 
           <button class="btn" id="btnCadastrar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnRegister">Criar
             Minha Conta</button>
