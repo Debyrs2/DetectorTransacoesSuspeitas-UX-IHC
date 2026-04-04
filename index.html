@@ -509,32 +509,30 @@
         </div>
       </div>
     </div>
-
-    <div id="modalGenerico"
-      style="display: none; position: fixed; inset: 0; z-index: 999999; align-items: center; justify-content: center;">
-      <div class="panel"
-        style="position: relative; max-width: 340px; width: 90%; text-align: center; animation: modalIn 0.3s ease;">
-
-        <h2 id="modalGenTitle" style="margin-top: 0; margin-bottom: 8px; font-size: 18px; color: var(--text);">Título
-        </h2>
-        <p id="modalGenMsg" class="muted" style="font-size: 13px; margin-bottom: 20px; line-height: 1.4;">Mensagem
-          principal aqui.</p>
-
-        <input type="text" id="modalGenInput" style="display: none; margin-bottom: 20px; text-align: center;" />
-
-        <div style="display: flex; gap: 12px; justify-content: center;">
-          <button class="btn2" id="btnGenCancel" style="flex: 1;" data-i18n="btnCancel">Cancelar</button>
-          <button class="btn" id="btnGenConfirm" style="flex: 1;" data-i18n="btnConfirm">Confirmar</button>
-        </div>
-      </div>
-    </div>
-
     <footer>
       <span data-i18n="footerText">Detecção de Transações Suspeitas - Por</span> Débora Ribeiro, Esdras Vitor, Tiago
       Lucas
     </footer>
   </div>
-  <!-- Integração de Libras com o Vlibras do Governo -->
+  <div id="modalGenerico"
+    style="display: none; position: fixed; inset: 0; z-index: 999999; align-items: center; justify-content: center;">
+    <div class="panel"
+      style="position: relative; max-width: 340px; width: 90%; text-align: center; animation: modalIn 0.3s ease;">
+
+      <h2 id="modalGenTitle" style="margin-top: 0; margin-bottom: 8px; font-size: 18px; color: var(--text);">Título</h2>
+      <p id="modalGenMsg" class="muted" style="font-size: 13px; margin-bottom: 20px; line-height: 1.4;">Mensagem
+        principal aqui.</p>
+
+      <input type="text" id="modalGenInput" style="display: none; margin-bottom: 20px; text-align: center;" />
+
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="btn2" id="btnGenCancel" style="flex: 1;" data-i18n="btnCancel">Cancelar</button>
+        <button class="btn" id="btnGenConfirm" style="flex: 1;" data-i18n="btnConfirm">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+
   <div vw class="enabled">
     <div vw-access-button class="active"></div>
     <div vw-plugin-wrapper>
