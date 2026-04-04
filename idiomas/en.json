@@ -3,7 +3,7 @@
   "loginTitle": "Login to your account",
   "loginDesc": "Identify yourself to access the dashboard.",
   "showPass": "Show password",
-  "btnEnter": "Enter",
+  "btnLogin": "Enter",
   "btnGoRegister": "No account? Register",
   "errLogin": "Invalid credentials.",
   "regTitle": "Create Account",

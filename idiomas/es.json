@@ -3,7 +3,7 @@
     "loginTitle": "Inicia sesión",
     "loginDesc": "Identifícate para acceder al sistema.",
     "showPass": "Mostrar contraseña",
-    "btnEnter": "Ingresar",
+    "btnLogin": "Ingresar",
     "btnGoRegister": "¿No tienes cuenta? Regístrate",
     "errLogin": "Credenciales incorrectas.",
     "regTitle": "Crear Cuenta",
