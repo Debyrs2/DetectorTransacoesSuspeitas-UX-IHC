@@ -881,45 +881,43 @@ $('btnCadastrar').addEventListener('click', async () => {
     btn.disabled = false;
 });
 
-// --- EXIBIÇÃO DOS TERMOS DE PRIVACIDADE (LGPD) ---
-document.getElementById('linkTermos')?.addEventListener('click', function (e) {
-    e.preventDefault();
+//EXIBIÇÃO DOS TERMOS DE PRIVACIDADE (LGPD)
+const linkTermos = document.getElementById('linkTermos');
+if (linkTermos) {
+    linkTermos.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation(); 
 
-    const termoTexto = dicionarioAtual.termsContent || `TERMOS DE PRIVACIDADE E TRATAMENTO DE DADOS (LGPD)
+        const termoTexto = dicionarioAtual.termsContent || "TERMOS DE PRIVACIDADE E TRATAMENTO DE DADOS (LGPD)\n\n1. Coleta de Dados: Coletamos apenas as informações estritamente necessárias para a criação da conta.\n2. Finalidade: Seus dados serão utilizados exclusivamente para autenticação, controle de acesso e validação de maioridade no sistema DataGuard.\n3. Tratamento de Arquivos: Os dados financeiros e planilhas enviados para análise são processados em memória e/ou armazenados temporariamente sob sigilo, não sendo utilizados para outros fins.\n4. Seus Direitos: Conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você pode solicitar a exclusão da sua conta e de todos os seus dados a qualquer momento.\n\n* Este é um projeto acadêmico sem fins comerciais.";
 
-1. Coleta de Dados: Coletamos apenas as informações estritamente necessárias para a criação da conta.
-2. Finalidade: Seus dados serão utilizados exclusivamente para autenticação, controle de acesso e validação de maioridade no sistema DataGuard.
-3. Tratamento de Arquivos: Os dados financeiros e planilhas enviados para análise são processados em memória e/ou armazenados temporariamente sob sigilo, não sendo utilizados para outros fins.
-4. Seus Direitos: Conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você pode solicitar a exclusão da sua conta e de todos os seus dados a qualquer momento.
+        const modalTitle = document.getElementById('modalGenTitle');
+        const modalMsg = document.getElementById('modalGenMsg');
+        const modalInput = document.getElementById('modalGenInput');
+        const btnCancel = document.getElementById('btnGenCancel');
+        const btnConfirm = document.getElementById('btnGenConfirm');
+        const overlay = document.getElementById('modalGenerico');
 
-* Este é um projeto acadêmico sem fins comerciais.`;
+        if (!overlay) return;
 
-    const modalTitle = document.getElementById('modalGenTitle');
-    const modalMsg = document.getElementById('modalGenMsg');
-    const modalInput = document.getElementById('modalGenInput');
-    const btnCancel = document.getElementById('btnGenCancel');
-    const btnConfirm = document.getElementById('btnGenConfirm');
-    const overlay = document.getElementById('modalGenerico');
+        modalTitle.textContent = dicionarioAtual.termsTitle || 'Termos de Privacidade';
+        modalMsg.innerText = termoTexto;
+        modalMsg.style.textAlign = 'left';
+        modalMsg.style.whiteSpace = 'pre-wrap';
 
-    modalTitle.textContent = dicionarioAtual.termsTitle || 'Termos de Privacidade';
-    modalMsg.innerText = termoTexto;
-    modalMsg.style.textAlign = 'left';
-    modalMsg.style.whiteSpace = 'pre-wrap';
+        modalInput.style.display = 'none';
+        btnCancel.style.display = 'none';
+        btnConfirm.textContent = dicionarioAtual.btnClose || 'Fechar';
 
-    modalInput.style.display = 'none';
-    btnCancel.style.display = 'none';
-    btnConfirm.textContent = dicionarioAtual.btnClose || 'Fechar';
+        overlay.style.display = 'flex';
 
-    overlay.style.display = 'flex';
-
-    btnConfirm.onclick = function () {
-        overlay.style.display = 'none';
-        btnCancel.style.display = 'block';
-        modalMsg.style.textAlign = 'center';
-        modalMsg.style.whiteSpace = 'normal';
-    };
-});
-
+        btnConfirm.onclick = function () {
+            overlay.style.display = 'none';
+            btnCancel.style.display = 'block';
+            modalMsg.style.textAlign = 'center';
+            modalMsg.style.whiteSpace = 'normal';
+        };
+    });
+}
 //LÓGICA DE SAIR
 $('btnSair').addEventListener('click', async (e) => {
     e.preventDefault();

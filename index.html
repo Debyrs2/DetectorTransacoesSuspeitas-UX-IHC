@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  <div <div
+  <div
     style="position: absolute; top: 16px; right: 24px; z-index: 999999; display: flex; gap: 12px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
 
     <div id="userMenuContainer" style="display: none; position: relative; margin-right: 8px;">
@@ -137,34 +137,47 @@
       <div style="flex: 1; display: flex; align-items: center; justify-content: flex-end; min-width: 320px;">
         <div class="panel" id="boxLogin" style="width: 100%; max-width: 340px;">
           <h2 class="form-title" data-i18n="loginTitle">Entrar no Sistema</h2>
-          <p class="form-subtitle muted" style="margin-bottom: 24px;" data-i18n="loginDesc">Bem-vindo de volta! Insira as suas credenciais.</p>
+          <p class="form-subtitle muted" style="margin-bottom: 24px;" data-i18n="loginDesc">Bem-vindo de volta! Insira
+            as suas credenciais.</p>
 
-          <div id="loginErro" class="muted" style="margin-bottom: 12px; display: none; color: var(--danger); text-align: center; font-size: 13px;" role="alert" aria-live="assertive"></div>
+          <div id="loginErro" class="muted"
+            style="margin-bottom: 12px; display: none; color: var(--danger); text-align: center; font-size: 13px;"
+            role="alert" aria-live="assertive"></div>
 
           <div style="margin-bottom: 16px; text-align: left;">
-            <label for="identificadorLogin" style="display: block; margin-bottom: 6px; font-size: 14px; color: var(--text);">
+            <label for="identificadorLogin"
+              style="display: block; margin-bottom: 6px; font-size: 14px; color: var(--text);">
               <span data-i18n="loginIdTitle">E-mail ou Usuário</span> <span style="color: var(--danger);">*</span>
             </label>
-            <input type="text" id="identificadorLogin" placeholder="ex: maria@gmail.com" data-i18n-placeholder="phLogin" style="width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);" />
+            <input type="text" id="identificadorLogin" placeholder="ex: maria@gmail.com" data-i18n-placeholder="phLogin"
+              style="width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);" />
           </div>
 
           <div style="margin-bottom: 12px; text-align: left;">
             <label for="senhaLogin" style="display: block; margin-bottom: 6px; font-size: 14px; color: var(--text);">
               <span data-i18n="loginPassTitle">Senha</span> <span style="color: var(--danger);">*</span>
             </label>
-            <input type="password" id="senhaLogin" placeholder="Palavra-passe" data-i18n-placeholder="phPassword" style="width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);" />
+            <input type="password" id="senhaLogin" placeholder="Palavra-passe" data-i18n-placeholder="phPassword"
+              style="width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);" />
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding: 0 4px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding: 0 4px;">
             <div style="display: flex; align-items: center; gap: 6px;">
-              <input type="checkbox" id="mostrarSenhaBtn" style="width: auto; height: auto; margin: 0; cursor: pointer;" />
-              <label for="mostrarSenhaBtn" class="muted" style="font-size: 12px; cursor: pointer;" data-i18n="showPass">Ver senha</label>
+              <input type="checkbox" id="mostrarSenhaBtn"
+                style="width: auto; height: auto; margin: 0; cursor: pointer;" />
+              <label for="mostrarSenhaBtn" class="muted" style="font-size: 12px; cursor: pointer;"
+                data-i18n="showPass">Ver senha</label>
             </div>
-            <a href="#" id="btnOpenReset" style="font-size: 12px; color: var(--brand); text-decoration: none;" data-i18n="forgotPass">Esqueceu a senha?</a>
+            <a href="#" id="btnOpenReset" style="font-size: 12px; color: var(--brand); text-decoration: none;"
+              data-i18n="forgotPass">Esqueceu a senha?</a>
           </div>
 
-          <button class="btn" id="btnLogar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnLogin">Entrar no Sistema</button>
-          <button class="btn-link muted" id="btnIrCadastro" style="font-size: 12px; display: block; width: 100%; background: none; border: none; cursor: pointer; text-decoration: underline;" data-i18n="btnGoRegister">Não tem conta? Crie uma</button>
+          <button class="btn" id="btnLogar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnLogin">Entrar no
+            Sistema</button>
+          <button class="btn-link muted" id="btnIrCadastro"
+            style="font-size: 12px; display: block; width: 100%; background: none; border: none; cursor: pointer; text-decoration: underline;"
+            data-i18n="btnGoRegister">Não tem conta? Crie uma</button>
         </div>
         <div class="panel" id="boxCadastro"
           style="width: 100%; max-width: 340px; display: none; max-height: 85vh; overflow-y: auto;">
@@ -497,9 +510,8 @@
       </div>
     </div>
 
-
     <div id="modalGenerico"
-      style="display: none; position: fixed; inset: 0; z-index: 100000; align-items: center; justify-content: center;">
+      style="display: none; position: fixed; inset: 0; z-index: 999999; align-items: center; justify-content: center;">
       <div class="panel"
         style="position: relative; max-width: 340px; width: 90%; text-align: center; animation: modalIn 0.3s ease;">
 
