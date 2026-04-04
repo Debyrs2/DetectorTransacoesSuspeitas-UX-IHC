@@ -800,7 +800,7 @@ $('btnCadastrar').addEventListener('click', async () => {
     const inputDataNasc = document.getElementById('regDataNasc').value;
 
     if (!inputDataNasc) {
-        alert("Por favor, preencha sua data de nascimento.");
+        abrirModalGenerico("Por favor, preencha sua data de nascimento.", false, '', '', () => { });
         return;
     }
 
@@ -817,12 +817,12 @@ $('btnCadastrar').addEventListener('click', async () => {
 
     // Verifica a restrição
     if (idade < 18) {
-        alert(dicionarioAtual.errUnder18 || "Acesso negado: Você precisa ter 18 anos ou mais para utilizar o sistema de análise financeira.");
+        abrirModalGenerico(dicionarioAtual.errUnder18 || "Acesso negado: Você precisa ter 18 anos ou mais para utilizar o sistema de análise financeira.", false, '', 'danger', () => { });
         return;
     }
     const aceiteLgpd = document.getElementById('regLgpd').checked;
     if (!aceiteLgpd) {
-        alert(dicionarioAtual.errLgpd || "Você precisa aceitar os Termos de Privacidade para criar uma conta.");
+        abrirModalGenerico(dicionarioAtual.errLgpd || "Você precisa aceitar os Termos de Privacidade para criar uma conta.", false, '', '', () => { });
         return;
     }
     const msgBox = $('cadastroMsg');
@@ -886,7 +886,7 @@ const linkTermos = document.getElementById('linkTermos');
 if (linkTermos) {
     linkTermos.addEventListener('click', function (e) {
         e.preventDefault();
-        e.stopPropagation(); 
+        e.stopPropagation();
 
         const termoTexto = dicionarioAtual.termsContent || "TERMOS DE PRIVACIDADE E TRATAMENTO DE DADOS (LGPD)\n\n1. Coleta de Dados: Coletamos apenas as informações estritamente necessárias para a criação da conta.\n2. Finalidade: Seus dados serão utilizados exclusivamente para autenticação, controle de acesso e validação de maioridade no sistema DataGuard.\n3. Tratamento de Arquivos: Os dados financeiros e planilhas enviados para análise são processados em memória e/ou armazenados temporariamente sob sigilo, não sendo utilizados para outros fins.\n4. Seus Direitos: Conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você pode solicitar a exclusão da sua conta e de todos os seus dados a qualquer momento.\n\n* Este é um projeto acadêmico sem fins comerciais.";
 
@@ -1242,6 +1242,18 @@ function startTutorial(userEmail) {
                 driverObj.destroy();
                 // Salva a confirmação na chave ÚNICA do usuário
                 localStorage.setItem(storageKey, 'true');
+            } else {
+                // Ao invés do `confirm()` nativo, usamos o seu modal:
+                abrirModalGenerico(
+                    "Pular Tutorial",
+                    dict.tourSkip || "Deseja pular o tutorial e ir direto para o sistema?",
+                    false, "", "danger",
+                    () => {
+                        // Callback se clicar em "Confirmar"
+                        driverObj.destroy();
+                        localStorage.setItem(storageKey, 'true');
+                    }
+                );
             }
         }
     });
