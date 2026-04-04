@@ -105,18 +105,25 @@ def get_me(request: Request):
     user = users[email]
     return {"status": "logado", "nome": user["nome"], "email": email}
 
+ALLOWED_ORIGINS = [
+    "https://debyrs2.github.io",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://debyrs2.github.io", 
-        "http://localhost:5500", 
-        "http://127.0.0.1:5500"
-    ],
-    allow_credentials=True, 
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
-
 class DatasetOut(BaseModel):
     id: str
     name: str
