@@ -876,6 +876,8 @@ $('btnSair').addEventListener('click', async (e) => {
         resetarResultado();
         $('dsTbody').innerHTML = `<tr><td colspan="5">Sessão encerrada.</td></tr>`;
         btn.textContent = dict.btnLogout || 'Sair';
+
+        document.getElementById('userMenuContainer').style.display = 'none';
     });
 });
 //ACESSIBILIDADE
