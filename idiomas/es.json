@@ -118,9 +118,9 @@
     "optIqr": "Análisis por Rango Esperado",
     "optMad": "Análisis Riguroso",
     "phUserOrEmail": "Correo o Usuario",
-    "phPassword": "Contraseña",
-    "phName": "Tu Nombre",
-    "phEmail": "Tu Correo",
+    "phPassword": "ex, @Maria0000",
+    "phName": "ex: Maria Silva",
+    "phEmail": "ex: maria@gmail.com",
     "phCreatePassword": "Crea una Contraseña",
     "tourNext": "Siguiente →",
     "tourPrev": "← Anterior",
@@ -152,5 +152,8 @@
     "regLgpdLink": "Términos de Privacidad (LGPD)",
     "termsTitle": "Términos de Privacidad",
     "errLgpd": "Debes aceptar los Términos de Privacidad para crear una cuenta.",
-    "termsContent": "TÉRMINOS DE PRIVACIDAD Y PROCESAMIENTO DE DATOS\n\n1. Recopilación de Datos: Recopilamos solo la información estrictamente necesaria para la creación de la cuenta.\n2. Propósito: Sus datos se utilizarán exclusivamente para autenticación, control de acceso y validación de mayoría de edad en el sistema DataGuard.\n3. Procesamiento de Archivos: Los datos financieros y las hojas de cálculo enviadas para análisis se procesan en memoria y/o se almacenan temporalmente de forma confidencial, y no se utilizan para otros fines.\n4. Sus Derechos: De acuerdo con las leyes de protección de datos, puede solicitar la eliminación de su cuenta y de todos sus datos en cualquier momento.\n\n* Este es un proyecto académico sin fines comerciales."
+    "termsContent": "TÉRMINOS DE PRIVACIDAD Y PROCESAMIENTO DE DATOS\n\n1. Recopilación de Datos: Recopilamos solo la información estrictamente necesaria para la creación de la cuenta.\n2. Propósito: Sus datos se utilizarán exclusivamente para autenticación, control de acceso y validación de mayoría de edad en el sistema DataGuard.\n3. Procesamiento de Archivos: Los datos financieros y las hojas de cálculo enviadas para análisis se procesan en memoria y/o se almacenan temporalmente de forma confidencial, y no se utilizan para otros fines.\n4. Sus Derechos: De acuerdo con las leyes de protección de datos, puede solicitar la eliminación de su cuenta y de todos sus datos en cualquier momento.\n\n* Este es un proyecto académico sin fines comerciales.",
+    "regNameTitle": "Nombre Completo",
+    "regEmailTitle": "Correo Electrónico",
+    "regPassTitle": "Contraseña"
 }

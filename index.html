@@ -135,44 +135,8 @@
       </div>
 
       <div style="flex: 1; display: flex; align-items: center; justify-content: flex-end; min-width: 320px;">
-        <div class="panel" id="boxLogin" style="width: 100%; max-width: 340px;">
-          <h2 class="form-title" data-i18n="loginTitle">Entre na sua conta</h2>
-          <p class="form-subtitle muted" style="margin-bottom: 24px;" data-i18n="loginDesc">Identifique-se para aceder
-            ao painel.</p>
-
-          <div id="loginErro" class="muted"
-            style="margin-bottom: 12px; display: none; text-align: center; font-size: 13px; color: var(--danger);"
-            role="alert" aria-live="polite"></div>
-
-          <input type="text" id="identificadorLogin" placeholder="E-mail ou Usuário"
-            data-i18n-placeholder="phUserOrEmail" style="margin-bottom: 8px;" />
-          <input type="password" id="senhaLogin" placeholder="A sua Palavra-passe" data-i18n-placeholder="phPassword"
-            style="margin-bottom: 8px;" />
-
-          <div
-            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 4px;">
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <input type="checkbox" id="mostrarSenhaBtn" style="width: auto; height: auto; margin: 0;" />
-              <label for="mostrarSenhaBtn" class="muted" style="font-size: 12px; cursor: pointer;"
-                data-i18n="showPass">Ver palavra-passe</label>
-            </div>
-            <a href="#" id="btnOpenReset" class="muted"
-              style="font-size: 12px; text-decoration: none; transition: color 0.2s;" data-i18n="forgotPass"
-              onmouseover="this.style.color='var(--brand)'" onmouseout="this.style.color='var(--muted)'">Esqueceu a
-              palavra-passe?</a>
-          </div>
-
-          <button class="btn" id="btnLogar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnEnter">Entrar no
-            Sistema</button>
-          <button class="btn-link muted" id="btnIrCadastro"
-            style="font-size: 12px; display: block; width: 100%; background: none; border: none; cursor: pointer; text-decoration: underline;"
-            data-i18n="btnGoRegister">Não tem conta? Registe-se</button>
-          <button id="btnVoltarLanding" class="muted"
-            style="background: none; border: none; font-size: 12px; width: 100%; margin-top: 16px; cursor: pointer; text-decoration: underline;">←
-            Voltar ao Início</button>
-        </div>
-
-        <div class="panel" id="boxCadastro" style="width: 100%; max-width: 340px; display: none;">
+        <div class="panel" id="boxCadastro"
+          style="width: 100%; max-width: 340px; display: none; max-height: 85vh; overflow-y: auto;">
           <h2 class="form-title" data-i18n="regTitle">Criar Conta</h2>
           <p class="form-subtitle muted" style="margin-bottom: 24px;" data-i18n="regDesc">Preencha os seus dados para
             começar.</p>
@@ -181,10 +145,23 @@
             style="margin-bottom: 12px; display: none; text-align: center; font-size: 13px;" role="alert"
             aria-live="polite"></div>
 
-          <input type="text" id="nomeCadastro" placeholder="O seu Nome" data-i18n-placeholder="phName"
-            style="margin-bottom: 8px;" <span style="color: var(--danger);">*</span> />
-          <input type="email" id="emailCadastro" placeholder="O seu E-mail" data-i18n-placeholder="phEmail"
-            style="margin-bottom: 8px;" <span style="color: var(--danger);">*</span> />
+          <div style="margin-bottom: 16px; text-align: left;">
+            <label for="nomeCadastro" style="display: block; margin-bottom: 6px; font-size: 14px; color: var(--text);">
+              <span data-i18n="regNameTitle">Nome Completo</span> <span style="color: var(--danger);">*</span>
+            </label>
+            <input type="text" id="nomeCadastro" placeholder="ex: Maria Silva" data-i18n-placeholder="phName" required
+              style="width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);">
+          </div>
+
+          <div style="margin-bottom: 16px; text-align: left;">
+            <label for="emailCadastro" style="display: block; margin-bottom: 6px; font-size: 14px; color: var(--text);">
+              <span data-i18n="regEmailTitle">E-mail</span> <span style="color: var(--danger);">*</span>
+            </label>
+            <input type="email" id="emailCadastro" placeholder="ex: maria@gmail.com" data-i18n-placeholder="phEmail"
+              required
+              style="width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);">
+          </div>
+
           <div style="margin-bottom: 16px; text-align: left;">
             <label for="regDataNasc" style="display: block; margin-bottom: 6px; font-size: 14px; color: var(--text);">
               <span data-i18n="regDob">Data de Nascimento</span> <span style="color: var(--danger);">*</span>
@@ -192,11 +169,19 @@
             <input type="date" id="regDataNasc" class="input" required
               style="width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);" />
           </div>
-          <input type="password" id="senhaCadastro" placeholder="Crie uma Palavra-passe"
-            data-i18n-placeholder="phCreatePassword" style="margin-bottom: 8px;" />
+
+          <div style="margin-bottom: 12px; text-align: left;">
+            <label for="senhaCadastro" style="display: block; margin-bottom: 6px; font-size: 14px; color: var(--text);">
+              <span data-i18n="regPassTitle">Senha</span> <span style="color: var(--danger);">*</span>
+            </label>
+            <input type="password" id="senhaCadastro" placeholder="ex: @Maria0000" data-i18n-placeholder="phPassword"
+              required
+              style="width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);" />
+          </div>
 
           <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px; padding: 0 4px;">
-            <input type="checkbox" id="mostrarSenhaCadastroBtn" style="width: auto; height: auto; margin: 0;" />
+            <input type="checkbox" id="mostrarSenhaCadastroBtn"
+              style="width: auto; height: auto; margin: 0; cursor: pointer;" />
             <label for="mostrarSenhaCadastroBtn" class="muted" style="font-size: 12px; cursor: pointer;"
               data-i18n="showPass">Ver palavra-passe</label>
           </div>
@@ -205,14 +190,21 @@
             palavra-passe deve ter no mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo especial (ex: *).
           </p>
 
-          <div style="margin-bottom: 24px; text-align: left; display: flex; align-items: flex-start; gap: 8px;">
-            <input type="checkbox" id="regLgpd" required style="cursor: pointer; margin-top: 4px;" />
-            <label for="regLgpd" style="font-size: 13px; color: var(--text); cursor: pointer; line-height: 1.4;">
-              <span data-i18n="regLgpdText">Li e concordo com os</span>
-              <a href="#" id="linkTermos" style="color: var(--brand); text-decoration: underline;"
-                data-i18n="regLgpdLink">Termos de Privacidade (LGPD)</a>
-              <span style="color: var(--danger);">*</span>
+          <div style="margin-bottom: 24px; text-align: left;">
+            <label style="display: block; margin-bottom: 6px; font-size: 14px; color: var(--text);">
+              <span data-i18n="regLgpdTitle">Privacidade e Termos</span> <span style="color: var(--danger);">*</span>
             </label>
+            <div
+              style="display: flex; align-items: center; gap: 10px; width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0);">
+              <input type="checkbox" id="regLgpd" required
+                style="width: 16px !important; height: 16px !important; flex-shrink: 0; cursor: pointer; margin: 0; padding: 0;" />
+              <label for="regLgpd"
+                style="font-size: 13px; color: var(--text); cursor: pointer; line-height: 1.4; margin: 0;">
+                <span data-i18n="regLgpdText">Li e concordo com os</span>
+                <a href="#" id="linkTermos" style="color: var(--brand); text-decoration: underline;"
+                  data-i18n="regLgpdLink">Termos (LGPD)</a>
+              </label>
+            </div>
           </div>
 
           <button class="btn" id="btnCadastrar" style="width: 100%; margin-bottom: 12px;" data-i18n="btnRegister">Criar

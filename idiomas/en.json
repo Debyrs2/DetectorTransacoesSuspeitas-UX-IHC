@@ -12,9 +12,9 @@
   "btnGoLogin": "Already have an account? Login",
   "rulePass": "Password must have at least 8 characters, with uppercase, lowercase, number, and special symbol.",
   "phUserOrEmail": "E-mail or Username",
-  "phPassword": "Password",
-  "phName": "Your Name",
-  "phEmail": "Your E-mail",
+  "phPassword": "e.g., @Mary0000",
+  "phName": "e.g., Mary Smith",
+  "phEmail": "e.g., Mary@gmail.com",
   "phCreatePassword": "Create a Password",
   "errEmailFormat": "⚠️ Enter a valid email (@gmail.com, @hotmail.com, or @outlook.com).",
   "errPassFormat": "⚠️ Password does not meet security requirements.",
@@ -152,5 +152,8 @@
   "regLgpdLink": "Privacy Terms (GDPR)",
   "termsTitle": "Privacy Terms",
   "errLgpd": "You must accept the Privacy Terms to create an account.",
-  "termsContent": "PRIVACY AND DATA PROCESSING TERMS\n\n1. Data Collection: We collect only the information strictly necessary for account creation.\n2. Purpose: Your data will be used exclusively for authentication, access control, and age validation in the DataGuard system.\n3. File Processing: Financial data and spreadsheets sent for analysis are processed in memory and/or temporarily stored confidentially, and are not used for other purposes.\n4. Your Rights: In accordance with data protection laws, you may request the deletion of your account and all your data at any time.\n\n* This is an academic project for non-commercial purposes."
+  "termsContent": "PRIVACY AND DATA PROCESSING TERMS\n\n1. Data Collection: We collect only the information strictly necessary for account creation.\n2. Purpose: Your data will be used exclusively for authentication, access control, and age validation in the DataGuard system.\n3. File Processing: Financial data and spreadsheets sent for analysis are processed in memory and/or temporarily stored confidentially, and are not used for other purposes.\n4. Your Rights: In accordance with data protection laws, you may request the deletion of your account and all your data at any time.\n\n* This is an academic project for non-commercial purposes.",
+  "regNameTitle": "Full Name",
+  "regEmailTitle": "Email",
+  "regPassTitle": "Password"
 }

@@ -12,9 +12,9 @@
   "btnGoLogin": "Já tem conta? Entrar",
   "rulePass": "A senha deve ter no mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo especial (ex: *).",
   "phUserOrEmail": "E-mail ou Nome de Usuário",
-  "phPassword": "Senha",
-  "phName": "Seu Nome",
-  "phEmail": "Seu E-mail",
+  "phPassword": "ex: @Maria0000",
+  "phName": "ex: Maria Silva",
+  "phEmail": "ex: maria@gmail.com",
   "phCreatePassword": "Crie uma Senha",
   "errEmailFormat": "⚠️ Entre com um email válido (@gmail.com, @hotmail.com ou @outlook.com).",
   "errPassFormat": "⚠️ A senha não cumpre os requisitos de segurança.",
@@ -152,5 +152,8 @@
   "regLgpdLink": "Termos de Privacidade (LGPD)",
   "termsTitle": "Termos de Privacidade",
   "errLgpd": "Você precisa aceitar os Termos de Privacidade para criar uma conta.",
-  "termsContent": "TERMOS DE PRIVACIDADE E TRATAMENTO DE DADOS (LGPD)\n\n1. Coleta de Dados: Coletamos apenas as informações estritamente necessárias para a criação da conta.\n2. Finalidade: Seus dados serão utilizados exclusivamente para autenticação, controle de acesso e validação de maioridade no sistema DataGuard.\n3. Tratamento de Arquivos: Os dados financeiros e planilhas enviados para análise são processados em memória e/ou armazenados temporariamente sob sigilo, não sendo utilizados para outros fins.\n4. Seus Direitos: Conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você pode solicitar a exclusão da sua conta e de todos os seus dados a qualquer momento.\n\n* Este é um projeto acadêmico sem fins comerciais."
+  "termsContent": "TERMOS DE PRIVACIDADE E TRATAMENTO DE DADOS (LGPD)\n\n1. Coleta de Dados: Coletamos apenas as informações estritamente necessárias para a criação da conta.\n2. Finalidade: Seus dados serão utilizados exclusivamente para autenticação, controle de acesso e validação de maioridade no sistema DataGuard.\n3. Tratamento de Arquivos: Os dados financeiros e planilhas enviados para análise são processados em memória e/ou armazenados temporariamente sob sigilo, não sendo utilizados para outros fins.\n4. Seus Direitos: Conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você pode solicitar a exclusão da sua conta e de todos os seus dados a qualquer momento.\n\n* Este é um projeto acadêmico sem fins comerciais.",
+  "regNameTitle": "Nome Completo",
+  "regEmailTitle": "E-mail",
+  "regPassTitle": "Senha"
 }
