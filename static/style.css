@@ -875,3 +875,73 @@ div[vw-plugin-wrapper] {
     background: rgba(248, 250, 252, 0.75);
   }
 }
+
+/*RESPONSIVIDADE MOBILE */
+
+@media (max-width: 980px) {
+
+  /* Oculta o super texto da logo na tela de login para abrir espaço pro formulário */
+  .login-info-column {
+    display: none !important;
+  }
+
+  /* Centraliza totalmente a caixa de login no mobile */
+  #loginOverlay>div {
+    justify-content: center !important;
+    padding-top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Ajusta a barra de menu flutuante (Usuário, Acessibilidade, Tema) para não sobrepor o cabeçalho do Dashboard */
+  body>div[style*="position: absolute; top: 16px; right: 24px"] {
+    position: relative !important;
+    top: 0 !important;
+    right: 0 !important;
+    padding: 16px 24px 0 !important;
+    justify-content: flex-start !important;
+    background: var(--bg-0);
+  }
+
+  .container {
+    padding: 16px !important;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  #logoSistemaHeader {
+    height: 60px !important;
+    /* Logo menorzinha no celular */
+  }
+
+  /* Tabelas devem permitir deslizar para o lado em telas curtas */
+  .table-box table {
+    min-width: 600px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .btn-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-row button {
+    width: 100%;
+  }
+
+  /* Modal Generico fica certinho na tela */
+  #modalGenerico .panel,
+  #modalGrafico .panel {
+    width: 95% !important;
+    max-width: none !important;
+  }
+}
