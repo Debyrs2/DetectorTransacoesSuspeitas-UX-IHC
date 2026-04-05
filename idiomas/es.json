@@ -103,7 +103,7 @@
     "optNo": "No",
     "optYesBatch": "Sí (media/desviación)",
     "defColumn": "valor",
-    "footerText": "Detección de Transacciones Sospechosas - Por",
+    "footerText": "DataGuard - Detección de Transacciones Sospechosas",
     "errMissingCol": "La hoja de cálculo debe tener una columna llamada '{col}'.",
     "errFewData": "No hay suficientes datos en la columna '{col}' para calcular estadísticas.",
     "errFewDataStd": "No hay suficientes datos para calcular la desviación estándar.",

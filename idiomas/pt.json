@@ -108,7 +108,7 @@
   "optNo": "Não",
   "optYesBatch": "Sim (média/desvio)",
   "defColumn": "valor",
-  "footerText": "Detecção de Transações Suspeitas - Por",
+  "footerText": "DataGuard - Detecção de Transações Suspeitas",
   "errMissingCol": "A planilha precisa ter uma coluna chamada '{col}'.",
   "errFewData": "Poucos dados na coluna '{col}' para calcular estatísticas.",
   "errFewDataStd": "Poucos dados na coluna para calcular desvio padrão.",

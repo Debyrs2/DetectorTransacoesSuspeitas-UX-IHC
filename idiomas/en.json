@@ -108,7 +108,7 @@
   "optNo": "No",
   "optYesBatch": "Yes (mean/std)",
   "defColumn": "value",
-  "footerText": "Suspicious Transaction Detection - By",
+  "footerText": "DataGuard - Suspicious Transaction Detection",
   "errMissingCol": "The spreadsheet must have a column named '{col}'.",
   "errFewData": "Not enough data in column '{col}' to calculate statistics.",
   "errFewDataStd": "Not enough data to calculate standard deviation.",
