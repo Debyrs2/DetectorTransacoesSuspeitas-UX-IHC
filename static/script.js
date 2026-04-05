@@ -1227,10 +1227,10 @@ function abrirModalGenerico(titulo, mensagem, isInput, placeholder, tipoBotaoCon
 }
 // Navegação entre Landing Page e Login
 $('btnAcessarLanding').addEventListener('click', () => {
-    localStorage.setItem('currentScreen', 'login')
+    localStorage.setItem('currentScreen', 'login');
     $('landingPage').style.display = 'none';
     $('loginOverlay').style.display = 'flex';
-
+    $('dashboardApp').style.display = 'none';
     // Código Anti-Bloqueio de Navegador
     const vid = $('bgVideo');
     if (vid) {
