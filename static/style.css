@@ -894,90 +894,39 @@ div[vw-plugin-wrapper] {
 
 @media (max-width: 768px) {
   body>div[style*="position: absolute; top: 16px; right: 24px"] {
-    position: absolute !important;
-    top: 10px !important;
-    right: 10px !important;
-    left: 10px !important;
-    padding: 0 !important;
-    justify-content: flex-end !important;
-    background: transparent !important;
-    z-index: 999999 !important;
-  }
-
-  /* Encolhe o VLibras e joga ele pro canto inferior para não atrapalhar */
-  div[vw-plugin-wrapper] {
-    transform: scale(0.6) !important;
-    transform-origin: right bottom !important;
-    right: 0px !important;
-    top: auto !important;
-    bottom: 10px !important;
-  }
-
-  .container {
-    padding: 16px !important;
+    position: relative !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    justify-content: center !important;
+    padding: 10px !important;
+    margin-bottom: 16px !important;
   }
 
   header {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin-top: 30px;
+    margin-top: 0 !important;
   }
 
-  #logoSistemaHeader {
-    height: 60px !important;
+  .actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px !important;
+    min-width: 200px;
   }
 
-  .form-grid {
-    grid-template-columns: 1fr !important;
+  .actions button {
+    width: 100% !important;
+    padding: 8px 4px !important;
+    font-size: 11px !important;
+    margin: 0 !important;
   }
 
-  .btn-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .btn-row button {
-    width: 100%;
-  }
-
-  #modalGenerico .panel,
-  #modalGrafico .panel {
-    width: 95% !important;
-    max-width: none !important;
-  }
-}
-
-@media (max-width: 520px) {
-
-  /* Mantém os cards em 2 colunas para não fazer o usuário rolar tanto a tela */
-  .cards {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 8px !important;
-  }
-
-  .card {
-    padding: 10px !important;
-  }
-
-  .card h3 {
-    font-size: 10px !important;
-  }
-
-  .card .value {
-    font-size: 16px !important;
-  }
-
-  /* Tabela mais enxuta para facilitar a rolagem horizontal */
-  th,
-  td {
-    padding: 8px !important;
-    font-size: 12px !important;
+  .actions button[data-act="delete"] {
+    grid-column: span 2;
   }
 
   .table-box table {
-    min-width: 500px !important;
-    /* Deixa rolar pro lado sem esmagar as palavras */
+    min-width: max-content !important;
   }
 }
 
