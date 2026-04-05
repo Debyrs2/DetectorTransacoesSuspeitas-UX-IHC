@@ -802,6 +802,7 @@ $('btnLogar').addEventListener('click', async () => {
         if (res.ok) {
             $('loginErro').style.display = 'none';
             $('senhaLogin').value = '';
+            localStorage.setItem('currentScreen', 'dashboard');
             checkLogin();
         } else {
             $('loginErro').style.display = 'block';
