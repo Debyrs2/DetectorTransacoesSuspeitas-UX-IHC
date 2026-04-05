@@ -941,3 +941,17 @@ div[vw-plugin-wrapper] {
     padding-bottom: 8px !important;
   }
 }
+
+/* Dá um respiro entre os botões do topo para não ficarem espremidos */
+body>div[style*="position: absolute; top: 16px; right: 24px"] {
+  gap: 12px !important;
+}
+
+#userDropdown,
+#a11yDropdown {
+  right: auto !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 200px !important;
+  z-index: 1000 !important;
+}
