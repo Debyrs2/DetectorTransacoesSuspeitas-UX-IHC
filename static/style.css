@@ -980,3 +980,15 @@ div[vw-plugin-wrapper] {
     /* Deixa rolar pro lado sem esmagar as palavras */
   }
 }
+
+@media (max-width: 768px) {
+  #boxGrafico {
+    /* Força o gráfico a ter um tamanho mínimo, ativando o scroll horizontal (overflow-x) da div pai */
+    min-width: 600px !important;
+  }
+
+  #sessao-grafico>div[style*="height: 400px"] {
+    height: 300px !important;
+    padding-bottom: 8px !important;
+  }
+}
