@@ -893,15 +893,24 @@ div[vw-plugin-wrapper] {
 }
 
 @media (max-width: 768px) {
-
-  /* Ajusta a barra de menu flutuante (Usuário, Acessibilidade, Tema) para não sobrepor o cabeçalho do Dashboard */
   body>div[style*="position: absolute; top: 16px; right: 24px"] {
-    position: relative !important;
-    top: 0 !important;
-    right: 0 !important;
-    padding: 16px 24px 0 !important;
-    justify-content: flex-start !important;
-    background: var(--bg-0);
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    left: 10px !important;
+    padding: 0 !important;
+    justify-content: flex-end !important;
+    background: transparent !important;
+    z-index: 999999 !important;
+  }
+
+  /* Encolhe o VLibras e joga ele pro canto inferior para não atrapalhar */
+  div[vw-plugin-wrapper] {
+    transform: scale(0.6) !important;
+    transform-origin: right bottom !important;
+    right: 0px !important;
+    top: auto !important;
+    bottom: 10px !important;
   }
 
   .container {
@@ -912,17 +921,11 @@ div[vw-plugin-wrapper] {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 30px;
   }
 
   #logoSistemaHeader {
     height: 60px !important;
-    /* Logo menorzinha no celular */
-  }
-
-  /* Tabelas devem permitir deslizar para o lado em telas curtas */
-  .table-box table {
-    min-width: 600px;
   }
 
   .form-grid {
@@ -938,7 +941,6 @@ div[vw-plugin-wrapper] {
     width: 100%;
   }
 
-  /* Modal Generico fica certinho na tela */
   #modalGenerico .panel,
   #modalGrafico .panel {
     width: 95% !important;
