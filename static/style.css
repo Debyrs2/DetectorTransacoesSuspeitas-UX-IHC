@@ -901,10 +901,34 @@ div[vw-plugin-wrapper] {
     justify-content: center !important;
     padding: 10px !important;
     margin-bottom: 16px !important;
+    gap: 12px !important;
+  }
+
+  /* Esconde o email do botão de perfil no celular para não esmagar os outros botões */
+  #userEmailDisplay {
+    display: none !important;
   }
 
   header {
     margin-top: 0 !important;
+  }
+
+  /* Faz o menu de Perfil crescer para a direita, impedindo que corte na borda da tela */
+  #userDropdown {
+    left: 0 !important;
+    right: auto !important;
+    transform: none !important;
+    width: 200px !important;
+    z-index: 1000 !important;
+  }
+
+  /* Desloca o menu de Acessibilidade um pouco para a esquerda para alinhar melhor */
+  #a11yDropdown {
+    left: -50px !important;
+    right: auto !important;
+    transform: none !important;
+    width: 200px !important;
+    z-index: 1000 !important;
   }
 
   .actions {
@@ -928,11 +952,8 @@ div[vw-plugin-wrapper] {
   .table-box table {
     min-width: max-content !important;
   }
-}
 
-@media (max-width: 768px) {
   #boxGrafico {
-    /* Força o gráfico a ter um tamanho mínimo, ativando o scroll horizontal (overflow-x) da div pai */
     min-width: 600px !important;
   }
 
@@ -940,18 +961,4 @@ div[vw-plugin-wrapper] {
     height: 300px !important;
     padding-bottom: 8px !important;
   }
-}
-
-/* Dá um respiro entre os botões do topo para não ficarem espremidos */
-body>div[style*="position: absolute; top: 16px; right: 24px"] {
-  gap: 12px !important;
-}
-
-#userDropdown,
-#a11yDropdown {
-  right: auto !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  width: 200px !important;
-  z-index: 1000 !important;
 }
