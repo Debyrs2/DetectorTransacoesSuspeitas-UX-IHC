@@ -25,7 +25,6 @@ def utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 app = FastAPI(title="Detecção de Transações Suspeitas")
-#app.mount("/static", StaticFiles(directory=APP_DIR.parent / "Frontend"), name="static")
 
 #Sistema de Login com bd
 USERS_FILE = APP_DIR / "users.json"
@@ -68,7 +67,9 @@ def login(response: Response, identificador: str = Form(...), senha: str = Form(
     if user_data["senha"] != senha:
         raise HTTPException(status_code=401, detail="Senha incorreta.")
 
-    response.set_cookie(key="sessao_app", value=user_key, httponly=True, samesite="none", secure=True, partitioned=True)
+    # Injeta o cookie cru direto no cabeçalho para evitar erros de versão no servidor
+    cookie_str = f"sessao_app={user_key}; HttpOnly; Secure; SameSite=None; Path=/; Partitioned"
+    response.headers.append("Set-Cookie", cookie_str)
     return {"status": "ok", "nome": user_data["nome"], "email": user_key}
 
 def _write_users(users_data: Dict[str, Any]) -> None:
