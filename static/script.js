@@ -1,4 +1,28 @@
 const API_URL = "https://dataguard-4cpi.onrender.com";
+const TOKEN_KEY = 'dataguard_access_token';
+
+function getAuthToken() {
+    return localStorage.getItem(TOKEN_KEY) || '';
+}
+
+function setAuthToken(token) {
+    localStorage.setItem(TOKEN_KEY, token);
+}
+
+function clearAuthToken() {
+    localStorage.removeItem(TOKEN_KEY);
+}
+
+function buildAuthHeaders(extraHeaders = undefined) {
+    const headers = new Headers(extraHeaders || {});
+    const token = getAuthToken();
+
+    if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return headers;
+}
 const $ = (id) => document.getElementById(id);
 const formatarMoeda = (valor) => {
     if (valor === null || valor === undefined || isNaN(valor)) return valor;
@@ -148,12 +172,20 @@ function getAnalyzeConfig() {
 
 // Implementa concorrência assíncrona (Non-blocking I/O) para garantir que cálculos matemáticos pesados no servidor não interrompam a thread principal da interface.
 async function apiJson(url, opts = {}) {
-    opts.credentials = 'include';
+    opts.headers = buildAuthHeaders(opts.headers);
+
     const res = await fetch(API_URL + url, opts);
     const data = await res.json().catch(() => ({}));
+
     if (!res.ok) {
+        if (res.status === 401) {
+            clearAuthToken();
+            irParaDeslogado('login');
+        }
+
         let msg = data.detail || data.erro || ('Erro HTTP ' + res.status);
         const dict = dicionarioAtual;
+
         if (msg.startsWith('ERR_MISSING_COLUMN|')) {
             msg = dict.errMissingCol.replace('{col}', msg.split('|')[1]);
         } else if (msg.startsWith('ERR_FEW_DATA|')) {
@@ -164,6 +196,7 @@ async function apiJson(url, opts = {}) {
 
         throw new Error(msg);
     }
+
     return data;
 }
 async function refreshDatasets() {
@@ -709,19 +742,26 @@ function aplicarTelaImediata() {
 
 async function checkLogin() {
     const telaSalva = aplicarTelaImediata();
+    const token = getAuthToken();
+
+    if (!token) {
+        irParaDeslogado(telaSalva);
+        return;
+    }
 
     try {
-        const res = await fetch(API_URL + '/me', { credentials: 'include' });
+        const res = await fetch(API_URL + '/me', {
+            headers: buildAuthHeaders()
+        });
+
         if (res.ok) {
             const data = await res.json();
 
-            // Preenche os dados do usuário, mas ainda NÃO mostra o menu na tela
             $('userNameDisplay').textContent = data.nome;
             $('userEmailDisplay').textContent = data.email;
             $('dropdownEmail').textContent = data.email;
             $('userAvatar').textContent = data.nome.charAt(0).toUpperCase();
 
-            // Roteamento de telas
             if (telaSalva === 'landing') {
                 $('landingPage').style.display = 'flex';
                 $('loginOverlay').style.display = 'none';
@@ -733,12 +773,10 @@ async function checkLogin() {
                 $('dashboardApp').style.display = 'none';
                 $('userMenuContainer').style.display = 'none';
             } else {
-                // SÓ RENDERIZA O DASHBOARD E O MENU SE ESTIVER NO DASHBOARD
                 localStorage.setItem('currentScreen', 'dashboard');
                 $('landingPage').style.display = 'none';
                 $('loginOverlay').style.display = 'none';
                 $('dashboardApp').style.display = 'block';
-
                 $('userMenuContainer').style.display = 'block';
 
                 startTutorial(data.email);
@@ -749,10 +787,11 @@ async function checkLogin() {
                 }).catch(e => showErr(e.message));
             }
         } else {
-            // Deslogado ou Token expirado
+            clearAuthToken();
             irParaDeslogado(telaSalva);
         }
     } catch (e) {
+        clearAuthToken();
         irParaDeslogado(telaSalva);
     }
 }
@@ -796,10 +835,19 @@ $('btnLogar').addEventListener('click', async () => {
     fd.append('senha', senha);
 
     try {
-        const res = await fetch(API_URL + '/login', { method: 'POST', body: fd, credentials: 'include' });
-        const data = await res.json();
+        const res = await fetch(API_URL + '/login', {
+            method: 'POST',
+            body: fd
+        });
+
+        const data = await res.json().catch(() => ({}));
 
         if (res.ok) {
+            if (!data.access_token) {
+                throw new Error('Token não recebido no login.');
+            }
+
+            setAuthToken(data.access_token);
             $('loginErro').style.display = 'none';
             $('senhaLogin').value = '';
             localStorage.setItem('currentScreen', 'dashboard');
@@ -810,7 +858,7 @@ $('btnLogar').addEventListener('click', async () => {
         }
     } catch (e) {
         $('loginErro').style.display = 'block';
-        $('loginErro').innerHTML = '⚠️ Erro de conexão.';
+        $('loginErro').innerHTML = '⚠️ ' + (e.message || 'Erro de conexão.');
     }
 
     btn.textContent = dicionarioAtual.btnLogin || 'Entrar';
@@ -968,6 +1016,7 @@ function mostrarToast(mensagem, tipo = 'danger') {
 $('btnSair').addEventListener('click', async (e) => {
     e.preventDefault();
     e.stopPropagation();
+
     const dict = dicionarioAtual;
     $('userDropdown').style.display = 'none';
 
@@ -976,13 +1025,18 @@ $('btnSair').addEventListener('click', async (e) => {
         btn.textContent = 'Saindo...';
 
         try {
-            await fetch(API_URL + '/logout', { method: 'POST', credentials: 'include' });
+            await fetch(API_URL + '/logout', {
+                method: 'POST',
+                headers: buildAuthHeaders()
+            });
         } catch (error) {
             console.error("Erro na API de logout", error);
         }
 
+        clearAuthToken();
         localStorage.removeItem('ultimo-dataset-id');
         localStorage.setItem('currentScreen', 'landing');
+
         $('dashboardApp').style.display = 'none';
         $('landingPage').style.display = 'flex';
         resetarResultado();

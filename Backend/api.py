@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import base64
+import hashlib
+import hmac
+import os
 import io
 import json
 import math
@@ -27,53 +31,148 @@ def utc_now_iso() -> str:
 app = FastAPI(title="Detecção de Transações Suspeitas")
 
 #Sistema de Login com bd
+# Sistema de Login com bd
 USERS_FILE = APP_DIR / "users.json"
+SECRET_KEY = os.getenv("APP_SECRET_KEY", "troque-esta-chave-no-render")
+TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7  # 7 dias
+
 
 def _load_users() -> Dict[str, Any]:
     if not USERS_FILE.exists():
         return {}
     return json.loads(USERS_FILE.read_text(encoding="utf-8"))
 
-def verifica_sessao(request: Request):
-    token = request.cookies.get("sessao_app")
-    if not token:
-        raise HTTPException(status_code=401, detail="Não autorizado")
-    
+
+def _write_users(users_data: Dict[str, Any]) -> None:
+    USERS_FILE.write_text(
+        json.dumps(users_data, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+
+def _b64url_encode(data: bytes) -> str:
+    return base64.urlsafe_b64encode(data).rstrip(b"=").decode("utf-8")
+
+
+def _b64url_decode(data: str) -> bytes:
+    padding = "=" * (-len(data) % 4)
+    return base64.urlsafe_b64decode(data + padding)
+
+
+def gerar_token(email: str) -> str:
+    payload = {
+        "sub": email.strip().lower(),
+        "exp": int(time.time()) + TOKEN_TTL_SECONDS
+    }
+    payload_b64 = _b64url_encode(
+        json.dumps(payload, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    )
+    assinatura = hmac.new(
+        SECRET_KEY.encode("utf-8"),
+        payload_b64.encode("utf-8"),
+        hashlib.sha256
+    ).digest()
+
+    return f"{payload_b64}.{_b64url_encode(assinatura)}"
+
+
+def validar_token(token: str) -> str:
+    try:
+        payload_b64, assinatura_b64 = token.split(".", 1)
+        assinatura_recebida = _b64url_decode(assinatura_b64)
+    except Exception:
+        raise HTTPException(status_code=401, detail="Token inválido")
+
+    assinatura_esperada = hmac.new(
+        SECRET_KEY.encode("utf-8"),
+        payload_b64.encode("utf-8"),
+        hashlib.sha256
+    ).digest()
+
+    if not hmac.compare_digest(assinatura_recebida, assinatura_esperada):
+        raise HTTPException(status_code=401, detail="Token inválido")
+
+    try:
+        payload = json.loads(_b64url_decode(payload_b64).decode("utf-8"))
+        email = str(payload.get("sub", "")).strip().lower()
+        exp = int(payload.get("exp", 0))
+    except Exception:
+        raise HTTPException(status_code=401, detail="Token inválido")
+
+    if not email:
+        raise HTTPException(status_code=401, detail="Token inválido")
+
+    if exp < int(time.time()):
+        raise HTTPException(status_code=401, detail="Token expirado")
+
     users = _load_users()
-    if token not in users:
-        raise HTTPException(status_code=401, detail="Sessão inválida")
-    return token 
+    if email not in users:
+        raise HTTPException(status_code=401, detail="Usuário não encontrado")
+
+    return email
+
+
+def _extrair_token_request(request: Request) -> Optional[str]:
+    auth_header = request.headers.get("Authorization", "")
+    if auth_header.startswith("Bearer "):
+        return auth_header.split(" ", 1)[1].strip()
+    return None
+
+
+def verifica_sessao(request: Request):
+    bearer_token = _extrair_token_request(request)
+    if bearer_token:
+        return validar_token(bearer_token)
+
+    # Fallback temporário para sessões antigas por cookie
+    cookie_token = request.cookies.get("sessao_app")
+    if cookie_token:
+        users = _load_users()
+        if cookie_token in users:
+            return cookie_token
+
+    raise HTTPException(status_code=401, detail="Não autorizado")
+
 
 class LoginOut(BaseModel):
     status: str
     nome: str
     email: str
+    access_token: str
+    token_type: str = "Bearer"
+    expires_in: int
+
 
 @app.post("/login", response_model=LoginOut)
-def login(response: Response, identificador: str = Form(...), senha: str = Form(...)):
+def login(identificador: str = Form(...), senha: str = Form(...)):
     users = _load_users()
     ident_limpo = identificador.strip().lower()
 
     user_key = None
     user_data = None
-    
+
     for key, data in users.items():
         if key.lower() == ident_limpo or data["nome"].strip().lower() == ident_limpo:
             user_key = key
             user_data = data
             break
+
     if not user_data:
         raise HTTPException(status_code=404, detail="Usuário ou e-mail não cadastrado.")
     if user_data["senha"] != senha:
         raise HTTPException(status_code=401, detail="Senha incorreta.")
 
-    # Injeta o cookie cru direto no cabeçalho para evitar erros de versão no servidor
-    cookie_str = f"sessao_app={user_key}; HttpOnly; Secure; SameSite=None; Path=/; Partitioned"
-    response.headers.append("Set-Cookie", cookie_str)
-    return {"status": "ok", "nome": user_data["nome"], "email": user_key}
+    access_token = gerar_token(user_key)
 
-def _write_users(users_data: Dict[str, Any]) -> None:
-     USERS_FILE.write_text(json.dumps(users_data, ensure_ascii=False, indent=2), encoding="utf-8")
+    return {
+        "status": "ok",
+        "nome": user_data["nome"],
+        "email": user_key,
+        "access_token": access_token,
+        "token_type": "Bearer",
+        "expires_in": TOKEN_TTL_SECONDS
+    }
+
 
 @app.post("/register")
 def register(nome: str = Form(...), email: str = Form(...), senha: str = Form(...)):
@@ -91,13 +190,14 @@ def register(nome: str = Form(...), email: str = Form(...), senha: str = Form(..
         "senha": senha
     }
     _write_users(users)
-    
+
     return {"status": "ok", "mensagem": "Conta criada com sucesso!"}
 
-@app.post("/logout", dependencies=[Depends(verifica_sessao)])
-def logout(response: Response):
-    response.delete_cookie("sessao_app")
+
+@app.post("/logout")
+def logout():
     return {"status": "deslogado"}
+
 
 @app.get("/me")
 def get_me(request: Request):
@@ -121,7 +221,7 @@ ALLOWED_ORIGINS = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
