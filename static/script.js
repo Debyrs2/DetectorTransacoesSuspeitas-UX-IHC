@@ -708,7 +708,6 @@ function aplicarTelaImediata() {
 }
 
 async function checkLogin() {
-    // Aplica a tela imediatamente para evitar que a tela "pisque"
     const telaSalva = aplicarTelaImediata();
 
     try {
@@ -716,27 +715,31 @@ async function checkLogin() {
         if (res.ok) {
             const data = await res.json();
 
-            // Mostra o perfil do usuário no cabeçalho
-            $('userMenuContainer').style.display = 'block';
+            // Preenche os dados do usuário, mas ainda NÃO mostra o menu na tela
             $('userNameDisplay').textContent = data.nome;
             $('userEmailDisplay').textContent = data.email;
             $('dropdownEmail').textContent = data.email;
             $('userAvatar').textContent = data.nome.charAt(0).toUpperCase();
 
+            // Roteamento de telas
             if (telaSalva === 'landing') {
                 $('landingPage').style.display = 'flex';
                 $('loginOverlay').style.display = 'none';
                 $('dashboardApp').style.display = 'none';
+                $('userMenuContainer').style.display = 'none';
             } else if (telaSalva === 'login') {
                 $('landingPage').style.display = 'none';
                 $('loginOverlay').style.display = 'flex';
                 $('dashboardApp').style.display = 'none';
+                $('userMenuContainer').style.display = 'none';
             } else {
-                // Só renderiza o dashboard se você realmente estiver no dashboard
+                // SÓ RENDERIZA O DASHBOARD E O MENU SE ESTIVER NO DASHBOARD
                 localStorage.setItem('currentScreen', 'dashboard');
                 $('landingPage').style.display = 'none';
                 $('loginOverlay').style.display = 'none';
                 $('dashboardApp').style.display = 'block';
+
+                $('userMenuContainer').style.display = 'block';
 
                 startTutorial(data.email);
 
