@@ -698,14 +698,26 @@ $('dsFile').addEventListener('change', (e) => {
         updateUI();
     }
 });
-//Sistema de Login
+// Sistema de Login e Controle de Telas
+function aplicarTelaImediata() {
+    const telaSalva = localStorage.getItem('currentScreen') || 'landing';
+    $('landingPage').style.display = telaSalva === 'landing' ? 'flex' : 'none';
+    $('loginOverlay').style.display = telaSalva === 'login' ? 'flex' : 'none';
+    $('dashboardApp').style.display = telaSalva === 'dashboard' ? 'block' : 'none';
+    return telaSalva;
+}
+
 async function checkLogin() {
+    // Aplica a tela imediatamente para evitar que a tela "pisque" e mude do nada
+    const telaSalva = aplicarTelaImediata();
+
     try {
         const res = await fetch(API_URL + '/me', { credentials: 'include' });
         if (res.ok) {
             const data = await res.json();
 
-            // Logado: Esconde Apresentação/Login e mostra o Sistema
+            // Logado: Força o Dashboard e salva a memória
+            localStorage.setItem('currentScreen', 'dashboard');
             $('landingPage').style.display = 'none';
             $('loginOverlay').style.display = 'none';
             $('dashboardApp').style.display = 'block';
@@ -723,15 +735,31 @@ async function checkLogin() {
                 if (lastId) viewLast(lastId, true);
             }).catch(e => showErr(e.message));
         } else {
-            // Deslogado: Mostra a Landing Page
-            $('dashboardApp').style.display = 'none';
-            $('loginOverlay').style.display = 'none';
-            $('landingPage').style.display = 'flex';
+            // Deslogado ou Token expirado
+            irParaDeslogado(telaSalva);
         }
     } catch (e) {
-        $('dashboardApp').style.display = 'none';
+        irParaDeslogado(telaSalva);
+    }
+}
+
+function irParaDeslogado(telaDesejada) {
+    $('dashboardApp').style.display = 'none';
+    if (telaDesejada === 'login') {
+        $('landingPage').style.display = 'none';
+        $('loginOverlay').style.display = 'flex';
+        localStorage.setItem('currentScreen', 'login');
+
+        // Lembra se a pessoa estava na tela de Login ou de Cadastro!
+        const formSalvo = localStorage.getItem('activeForm') || 'login';
+        if (formSalvo === 'cadastro') {
+            $('boxLogin').style.display = 'none';
+            $('boxCadastro').style.display = 'block';
+        }
+    } else {
         $('loginOverlay').style.display = 'none';
         $('landingPage').style.display = 'flex';
+        localStorage.setItem('currentScreen', 'landing');
     }
 }
 
@@ -779,11 +807,13 @@ $('btnLogar').addEventListener('click', async () => {
 $('btnIrCadastro').addEventListener('click', () => {
     $('boxLogin').style.display = 'none';
     $('boxCadastro').style.display = 'block';
+    localStorage.setItem('activeForm', 'cadastro');
 });
 
 $('btnIrLogin').addEventListener('click', () => {
     $('boxCadastro').style.display = 'none';
     $('boxLogin').style.display = 'block';
+    localStorage.setItem('activeForm', 'login');
 });
 
 // Mostrar senha no Login e cadastro
@@ -938,6 +968,7 @@ $('btnSair').addEventListener('click', async (e) => {
         }
 
         localStorage.removeItem('ultimo-dataset-id');
+        localStorage.setItem('currentScreen', 'landing');
         $('dashboardApp').style.display = 'none';
         $('landingPage').style.display = 'flex';
         resetarResultado();
@@ -1196,6 +1227,7 @@ function abrirModalGenerico(titulo, mensagem, isInput, placeholder, tipoBotaoCon
 }
 // Navegação entre Landing Page e Login
 $('btnAcessarLanding').addEventListener('click', () => {
+    localStorage.setItem('currentScreen', 'login')
     $('landingPage').style.display = 'none';
     $('loginOverlay').style.display = 'flex';
 
