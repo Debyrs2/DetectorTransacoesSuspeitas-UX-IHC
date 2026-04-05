@@ -798,7 +798,7 @@ $('mostrarSenhaCadastroBtn').addEventListener('change', (e) => {
 $('btnCadastrar').addEventListener('click', async () => {
     const aceiteLgpd = document.getElementById('regLgpd').checked;
     if (!aceiteLgpd) {
-        abrirModalGenerico(dicionarioAtual.errLgpd || "Você precisa aceitar os Termos de Privacidade para criar uma conta.", false, '', '', () => { });
+        mostrarToast(dicionarioAtual.errLgpd || "Você precisa aceitar os Termos de Privacidade para criar uma conta.", false, '', '', () => { });
         return;
     }
     const msgBox = $('cadastroMsg');
@@ -893,6 +893,32 @@ if (linkTermos) {
             modalMsg.style.whiteSpace = 'normal';
         };
     });
+}
+function mostrarToast(mensagem, tipo = 'danger') {
+    // Remove um toast anterior se houver, para não empilhar
+    const oldToast = document.getElementById('app-toast');
+    if (oldToast) oldToast.remove();
+
+    const toast = document.createElement('div');
+    toast.id = 'app-toast';
+    toast.className = `toast toast-${tipo}`;
+
+    toast.innerHTML = `
+        <span>${mensagem}</span>
+        <button onclick="this.parentElement.remove()" aria-label="Fechar">&times;</button>
+    `;
+
+    document.body.appendChild(toast);
+
+    // Auto-remover após 5 segundos
+    setTimeout(() => {
+        if (document.body.contains(toast)) {
+            toast.style.animation = window.innerWidth <= 600
+                ? 'slideOutRight 0.3s forwards'
+                : 'slideOutRight 0.3s forwards';
+            setTimeout(() => toast.remove(), 300);
+        }
+    }, 5000);
 }
 //LÓGICA DE SAIR
 $('btnSair').addEventListener('click', async (e) => {
