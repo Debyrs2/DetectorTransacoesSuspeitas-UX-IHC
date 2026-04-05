@@ -947,3 +947,36 @@ div[vw-plugin-wrapper] {
     max-width: none !important;
   }
 }
+
+@media (max-width: 520px) {
+
+  /* Mantém os cards em 2 colunas para não fazer o usuário rolar tanto a tela */
+  .cards {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .card {
+    padding: 10px !important;
+  }
+
+  .card h3 {
+    font-size: 10px !important;
+  }
+
+  .card .value {
+    font-size: 16px !important;
+  }
+
+  /* Tabela mais enxuta para facilitar a rolagem horizontal */
+  th,
+  td {
+    padding: 8px !important;
+    font-size: 12px !important;
+  }
+
+  .table-box table {
+    min-width: 500px !important;
+    /* Deixa rolar pro lado sem esmagar as palavras */
+  }
+}
