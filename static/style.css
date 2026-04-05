@@ -894,14 +894,29 @@ div[vw-plugin-wrapper] {
 
 @media (max-width: 768px) {
   body>div[style*="position: absolute; top: 16px; right: 24px"] {
-    position: relative !important;
-    top: 0 !important;
-    right: 0 !important;
-    left: 0 !important;
+    position: absolute !important;
+    top: 12px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
     justify-content: center !important;
-    padding: 10px !important;
-    margin-bottom: 16px !important;
-    gap: 12px !important;
+    width: calc(100% - 24px) !important;
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+    gap: 10px !important;
+    z-index: 999999 !important;
+  }
+
+  #landingPage {
+    padding-top: 110px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  #btnThemeToggle,
+  #langSelect,
+  #btnA11yToggle {
+    height: 40px !important;
   }
 
   /* Esconde o email do botão de perfil no celular para não esmagar os outros botões */
@@ -962,6 +977,7 @@ div[vw-plugin-wrapper] {
     padding-bottom: 8px !important;
   }
 }
+
 /* ALERTAS FLUTUANTES*/
 .toast {
   position: fixed;
@@ -1006,13 +1022,27 @@ div[vw-plugin-wrapper] {
 }
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(100%); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideOutRight {
-  from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(100%); }
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
 }
 
 /* Responsividade: No mobile o alerta desce do topo */
@@ -1024,14 +1054,28 @@ div[vw-plugin-wrapper] {
     max-width: none;
     animation: slideInDown 0.3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
   }
-  
+
   @keyframes slideInDown {
-    from { opacity: 0; transform: translateY(-100%); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @keyframes slideOutRight {
-    from { opacity: 1; transform: translateY(0); }
-    to { opacity: 0; transform: translateY(-100%); }
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    to {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
   }
 }
