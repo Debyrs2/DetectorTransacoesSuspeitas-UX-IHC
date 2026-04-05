@@ -708,7 +708,7 @@ function aplicarTelaImediata() {
 }
 
 async function checkLogin() {
-    // Aplica a tela imediatamente para evitar que a tela "pisque" e mude do nada
+    // Aplica a tela imediatamente para evitar que a tela "pisque"
     const telaSalva = aplicarTelaImediata();
 
     try {
@@ -716,24 +716,35 @@ async function checkLogin() {
         if (res.ok) {
             const data = await res.json();
 
-            // Logado: Força o Dashboard e salva a memória
-            localStorage.setItem('currentScreen', 'dashboard');
-            $('landingPage').style.display = 'none';
-            $('loginOverlay').style.display = 'none';
-            $('dashboardApp').style.display = 'block';
-
-            startTutorial(data.email);
-
+            // Mostra o perfil do usuário no cabeçalho
             $('userMenuContainer').style.display = 'block';
             $('userNameDisplay').textContent = data.nome;
             $('userEmailDisplay').textContent = data.email;
             $('dropdownEmail').textContent = data.email;
             $('userAvatar').textContent = data.nome.charAt(0).toUpperCase();
 
-            refreshDatasets().then(() => {
-                const lastId = localStorage.getItem('ultimo-dataset-id');
-                if (lastId) viewLast(lastId, true);
-            }).catch(e => showErr(e.message));
+            if (telaSalva === 'landing') {
+                $('landingPage').style.display = 'flex';
+                $('loginOverlay').style.display = 'none';
+                $('dashboardApp').style.display = 'none';
+            } else if (telaSalva === 'login') {
+                $('landingPage').style.display = 'none';
+                $('loginOverlay').style.display = 'flex';
+                $('dashboardApp').style.display = 'none';
+            } else {
+                // Só renderiza o dashboard se você realmente estiver no dashboard
+                localStorage.setItem('currentScreen', 'dashboard');
+                $('landingPage').style.display = 'none';
+                $('loginOverlay').style.display = 'none';
+                $('dashboardApp').style.display = 'block';
+
+                startTutorial(data.email);
+
+                refreshDatasets().then(() => {
+                    const lastId = localStorage.getItem('ultimo-dataset-id');
+                    if (lastId) viewLast(lastId, true);
+                }).catch(e => showErr(e.message));
+            }
         } else {
             // Deslogado ou Token expirado
             irParaDeslogado(telaSalva);
