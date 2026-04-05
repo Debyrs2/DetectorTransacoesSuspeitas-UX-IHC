@@ -776,7 +776,6 @@ function irParaDeslogado(telaDesejada) {
         localStorage.setItem('currentScreen', 'landing');
     }
 }
-
 // Enviar Login
 $('btnLogar').addEventListener('click', async () => {
     const identificador = $('identificadorLogin').value.trim();
@@ -813,7 +812,7 @@ $('btnLogar').addEventListener('click', async () => {
         $('loginErro').innerHTML = '⚠️ Erro de conexão.';
     }
 
-    btn.textContent = 'Entrar no Sistema';
+    btn.textContent = dicionarioAtual.btnLogin || 'Entrar';
     btn.disabled = false;
 });
 
