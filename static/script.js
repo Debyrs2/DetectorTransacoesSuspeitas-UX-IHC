@@ -1102,6 +1102,77 @@ function falar(texto) {
     window.speechSynthesis.speak(utterance);
 }
 // MENU DO USUÁRIO E ACESSIBILIDADE
+const btnThemeToggle = $('btnThemeToggle');
+const htmlEl = document.documentElement;
+const savedTheme = localStorage.getItem('app-theme') || 'dark';
+
+function atualizarBotaoTema() {
+    if (!btnThemeToggle) return;
+    const currentTheme = htmlEl.getAttribute('data-theme');
+    const themeIcon = $('themeIcon');
+    
+    // Altera o ícone dependendo do tema atual
+    if (currentTheme === 'light') {
+        if(themeIcon) themeIcon.textContent = '🌙';
+    } else {
+        if(themeIcon) themeIcon.textContent = '☀️';
+    }
+}
+
+function ajustarIdiomaMobile() {
+    const select = $('langSelect');
+    if (!select) return;
+    
+    // Remove o texto "PT", "EN" , "ES" no celular para o layout não quebrar
+    if (window.innerWidth <= 768) {
+        Array.from(select.options).forEach(opt => {
+            if (opt.value === 'pt') opt.text = '🇧🇷';
+            if (opt.value === 'en') opt.text = '🇺🇸';
+            if (opt.value === 'es') opt.text = '🇪🇸';
+        });
+    } else {
+        Array.from(select.options).forEach(opt => {
+            if (opt.value === 'pt') opt.text = '🇧🇷 PT';
+            if (opt.value === 'en') opt.text = '🇺🇸 EN';
+            if (opt.value === 'es') opt.text = '🇪🇸 ES';
+        });
+    }
+}
+
+// Aplica o tema salvo logo que a página carrega
+if (savedTheme === 'light') {
+    htmlEl.setAttribute('data-theme', 'light');
+} else {
+    htmlEl.removeAttribute('data-theme');
+}
+
+// Ouve o clique no botão para alternar tudo
+if (btnThemeToggle) {
+    btnThemeToggle.addEventListener('click', (e) => {
+        e.preventDefault(); 
+        const currentTheme = htmlEl.getAttribute('data-theme');
+
+        if (currentTheme === 'light') {
+            htmlEl.removeAttribute('data-theme');
+            localStorage.setItem('app-theme', 'dark');
+        } else {
+            htmlEl.setAttribute('data-theme', 'light');
+            localStorage.setItem('app-theme', 'light');
+        }
+
+        atualizarBotaoTema();
+
+        // Faz o gráfico piscar para recalcular a cor da grade
+        if (typeof meuGrafico !== 'undefined' && meuGrafico) {
+            meuGrafico.update();
+        }
+    });
+}
+
+window.addEventListener('resize', ajustarIdiomaMobile);
+atualizarBotaoTema();
+ajustarIdiomaMobile();
+
 $('userProfile').addEventListener('click', (e) => {
     e.stopPropagation();
     const drop = $('userDropdown');
