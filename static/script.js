@@ -695,13 +695,68 @@ const htmlEl = document.documentElement;
 
 const savedTheme = localStorage.getItem('app-theme') || 'dark';
 
-// Verifica o tema inicial e ajusta a etiqueta de tradução
+function atualizarBotaoTema() {
+    const currentTheme = htmlEl.getAttribute('data-theme');
+    const proximoEhClaro = currentTheme !== 'light';
+
+    themeIcon.textContent = proximoEhClaro ? '☀️' : '🌙';
+    $('themeText').setAttribute('data-i18n', proximoEhClaro ? 'themeLight' : 'themeDark');
+
+    const label = proximoEhClaro
+        ? (dicionarioAtual.themeLight || 'Tema Claro')
+        : (dicionarioAtual.themeDark || 'Tema Escuro');
+
+    btnThemeToggle.setAttribute('title', label);
+    btnThemeToggle.setAttribute('aria-label', label);
+
+    updateUI();
+}
+
+function ajustarIdiomaMobile() {
+    if (!langSelectElem) return;
+
+    const isMobile = window.innerWidth <= 768;
+
+    const labels = {
+        pt: isMobile ? '🇧🇷' : '🇧🇷 PT',
+        en: isMobile ? '🇺🇸' : '🇺🇸 EN',
+        es: isMobile ? '🇪🇸' : '🇪🇸 ES'
+    };
+
+    Object.entries(labels).forEach(([value, text]) => {
+        const option = langSelectElem.querySelector(`option[value="${value}"]`);
+        if (option) option.textContent = text;
+    });
+}
+
 if (savedTheme === 'light') {
     htmlEl.setAttribute('data-theme', 'light');
-    $('themeIcon').textContent = '🌙';
-    $('themeText').setAttribute('data-i18n', 'themeDark');
-    updateUI(); // Chama a tradução para ajustar o texto na hora
+} else {
+    htmlEl.removeAttribute('data-theme');
 }
+
+atualizarBotaoTema();
+ajustarIdiomaMobile();
+
+window.addEventListener('resize', ajustarIdiomaMobile);
+
+btnThemeToggle.addEventListener('click', () => {
+    const currentTheme = htmlEl.getAttribute('data-theme');
+
+    if (currentTheme === 'light') {
+        htmlEl.removeAttribute('data-theme');
+        localStorage.setItem('app-theme', 'dark');
+    } else {
+        htmlEl.setAttribute('data-theme', 'light');
+        localStorage.setItem('app-theme', 'light');
+    }
+
+    atualizarBotaoTema();
+
+    if (meuGrafico) {
+        meuGrafico.update();
+    }
+});
 const btnThemeToggle = $('btnThemeToggle');
 const themeIcon = $('themeIcon');
 const htmlEl = document.documentElement;
