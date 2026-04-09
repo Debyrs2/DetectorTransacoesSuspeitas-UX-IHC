@@ -913,7 +913,7 @@ div[vw-plugin-wrapper] {
     padding-right: 16px !important;
   }
 
-   #btnThemeToggle,
+  #btnThemeToggle,
   #langSelect,
   #btnA11yToggle,
   #userProfile {
@@ -953,7 +953,7 @@ div[vw-plugin-wrapper] {
     gap: 0 !important;
   }
 
-  #userProfile > div:first-child,
+  #userProfile>div:first-child,
   #userEmailDisplay,
   #userNameDisplay {
     display: none !important;
@@ -1120,4 +1120,17 @@ div[vw-plugin-wrapper] {
       transform: translateY(-100%);
     }
   }
+}
+
+/*MENU LATERAL*/
+.sidebar-open {
+  left: 0 !important;
+}
+
+.file-ready {
+  border: 2px solid #10b981 !important;
+  background: rgba(16, 185, 129, 0.08) !important;
+  color: var(--text) !important;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
