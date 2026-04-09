@@ -733,10 +733,9 @@ async function checkLogin() {
         if (res.ok) {
             const data = await res.json();
 
-            $('userNameDisplay').textContent = data.nome;
-            $('userEmailDisplay').textContent = data.email;
-            $('dropdownEmail').textContent = data.email;
-            $('userAvatar').textContent = data.nome.charAt(0).toUpperCase();
+            if ($('userNameDisplay')) $('userNameDisplay').textContent = data.nome;
+            if ($('userEmailDisplay')) $('userEmailDisplay').textContent = data.email;
+            if ($('userAvatar')) $('userAvatar').textContent = data.nome.charAt(0).toUpperCase();
 
             if (telaSalva === 'landing') {
                 $('landingPage').style.display = 'flex';
@@ -753,7 +752,9 @@ async function checkLogin() {
                 $('landingPage').style.display = 'none';
                 $('loginOverlay').style.display = 'none';
                 $('dashboardApp').style.display = 'block';
-                if ($('btnHamburger')) $('btnHamburger').style.display = 'none';
+
+                // CORREÇÃO: Mostra o menu Hamburger quando entra no Dashboard
+                if ($('btnHamburger')) $('btnHamburger').style.display = 'flex';
 
                 startTutorial(data.email);
 
@@ -994,7 +995,8 @@ $('btnSair').addEventListener('click', async (e) => {
     e.stopPropagation();
 
     const dict = dicionarioAtual;
-    $('userDropdown').style.display = 'none';
+    if ($('userDropdown')) $('userDropdown').style.display = 'none';
+    if (typeof fecharSidebar === 'function') fecharSidebar();
 
     abrirModalGenerico(dict.logoutTitle, dict.logoutMsg, false, "", 'danger', async () => {
         const btn = $('btnSair');
@@ -1010,16 +1012,17 @@ $('btnSair').addEventListener('click', async (e) => {
         }
 
         clearAuthToken();
-        localStorage.removeItem('ultimo-dataset-id');
+        localStorage.setItem('ultimo-dataset-id');
         localStorage.setItem('currentScreen', 'landing');
 
         $('dashboardApp').style.display = 'none';
         $('landingPage').style.display = 'flex';
+        if ($('btnHamburger')) $('btnHamburger').style.display = 'none'; // Esconde menu
         resetarResultado();
         $('dsTbody').innerHTML = `<tr><td colspan="5">Sessão encerrada.</td></tr>`;
         btn.textContent = dict.btnLogout || 'Sair';
 
-        document.getElementById('userMenuContainer').style.display = 'none';
+        if ($('userMenuContainer')) document.getElementById('userMenuContainer').style.display = 'none';
     });
 });
 //ACESSIBILIDADE
@@ -1399,6 +1402,7 @@ function startTutorial(userEmail) {
             { element: '#method', popover: { title: dict.tourS3Title, description: dict.tourS3Desc, side: "left", align: 'start' } },
             { element: '#dsTbody', popover: { title: dict.tourS4Title, description: dict.tourS4Desc, side: "top", align: 'start' } },
             { element: '#rMethod', popover: { title: dict.tourS5Title || 'Exportar Resultados 📊', description: dict.tourS5Desc || 'Assim que a análise terminar, é nesta área que aparecerão os botões para baixar a Tabela (CSV) e o Gráfico (PNG).', side: "bottom", align: 'start' } },
+            { element: '#btnHamburger', popover: { title: dict.tourS9Title || 'Menu Principal ☰', description: 'Aqui você acessa seu Perfil, Acessibilidade, Tema e o Manual do Sistema. Aproveite!', side: "right", align: 'start' } },
             { element: '#btnA11yToggle', popover: { title: dict.tourS6Title || 'Acessibilidade ♿', description: dict.tourS6Desc || 'Precisa de alto contraste, modo daltônico ou leitor de tela? As opções ficam aqui.', side: "bottom", align: 'end' } },
             { element: '#langSelect', popover: { title: dict.tourS7Title || 'Idioma 🌍', description: dict.tourS7Desc || 'Talvez você já conheça, mas aqui você pode alterar o idioma do sistema a qualquer momento.', side: "bottom", align: 'end' } },
             { element: '#btnThemeToggle', popover: { title: dict.tourS8Title || 'Tema 🌓', description: dict.tourS8Desc || 'Prefere trabalhar no escuro? Alterne entre o tema Claro e Escuro clicando aqui.', side: "bottom", align: 'end' } },
