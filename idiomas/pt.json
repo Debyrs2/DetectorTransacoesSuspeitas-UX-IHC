@@ -160,5 +160,11 @@
   "termsContent": "TERMOS DE PRIVACIDADE E TRATAMENTO DE DADOS (LGPD)\n\n1. Coleta de Dados: Coletamos apenas as informações estritamente necessárias para a criação da conta.\n2. Finalidade: Seus dados serão utilizados exclusivamente para autenticação, controle de acesso e validação de maioridade no sistema DataGuard.\n3. Tratamento de Arquivos: Os dados financeiros e planilhas enviados para análise são processados em memória e/ou armazenados temporariamente sob sigilo, não sendo utilizados para outros fins.\n4. Seus Direitos: Conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você pode solicitar a exclusão da sua conta e de todos os seus dados a qualquer momento.\n\n* Este é um projeto acadêmico sem fins comerciais.",
   "regNameTitle": "Nome Completo",
   "regEmailTitle": "E-mail",
-  "regPassTitle": "Senha"
+  "regPassTitle": "Senha",
+  "btnSysInfo": "Manual do Sistema",
+  "btnReplayTour": "Rever Tutorial",
+  "infoMinRows": "Mínimo exigido: O arquivo deve conter pelo menos 2 linhas (transações) para cálculo estatístico.",
+  "sysInfoTitle": "Manual do DataGuard",
+  "sysInfoText": "O DataGuard analisa anomalias financeiras utilizando modelos estatísticos avançados.<br><br><b>1. Upload:</b> Envie planilhas CSV ou Excel com no mínimo 2 transações.<br><b>2. Configuração:</b> Escolha o método (Sigma, Z-Score, etc) e a sensibilidade.<br><b>3. Análise:</b> O sistema destacará os valores fora do padrão esperado.<br><br>Utilize este menu para adaptar o sistema às suas necessidades.",
+  "tourSkipTitle": "Sair do Tutorial"
 }

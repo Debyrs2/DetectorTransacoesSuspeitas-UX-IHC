@@ -24,9 +24,9 @@
   "resetDesc": "Test environment: enter your registered e-mail and the new password directly below.",
   "btnReset": "Save New Password",
   "statusChecking": "Checking...",
-"statusCreating": "Creating...",
-"statusLoggingOut": "Logging out...",
-"statusSaving": "Saving...",
+  "statusCreating": "Creating...",
+  "statusLoggingOut": "Logging out...",
+  "statusSaving": "Saving...",
   "title": "Suspicious Transaction Detection",
   "titleSlogan": "Suspicious Transaction Detection",
   "landSubtitle": "Suspicious Transaction Detection",
@@ -160,5 +160,11 @@
   "termsContent": "PRIVACY AND DATA PROCESSING TERMS\n\n1. Data Collection: We collect only the information strictly necessary for account creation.\n2. Purpose: Your data will be used exclusively for authentication, access control, and age validation in the DataGuard system.\n3. File Processing: Financial data and spreadsheets sent for analysis are processed in memory and/or temporarily stored confidentially, and are not used for other purposes.\n4. Your Rights: In accordance with data protection laws, you may request the deletion of your account and all your data at any time.\n\n* This is an academic project for non-commercial purposes.",
   "regNameTitle": "Full Name",
   "regEmailTitle": "Email",
-  "regPassTitle": "Password"
+  "regPassTitle": "Password",
+  "btnSysInfo": "System Manual",
+  "btnReplayTour": "Replay Tutorial",
+  "infoMinRows": "Minimum required: The file must contain at least 2 rows (transactions) for statistical calculation.",
+  "sysInfoTitle": "DataGuard Manual",
+  "sysInfoText": "DataGuard analyzes financial anomalies using advanced statistical models.<br><br><b>1. Upload:</b> Send CSV or Excel spreadsheets with at least 2 transactions.<br><b>2. Setup:</b> Choose the method (Sigma, Z-Score, etc) and sensitivity.<br><b>3. Analysis:</b> The system will highlight unexpected values.<br><br>Use this menu to adapt the system to your needs.",
+  "tourSkipTitle": "Exit Tutorial"
 }
