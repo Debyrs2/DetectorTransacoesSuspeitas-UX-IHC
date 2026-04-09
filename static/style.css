@@ -1128,7 +1128,6 @@ div[vw-plugin-wrapper] {
   top: 16px !important;
   left: 24px !important;
   z-index: 999999 !important;
-  transform: translateZ(0);
 }
 
 #sidebarMenu {
@@ -1137,7 +1136,6 @@ div[vw-plugin-wrapper] {
   bottom: 0 !important;
   height: 100dvh !important;
   z-index: 999999 !important;
-  transform: translateZ(0);
 }
 
 .sidebar-open {

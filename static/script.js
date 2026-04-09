@@ -1010,7 +1010,7 @@ function mostrarToast(mensagem, tipo = 'danger') {
     }, 5000);
 }
 //LÓGICA DE SAIR
-$('btnSair').addEventListener('click', async (e) => {
+$('btnSair').addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -1018,27 +1018,25 @@ $('btnSair').addEventListener('click', async (e) => {
     if ($('userDropdown')) $('userDropdown').style.display = 'none';
     if (typeof fecharSidebar === 'function') fecharSidebar();
 
-    abrirModalGenerico(dict.logoutTitle, dict.logoutMsg, false, "", 'danger', async () => {
+    abrirModalGenerico(dict.logoutTitle, dict.logoutMsg, false, "", 'danger', () => {
         const btn = $('btnSair');
         btn.textContent = dict.statusLoggingOut || 'Saindo...';
 
-        try {
-            await fetch(API_URL + '/logout', {
-                method: 'POST',
-                headers: buildAuthHeaders()
-            });
-        } catch (error) {
-            console.error("Erro na API de logout", error);
-        }
+        // Dispara o logout em segundo plano
+        fetch(API_URL + '/logout', {
+            method: 'POST',
+            headers: buildAuthHeaders()
+        }).catch(() => { });
+
+        // Limpa os dados instantaneamente e expulsa o usuário para a tela inicial
         clearAuthToken();
         localStorage.removeItem('ultimo-dataset-id');
         irParaDeslogado('landing');
         resetarResultado();
 
         $('dsTbody').innerHTML = `<tr><td colspan="5">Sessão encerrada.</td></tr>`;
-        btn.textContent = dict.btnLogout || 'Sair';
 
-        if ($('userMenuContainer')) document.getElementById('userMenuContainer').style.display = 'none';
+        btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> <span data-i18n="btnLogout">${dict.btnLogout || 'Sair'}</span>`;
     });
 });
 //ACESSIBILIDADE
