@@ -1030,15 +1030,11 @@ $('btnSair').addEventListener('click', async (e) => {
         } catch (error) {
             console.error("Erro na API de logout", error);
         }
-
         clearAuthToken();
-        localStorage.setItem('ultimo-dataset-id');
-        localStorage.setItem('currentScreen', 'landing');
-
-        $('dashboardApp').style.display = 'none';
-        $('landingPage').style.display = 'flex';
-        if ($('btnHamburger')) $('btnHamburger').style.display = 'none'; // Esconde menu
+        localStorage.removeItem('ultimo-dataset-id');
+        irParaDeslogado('landing');
         resetarResultado();
+
         $('dsTbody').innerHTML = `<tr><td colspan="5">Sessão encerrada.</td></tr>`;
         btn.textContent = dict.btnLogout || 'Sair';
 
@@ -1229,7 +1225,7 @@ $('btnSysInfo').addEventListener('click', () => {
     fecharSidebar();
 
     abrirModalGenerico(
-        
+
         dicionarioAtual.sysInfoTitle || "Manual do Sistema",
         dicionarioAtual.sysInfoText || "Informações do sistema.",
         false, "", "", () => { }
