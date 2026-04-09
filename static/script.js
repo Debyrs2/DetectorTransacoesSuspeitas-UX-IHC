@@ -1227,11 +1227,17 @@ if (sidebarOverlay) {
 // Lógica de Informações do Sistema
 $('btnSysInfo').addEventListener('click', () => {
     fecharSidebar();
+
     abrirModalGenerico(
+        
         dicionarioAtual.sysInfoTitle || "Manual do Sistema",
         dicionarioAtual.sysInfoText || "Informações do sistema.",
         false, "", "", () => { }
     );
+    $('modalGenerico').querySelector('.panel').style.maxWidth = '750px';
+    $('modalGenerico').querySelector('.panel').style.width = '95%';
+    $('btnGenCancel').style.display = 'none';
+    $('btnGenConfirm').textContent = dicionarioAtual.btnClose || 'Fechar';
 });
 
 // Lógica de Rever Tutorial
@@ -1341,8 +1347,12 @@ $('btnEnviarReset').addEventListener('click', async () => {
     btn.disabled = false;
 });
 
-//SISTEMA DE POP-UP GENÉRICO (CONFIRMAÇÕES E INPUTS)
+//SISTEMA DE POP-UP GENÉRICO
 function abrirModalGenerico(titulo, mensagem, isInput, placeholder, tipoBotaoConfirmar, callbackConfirmacao) {
+    $('modalGenerico').querySelector('.panel').style.maxWidth = '340px';
+    $('modalGenerico').querySelector('.panel').style.width = '90%';
+    $('btnGenCancel').style.display = 'block';
+
     $('modalGenTitle').textContent = titulo;
     $('modalGenMsg').innerHTML = mensagem;
 
