@@ -715,7 +715,6 @@ function aplicarTelaImediata() {
     $('dashboardApp').style.display = telaSalva === 'dashboard' ? 'block' : 'none';
     return telaSalva;
 }
-
 async function checkLogin() {
     const telaSalva = aplicarTelaImediata();
     const token = getAuthToken();
@@ -725,53 +724,70 @@ async function checkLogin() {
         return;
     }
 
+    let data;
+
+    // BLOCO 1: Isolado para Autenticação (Apenas Comunicação com a API)
     try {
         const res = await fetch(API_URL + '/me', {
             headers: buildAuthHeaders()
         });
 
-        if (res.ok) {
-            const data = await res.json();
-
-            if ($('userNameDisplay')) $('userNameDisplay').textContent = data.nome;
-            if ($('userEmailDisplay')) $('userEmailDisplay').textContent = data.email;
-            if ($('userAvatar')) $('userAvatar').textContent = data.nome.charAt(0).toUpperCase();
-
-            if (telaSalva === 'landing') {
-                $('landingPage').style.display = 'flex';
-                $('loginOverlay').style.display = 'none';
-                $('dashboardApp').style.display = 'none';
-                if ($('btnHamburger')) $('btnHamburger').style.display = 'none';
-            } else if (telaSalva === 'login') {
-                $('landingPage').style.display = 'none';
-                $('loginOverlay').style.display = 'flex';
-                $('dashboardApp').style.display = 'none';
-                if ($('btnHamburger')) $('btnHamburger').style.display = 'none';
-            } else {
-                localStorage.setItem('currentScreen', 'dashboard');
-                $('landingPage').style.display = 'none';
-                $('loginOverlay').style.display = 'none';
-                $('dashboardApp').style.display = 'block';
-
-                // CORREÇÃO: Mostra o menu Hamburger quando entra no Dashboard
-                if ($('btnHamburger')) $('btnHamburger').style.display = 'flex';
-
-                startTutorial(data.email);
-
-                refreshDatasets().then(() => {
-                    const lastId = localStorage.getItem('ultimo-dataset-id');
-                    if (lastId) viewLast(lastId, true);
-                }).catch(e => showErr(e.message));
-            }
-        } else {
+        if (!res.ok) {
             clearAuthToken();
             irParaDeslogado(telaSalva);
+            return;
         }
+        data = await res.json();
     } catch (e) {
+        console.error("Erro na validação do token com a API:", e);
         clearAuthToken();
         irParaDeslogado(telaSalva);
+        return;
+    }
+
+    // BLOCO 2: Isolado para Interface (Se algo der errado aqui, NÃO desloga o usuário)
+    try {
+        if ($('userNameDisplay')) $('userNameDisplay').textContent = data.nome || 'Usuário';
+        if ($('userEmailDisplay')) $('userEmailDisplay').textContent = data.email || '';
+        if ($('userAvatar')) $('userAvatar').textContent = (data.nome || 'U').charAt(0).toUpperCase();
+
+        if (telaSalva === 'landing') {
+            $('landingPage').style.display = 'flex';
+            $('loginOverlay').style.display = 'none';
+            $('dashboardApp').style.display = 'none';
+            if ($('btnHamburger')) $('btnHamburger').style.display = 'none';
+        } else if (telaSalva === 'login') {
+            $('landingPage').style.display = 'none';
+            $('loginOverlay').style.display = 'flex';
+            $('dashboardApp').style.display = 'none';
+            if ($('btnHamburger')) $('btnHamburger').style.display = 'none';
+        } else {
+            localStorage.setItem('currentScreen', 'dashboard');
+            $('landingPage').style.display = 'none';
+            $('loginOverlay').style.display = 'none';
+            $('dashboardApp').style.display = 'block';
+
+            if ($('btnHamburger')) $('btnHamburger').style.display = 'flex';
+
+            // Dá 250ms para o HTML "respirar" e renderizar antes de disparar o tutorial
+            setTimeout(() => {
+                try {
+                    startTutorial(data.email);
+                } catch (err) {
+                    console.error("Erro isolado ao rodar o tutorial (O usuário continua logado):", err);
+                }
+            }, 250);
+
+            refreshDatasets().then(() => {
+                const lastId = localStorage.getItem('ultimo-dataset-id');
+                if (lastId) viewLast(lastId, true);
+            }).catch(e => showErr(e.message));
+        }
+    } catch (e) {
+        console.error("Erro ao montar a interface (O usuário continua logado):", e);
     }
 }
+
 function irParaDeslogado(telaDesejada) {
     $('dashboardApp').style.display = 'none';
 
@@ -1384,12 +1400,15 @@ $('btnAcessarLanding').addEventListener('click', () => {
 });
 
 // Gatilho para iniciar o tutorial com Driver.js
-// Gatilho para iniciar o tutorial com Driver.js
 function startTutorial(userEmail) {
-    // Cria uma chave única para esse usuário (ex: tutorialVisto_teste@gmail.com)
+    // Trava: Se a biblioteca Driver.js (CDN) falhar em carregar, cancela sem dar erro
+    if (!window.driver || !window.driver.js) {
+        console.warn("Aviso: Biblioteca Driver.js não carregou a tempo.");
+        return;
+    }
+
     const storageKey = 'tutorialVisto_' + userEmail;
 
-    // Verifica a chave ESPECÍFICA deste usuário
     if (localStorage.getItem(storageKey) === 'true') return;
 
     const dict = dicionarioAtual;
@@ -1404,7 +1423,8 @@ function startTutorial(userEmail) {
 
         steps: [
             { element: '#logoSistemaHeader', popover: { title: dict.tourS1Title, description: dict.tourS1Desc, side: "bottom", align: 'start' } },
-            { element: '#dsFile', popover: { title: dict.tourS2Title, description: dict.tourS2Desc, side: "top", align: 'start' } },
+            // CORREÇÃO: Apontando para o label visível (#lblDsFile) em vez do input invisível (#dsFile)
+            { element: '#lblDsFile', popover: { title: dict.tourS2Title, description: dict.tourS2Desc, side: "top", align: 'start' } },
             { element: '#method', popover: { title: dict.tourS3Title, description: dict.tourS3Desc, side: "left", align: 'start' } },
             { element: '#dsTbody', popover: { title: dict.tourS4Title, description: dict.tourS4Desc, side: "top", align: 'start' } },
             { element: '#rMethod', popover: { title: dict.tourS5Title || 'Exportar Resultados 📊', description: dict.tourS5Desc || 'Assim que a análise terminar, é nesta área que aparecerão os botões para baixar a Tabela (CSV) e o Gráfico (PNG).', side: "bottom", align: 'start' } },
@@ -1418,12 +1438,11 @@ function startTutorial(userEmail) {
                 return;
             }
 
-            // Pausa o driver chamando o seu modal generico padronizado
             abrirModalGenerico(
                 dict.tourSkipTitle || "Sair do Tutorial",
                 dict.tourSkip || "Deseja pular o tutorial e ir direto para o sistema?",
                 false, "", "danger",
-                () => { // Callback caso o usuário clique em Confirmar
+                () => {
                     driverObj.destroy();
                     localStorage.setItem(storageKey, 'true');
                 }
@@ -1433,6 +1452,5 @@ function startTutorial(userEmail) {
 
     driverObj.start();
 }
-
 // Inicializa o sistema verificando se o usuário já tem um acesso salvo
 checkLogin();
