@@ -1384,6 +1384,7 @@ $('btnAcessarLanding').addEventListener('click', () => {
 });
 
 // Gatilho para iniciar o tutorial com Driver.js
+// Gatilho para iniciar o tutorial com Driver.js
 function startTutorial(userEmail) {
     // Cria uma chave única para esse usuário (ex: tutorialVisto_teste@gmail.com)
     const storageKey = 'tutorialVisto_' + userEmail;
@@ -1407,11 +1408,7 @@ function startTutorial(userEmail) {
             { element: '#method', popover: { title: dict.tourS3Title, description: dict.tourS3Desc, side: "left", align: 'start' } },
             { element: '#dsTbody', popover: { title: dict.tourS4Title, description: dict.tourS4Desc, side: "top", align: 'start' } },
             { element: '#rMethod', popover: { title: dict.tourS5Title || 'Exportar Resultados 📊', description: dict.tourS5Desc || 'Assim que a análise terminar, é nesta área que aparecerão os botões para baixar a Tabela (CSV) e o Gráfico (PNG).', side: "bottom", align: 'start' } },
-            { element: '#btnHamburger', popover: { title: dict.tourS9Title || 'Menu Principal ☰', description: 'Aqui você acessa seu Perfil, Acessibilidade, Tema e o Manual do Sistema. Aproveite!', side: "right", align: 'start' } },
-            { element: '#btnA11yToggle', popover: { title: dict.tourS6Title || 'Acessibilidade ♿', description: dict.tourS6Desc || 'Precisa de alto contraste, modo daltônico ou leitor de tela? As opções ficam aqui.', side: "bottom", align: 'end' } },
-            { element: '#langSelect', popover: { title: dict.tourS7Title || 'Idioma 🌍', description: dict.tourS7Desc || 'Talvez você já conheça, mas aqui você pode alterar o idioma do sistema a qualquer momento.', side: "bottom", align: 'end' } },
-            { element: '#btnThemeToggle', popover: { title: dict.tourS8Title || 'Tema 🌓', description: dict.tourS8Desc || 'Prefere trabalhar no escuro? Alterne entre o tema Claro e Escuro clicando aqui.', side: "bottom", align: 'end' } },
-            { element: '#userProfile', popover: { title: dict.tourS9Title || 'Seu Perfil 🎉', description: dict.tourS9Desc || 'Aqui você pode ver seus dados, alterar o idioma e sair do sistema. Aproveite!', side: "bottom", align: 'end' } }
+            { element: '#btnHamburger', popover: { title: dict.tourS9Title || 'Menu Principal ☰', description: 'Aqui você acessa seu Perfil, Acessibilidade, Tema e o Manual do Sistema. Aproveite!', side: "right", align: 'start' } }
         ],
 
         onDestroyStarted: () => {
