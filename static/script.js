@@ -772,9 +772,13 @@ async function checkLogin() {
         irParaDeslogado(telaSalva);
     }
 }
-
 function irParaDeslogado(telaDesejada) {
     $('dashboardApp').style.display = 'none';
+
+    // FORÇA O FECHAMENTO E OCULTAÇÃO DO MENU QUANDO DESLOGADO
+    if ($('btnHamburger')) $('btnHamburger').style.display = 'none';
+    if (typeof fecharSidebar === 'function') fecharSidebar();
+
     if (telaDesejada === 'login') {
         $('landingPage').style.display = 'none';
         $('loginOverlay').style.display = 'flex';
@@ -1218,9 +1222,10 @@ $('btnSysInfo').addEventListener('click', () => {
 $('btnReplayTour').addEventListener('click', () => {
     fecharSidebar();
     const email = $('userEmailDisplay').textContent;
-    // Remove a trava de "já visto" e inicia novamente
     localStorage.removeItem('tutorialVisto_' + email);
-    startTutorial(email);
+    setTimeout(() => {
+        startTutorial(email);
+    }, 350);
 });
 // DOWNLOAD DA TABELA (Converte o JSON para CSV na hora)
 $('btnDownTable').addEventListener('click', () => {

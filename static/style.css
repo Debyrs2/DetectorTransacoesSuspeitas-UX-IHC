@@ -1123,14 +1123,15 @@ div[vw-plugin-wrapper] {
 }
 
 /*MENU LATERAL*/
-.sidebar-open {
-  left: 0 !important;
+#btnHamburger {
+  position: fixed !important;
 }
 
-.file-ready {
-  border: 2px solid #10b981 !important;
-  background: rgba(16, 185, 129, 0.08) !important;
-  color: var(--text) !important;
-  font-weight: 600;
-  transition: all 0.3s ease;
+#sidebarMenu {
+  position: fixed !important;
+  height: 100dvh !important;
+}
+
+.sidebar-open {
+  left: 0 !important;
 }
