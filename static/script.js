@@ -91,10 +91,10 @@ if (langSelectElem) {
         currentLang = e.target.value;
         localStorage.setItem('app-lang', currentLang);
         await carregarIdioma(currentLang);
-ajustarIdiomaMobile();
-atualizarBotaoTema();
+        ajustarIdiomaMobile();
+        atualizarBotaoTema();
 
-await refreshDatasets();
+        await refreshDatasets();
 
         if (ultimoResultadoGlobal) {
             renderResult(ultimoResultadoGlobal, true, true);
@@ -120,6 +120,8 @@ function showOk(msg) {
     $('okText').textContent = msg;
     box.style.display = 'block';
     $('errBox').style.display = 'none';
+    $('fileNameDisplay').classList.remove('file-ready');
+    $('lblDsFile').classList.remove('file-ready');
 }
 
 function clearMsg() {
@@ -688,14 +690,20 @@ $('dsTbody').addEventListener('click', (ev) => {
     if (act === 'replace') replaceFile(id);
     if (act === 'delete') deleteDataset(id);
 });
-
 $('dsFile').addEventListener('change', (e) => {
     const display = $('fileNameDisplay');
+    const label = $('lblDsFile');
+
     if (e.target.files.length > 0) {
         display.textContent = e.target.files[0].name;
         display.removeAttribute('data-i18n');
+
+        display.classList.add('file-ready');
+        label.classList.add('file-ready');
     } else {
         display.setAttribute('data-i18n', 'noFileChosen');
+        display.classList.remove('file-ready');
+        label.classList.remove('file-ready');
         updateUI();
     }
 });
@@ -734,18 +742,18 @@ async function checkLogin() {
                 $('landingPage').style.display = 'flex';
                 $('loginOverlay').style.display = 'none';
                 $('dashboardApp').style.display = 'none';
-                $('userMenuContainer').style.display = 'none';
+                if ($('btnHamburger')) $('btnHamburger').style.display = 'none';
             } else if (telaSalva === 'login') {
                 $('landingPage').style.display = 'none';
                 $('loginOverlay').style.display = 'flex';
                 $('dashboardApp').style.display = 'none';
-                $('userMenuContainer').style.display = 'none';
+                if ($('btnHamburger')) $('btnHamburger').style.display = 'none';
             } else {
                 localStorage.setItem('currentScreen', 'dashboard');
                 $('landingPage').style.display = 'none';
                 $('loginOverlay').style.display = 'none';
                 $('dashboardApp').style.display = 'block';
-                $('userMenuContainer').style.display = 'block';
+                if ($('btnHamburger')) $('btnHamburger').style.display = 'none';
 
                 startTutorial(data.email);
 
@@ -990,7 +998,7 @@ $('btnSair').addEventListener('click', async (e) => {
 
     abrirModalGenerico(dict.logoutTitle, dict.logoutMsg, false, "", 'danger', async () => {
         const btn = $('btnSair');
-       btn.textContent = dict.statusLoggingOut || 'Saindo...';
+        btn.textContent = dict.statusLoggingOut || 'Saindo...';
 
         try {
             await fetch(API_URL + '/logout', {
@@ -1110,19 +1118,19 @@ function atualizarBotaoTema() {
     if (!btnThemeToggle) return;
     const currentTheme = htmlEl.getAttribute('data-theme');
     const themeIcon = $('themeIcon');
-    
+
     // Altera o ícone dependendo do tema atual
     if (currentTheme === 'light') {
-        if(themeIcon) themeIcon.textContent = '🌙';
+        if (themeIcon) themeIcon.textContent = '🌙';
     } else {
-        if(themeIcon) themeIcon.textContent = '☀️';
+        if (themeIcon) themeIcon.textContent = '☀️';
     }
 }
 
 function ajustarIdiomaMobile() {
     const select = $('langSelect');
     if (!select) return;
-    
+
     // Remove o texto "PT", "EN" , "ES" no celular para o layout não quebrar
     if (window.innerWidth <= 768) {
         Array.from(select.options).forEach(opt => {
@@ -1149,7 +1157,7 @@ if (savedTheme === 'light') {
 // Ouve o clique no botão para alternar tudo
 if (btnThemeToggle) {
     btnThemeToggle.addEventListener('click', (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
         const currentTheme = htmlEl.getAttribute('data-theme');
 
         if (currentTheme === 'light') {
@@ -1172,25 +1180,44 @@ if (btnThemeToggle) {
 window.addEventListener('resize', ajustarIdiomaMobile);
 atualizarBotaoTema();
 ajustarIdiomaMobile();
+//LÓGICA DO MENU LATERAL
+const btnHamburger = $('btnHamburger');
+const sidebarMenu = $('sidebarMenu');
+const sidebarOverlay = $('sidebarOverlay');
 
-$('userProfile').addEventListener('click', (e) => {
-    e.stopPropagation();
-    const drop = $('userDropdown');
-    drop.style.display = drop.style.display === 'none' ? 'flex' : 'none';
-    if ($('a11yDropdown')) $('a11yDropdown').style.display = 'none'; // Fecha o de acessibilidade
+function fecharSidebar() {
+    sidebarMenu.classList.remove('sidebar-open');
+    sidebarOverlay.style.display = 'none';
+}
+
+if (btnHamburger) {
+    btnHamburger.addEventListener('click', () => {
+        sidebarMenu.classList.add('sidebar-open');
+        sidebarOverlay.style.display = 'block';
+    });
+}
+
+if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', fecharSidebar);
+}
+
+// Lógica de Informações do Sistema
+$('btnSysInfo').addEventListener('click', () => {
+    fecharSidebar();
+    abrirModalGenerico(
+        dicionarioAtual.sysInfoTitle || "Manual do Sistema",
+        dicionarioAtual.sysInfoText || "Informações do sistema.",
+        false, "", "", () => { }
+    );
 });
 
-$('btnA11yToggle').addEventListener('click', (e) => {
-    e.stopPropagation();
-    const drop = $('a11yDropdown');
-    drop.style.display = drop.style.display === 'none' ? 'flex' : 'none';
-    if ($('userDropdown')) $('userDropdown').style.display = 'none'; // Fecha o do usuário
-});
-
-// Fecha os menus se clicar em qualquer outro lugar da tela
-document.addEventListener('click', () => {
-    if ($('userDropdown')) $('userDropdown').style.display = 'none';
-    if ($('a11yDropdown')) $('a11yDropdown').style.display = 'none';
+// Lógica de Rever Tutorial
+$('btnReplayTour').addEventListener('click', () => {
+    fecharSidebar();
+    const email = $('userEmailDisplay').textContent;
+    // Remove a trava de "já visto" e inicia novamente
+    localStorage.removeItem('tutorialVisto_' + email);
+    startTutorial(email);
 });
 // DOWNLOAD DA TABELA (Converte o JSON para CSV na hora)
 $('btnDownTable').addEventListener('click', () => {
@@ -1379,27 +1406,26 @@ function startTutorial(userEmail) {
         ],
 
         onDestroyStarted: () => {
-            if (!driverObj.hasNextStep() || confirm(dict.tourSkip || "Deseja pular o tutorial?")) {
+            if (!driverObj.hasNextStep()) {
                 driverObj.destroy();
-                // Salva a confirmação na chave ÚNICA do usuário
                 localStorage.setItem(storageKey, 'true');
-            } else {
-                // Ao invés do `confirm()` nativo, usamos o seu modal:
-                abrirModalGenerico(
-                    "Pular Tutorial",
-                    dict.tourSkip || "Deseja pular o tutorial e ir direto para o sistema?",
-                    false, "", "danger",
-                    () => {
-                        // Callback se clicar em "Confirmar"
-                        driverObj.destroy();
-                        localStorage.setItem(storageKey, 'true');
-                    }
-                );
+                return;
             }
+
+            // Pausa o driver chamando o seu modal generico padronizado
+            abrirModalGenerico(
+                dict.tourSkipTitle || "Sair do Tutorial",
+                dict.tourSkip || "Deseja pular o tutorial e ir direto para o sistema?",
+                false, "", "danger",
+                () => { // Callback caso o usuário clique em Confirmar
+                    driverObj.destroy();
+                    localStorage.setItem(storageKey, 'true');
+                }
+            );
         }
     });
 
-    driverObj.drive();
+    driverObj.start();
 }
 
 // Inicializa o sistema verificando se o usuário já tem um acesso salvo
