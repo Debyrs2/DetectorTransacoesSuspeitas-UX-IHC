@@ -281,7 +281,7 @@ button:disabled {
 }
 
 .btn2:hover {
-  background: var(--btn2-hover);
+  background:  #185BF4;
 }
 
 .danger {
