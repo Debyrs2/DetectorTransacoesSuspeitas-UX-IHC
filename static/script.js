@@ -1148,19 +1148,11 @@ function ajustarIdiomaMobile() {
     const select = $('langSelect');
     if (!select) return;
 
-    // Remove o texto "PT", "EN" , "ES" no celular para o layout não quebrar
-    if (window.innerWidth <= 768) {
-        Array.from(select.options).forEach(opt => {
-            if (opt.value === 'pt') opt.text = '🇧🇷';
-            if (opt.value === 'en') opt.text = '🇺🇸';
-            if (opt.value === 'es') opt.text = '🇪🇸';
-        });
-    } else {
-        Array.from(select.options).forEach(opt => {
-            if (opt.value === 'pt') opt.text = '🇧🇷 PT';
-            if (opt.value === 'en') opt.text = '🇺🇸 EN';
-            if (opt.value === 'es') opt.text = '🇪🇸 ES';
-        });
+Array.from(select.options).forEach(opt => {
+        if (opt.value === 'pt') opt.text = '🇧🇷 PT';
+        if (opt.value === 'en') opt.text = '🇺🇸 EN';
+        if (opt.value === 'es') opt.text = '🇪🇸 ES';
+    });
     }
 }
 
