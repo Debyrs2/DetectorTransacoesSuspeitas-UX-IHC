@@ -827,8 +827,7 @@ $('btnLogar').addEventListener('click', async () => {
     const senha = $('senhaLogin').value;
 
     if (!identificador || !senha) {
-        $('loginErro').style.display = 'block';
-        $('loginErro').innerHTML = '⚠️ Preencha todos os campos.';
+       mostrarToast(dicionarioAtual.errLoginEmpty || '⚠️ Preencha todos os campos.', 'danger');
         return;
     }
 
@@ -859,12 +858,10 @@ $('btnLogar').addEventListener('click', async () => {
             localStorage.setItem('currentScreen', 'dashboard');
             checkLogin();
         } else {
-            $('loginErro').style.display = 'block';
-            $('loginErro').innerHTML = '⚠️ ' + (data.detail || 'Erro ao entrar.');
+            mostrarToast('⚠️ ' + (data.detail || dicionarioAtual.errLogin || 'Erro ao entrar.'), 'danger');
         }
     } catch (e) {
-        $('loginErro').style.display = 'block';
-        $('loginErro').innerHTML = '⚠️ ' + (e.message || 'Erro de conexão.');
+       mostrarToast('⚠️ ' + (e.message || 'Erro de conexão.'), 'danger');
     }
 
     btn.textContent = dicionarioAtual.btnLogin || 'Entrar';
@@ -906,21 +903,17 @@ $('btnCadastrar').addEventListener('click', async () => {
 
     const dictMsg = dicionarioAtual; // Puxa o idioma atual
 
-    // --- VALIDAÇÃO DE E-MAIL ---
+    // VALIDAÇÃO DE E-MAIL
     const dominios = ['@gmail.com', '@hotmail.com', '@outlook.com'];
-    if (!dominios.some(d => email.toLowerCase().endsWith(d))) {
-        msgBox.style.display = 'block';
-        msgBox.style.color = 'var(--danger)';
-        msgBox.textContent = dictMsg.errEmailFormat;
+   if (!dominios.some(d => email.toLowerCase().endsWith(d))) {
+        mostrarToast(dictMsg.errEmailFormat, 'danger');
         return;
     }
 
-    // --- VALIDAÇÃO DE SENHA RIGOROSA ---
+    // VALIDAÇÃO DE SENHA RIGOROSA
     const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-    if (!regexSenha.test(senha)) {
-        msgBox.style.display = 'block';
-        msgBox.style.color = 'var(--danger)';
-        msgBox.textContent = dictMsg.errPassFormat;
+ if (!regexSenha.test(senha)) {
+        mostrarToast(dictMsg.errPassFormat, 'danger');
         return;
     }
 
@@ -943,12 +936,10 @@ $('btnCadastrar').addEventListener('click', async () => {
             msgBox.textContent = data.mensagem;
             setTimeout(() => $('btnIrLogin').click(), 1500);
         } else {
-            msgBox.style.color = 'var(--danger)';
-            msgBox.textContent = data.detail || 'Erro ao cadastrar';
+           mostrarToast(data.detail || 'Erro ao cadastrar', 'danger');
         }
     } catch (e) {
-        msgBox.style.color = 'var(--danger)';
-        msgBox.textContent = 'Erro de conexão';
+mostrarToast('Erro de conexão', 'danger');
     }
 
     btn.textContent = 'Criar Minha Conta';
