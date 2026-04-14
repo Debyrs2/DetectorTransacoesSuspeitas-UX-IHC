@@ -713,6 +713,15 @@ function aplicarTelaImediata() {
     $('landingPage').style.display = telaSalva === 'landing' ? 'flex' : 'none';
     $('loginOverlay').style.display = telaSalva === 'login' ? 'flex' : 'none';
     $('dashboardApp').style.display = telaSalva === 'dashboard' ? 'block' : 'none';
+  
+    if (telaSalva !== 'dashboard') {
+        if ($('btnHamburger')) $('btnHamburger').style.display = 'none';
+        if ($('a11yFloating')) $('a11yFloating').style.display = 'flex';
+    } else {
+        if ($('btnHamburger')) $('btnHamburger').style.display = 'flex';
+        if ($('a11yFloating')) $('a11yFloating').style.display = 'none';
+    }
+    
     return telaSalva;
 }
 async function checkLogin() {
@@ -726,7 +735,7 @@ async function checkLogin() {
 
     let data;
 
-    // BLOCO 1: Isolado para Autenticação (Apenas Comunicação com a API)
+    //Isolado para Autenticação (Apenas Comunicação com a API)
     try {
         const res = await fetch(API_URL + '/me', {
             headers: buildAuthHeaders()
@@ -745,7 +754,7 @@ async function checkLogin() {
         return;
     }
 
-    // BLOCO 2: Isolado para Interface (Se algo der errado aqui, NÃO desloga o usuário)
+    // Ir para Interface (Se algo der errado aqui, NÃO desloga o usuário)
     try {
         if ($('userNameDisplay')) $('userNameDisplay').textContent = data.nome || 'Usuário';
         if ($('userEmailDisplay')) $('userEmailDisplay').textContent = data.email || '';
