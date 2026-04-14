@@ -853,7 +853,6 @@ $('btnLogar').addEventListener('click', async () => {
             }
 
             setAuthToken(data.access_token);
-            $('loginErro').style.display = 'none';
             $('senhaLogin').value = '';
             localStorage.setItem('currentScreen', 'dashboard');
             checkLogin();
@@ -896,7 +895,6 @@ $('btnCadastrar').addEventListener('click', async () => {
         mostrarToast(dicionarioAtual.errLgpd || "Você precisa aceitar os Termos de Privacidade para criar uma conta.", false, '', '', () => { });
         return;
     }
-    const msgBox = $('cadastroMsg');
     const nome = $('nomeCadastro').value;
     const email = $('emailCadastro').value;
     const senha = $('senhaCadastro').value;
@@ -932,8 +930,7 @@ $('btnCadastrar').addEventListener('click', async () => {
 
         msgBox.style.display = 'block';
         if (res.ok) {
-            msgBox.style.color = 'var(--brand)';
-            msgBox.textContent = data.mensagem;
+           mostrarToast(data.mensagem || 'Conta criada com sucesso!', 'success');
             setTimeout(() => $('btnIrLogin').click(), 1500);
         } else {
            mostrarToast(data.detail || 'Erro ao cadastrar', 'danger');
@@ -1273,7 +1270,6 @@ $('btnOpenReset').addEventListener('click', (e) => {
     $('boxReset').style.display = 'block';
     $('emailReset').value = '';
     $('senhaReset').value = '';
-    $('resetMsg').style.display = 'none';
 });
 
 $('btnVoltarLoginReset').addEventListener('click', (e) => {
@@ -1298,9 +1294,7 @@ $('btnEnviarReset').addEventListener('click', async () => {
     // Validação de segurança parecida com a do cadastro
     const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     if (!regexSenha.test(senhaNova)) {
-        msgBox.style.display = 'block';
-        msgBox.style.color = 'var(--danger)';
-        msgBox.textContent = dictMsg.errPassFormat;
+       mostrarToast(dictMsg.errPassFormat, 'danger');
         return;
     }
 
@@ -1316,22 +1310,17 @@ $('btnEnviarReset').addEventListener('click', async () => {
         const res = await fetch(API_URL + '/reset-password', { method: 'POST', body: fd });
         const data = await res.json();
 
-        msgBox.style.display = 'block';
         if (res.ok) {
-            msgBox.style.color = 'var(--brand)';
-            msgBox.textContent = data.mensagem;
+           mostrarToast(data.mensagem || 'Senha redefinida com sucesso!', 'success');
             setTimeout(() => {
                 $('boxReset').style.display = 'none';
                 $('boxLogin').style.display = 'block';
             }, 2000);
         } else {
-            msgBox.style.color = 'var(--danger)';
-            msgBox.textContent = data.detail || 'Erro ao redefinir.';
+           mostrarToast(data.detail || 'Erro ao redefinir.', 'danger');
         }
     } catch (e) {
-        msgBox.style.display = 'block';
-        msgBox.style.color = 'var(--danger)';
-        msgBox.textContent = 'Erro de conexão.';
+       mostrarToast('Erro de conexão.', 'danger');
     }
 
     btn.textContent = dictMsg.btnReset || 'Salvar Nova Senha';
