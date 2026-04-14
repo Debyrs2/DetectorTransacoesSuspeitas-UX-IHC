@@ -1126,6 +1126,11 @@ function falar(texto) {
 
     window.speechSynthesis.speak(utterance);
 }
+if ($('btnA11yLeituraFloat')) {
+    $('btnA11yLeituraFloat').addEventListener('click', () => $('btnA11yLeitura').click());
+    $('btnA11yDaltonicoFloat').addEventListener('click', () => $('btnA11yDaltonico').click());
+    $('btnA11yAudioFloat').addEventListener('click', () => $('btnA11yAudio').click());
+}
 // MENU DO USUÁRIO E ACESSIBILIDADE
 const btnThemeToggle = $('btnThemeToggle');
 const htmlEl = document.documentElement;
