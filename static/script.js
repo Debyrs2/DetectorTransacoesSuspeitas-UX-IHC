@@ -1155,7 +1155,6 @@ Array.from(select.options).forEach(opt => {
         if (opt.value === 'en') opt.text = '🇺🇸 EN';
         if (opt.value === 'es') opt.text = '🇪🇸 ES';
     });
-    }
 }
 
 // Aplica o tema salvo logo que a página carrega
