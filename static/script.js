@@ -928,7 +928,6 @@ $('btnCadastrar').addEventListener('click', async () => {
         const res = await fetch(API_URL + '/register', { method: 'POST', body: fd });
         const data = await res.json();
 
-        msgBox.style.display = 'block';
         if (res.ok) {
            mostrarToast(data.mensagem || 'Conta criada com sucesso!', 'success');
             setTimeout(() => $('btnIrLogin').click(), 1500);
@@ -1439,7 +1438,7 @@ function startTutorial(userEmail) {
         }
     });
 
-    driverObj.start();
+    driverObj.drive();
 }
 // Inicializa o sistema verificando se o usuário já tem um acesso salvo
 checkLogin();
