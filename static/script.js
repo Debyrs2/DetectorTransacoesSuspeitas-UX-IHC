@@ -1048,12 +1048,19 @@ document.addEventListener('keydown', (e) => {
 //FUNCIONALIDADES DE ACESSIBILIDADE
 // Leitura Confortável
 $('btnA11yLeitura').addEventListener('click', () => {
-    document.body.classList.toggle('modo-leitura');
+    const isAtivo = document.body.classList.toggle('modo-leitura');
+    // Pinta ou despinta os botões 
+    $('btnA11yLeitura').classList.toggle('active-a11y', isAtivo);
+    if ($('btnA11yLeituraFloat')) $('btnA11yLeituraFloat').classList.toggle('active-a11y', isAtivo);
 });
 
 // Modo Daltônico
 $('btnA11yDaltonico').addEventListener('click', () => {
-    document.body.classList.toggle('modo-daltonico');
+    const isAtivo = document.body.classList.toggle('modo-daltonico');
+    // Pinta ou despinta os botões 
+    $('btnA11yDaltonico').classList.toggle('active-a11y', isAtivo);
+    if ($('btnA11yDaltonicoFloat')) $('btnA11yDaltonicoFloat').classList.toggle('active-a11y', isAtivo);
+
     if (meuGrafico) meuGrafico.update();
 });
 
@@ -1063,19 +1070,20 @@ let leitorAtivo = false;
 $('btnA11yAudio').addEventListener('click', () => {
     leitorAtivo = !leitorAtivo;
     const btn = $('btnA11yAudio');
-    const dictMsg = dicionarioAtual;
+    const btnFloat = $('btnA11yAudioFloat');
 
     if (leitorAtivo) {
-        // Deixa o botão pintado para mostrar que está ligado
-        btn.style.background = 'var(--brand)';
-        btn.style.color = 'white';
+        // Liga a cor nos botões
+        btn.classList.add('active-a11y');
+        if (btnFloat) btnFloat.classList.add('active-a11y');
+
         falar(currentLang === 'pt' ? 'Leitor ativado. Navegue com a tecla Tab.' :
             currentLang === 'en' ? 'Reader activated. Navigate with Tab.' :
                 'Lector activado. Navega con Tab.');
     } else {
-        // Desliga o botão e cala a boca do robô
-        btn.style.background = '';
-        btn.style.color = '';
+        // Desliga a cor dos botões e cala a voz
+        btn.classList.remove('active-a11y');
+        if (btnFloat) btnFloat.classList.remove('active-a11y');
         window.speechSynthesis.cancel();
     }
 });
