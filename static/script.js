@@ -713,7 +713,7 @@ function aplicarTelaImediata() {
     $('landingPage').style.display = telaSalva === 'landing' ? 'flex' : 'none';
     $('loginOverlay').style.display = telaSalva === 'login' ? 'flex' : 'none';
     $('dashboardApp').style.display = telaSalva === 'dashboard' ? 'block' : 'none';
-  
+
     if (telaSalva !== 'dashboard') {
         if ($('btnHamburger')) $('btnHamburger').style.display = 'none';
         if ($('a11yFloating')) $('a11yFloating').style.display = 'flex';
@@ -721,7 +721,7 @@ function aplicarTelaImediata() {
         if ($('btnHamburger')) $('btnHamburger').style.display = 'flex';
         if ($('a11yFloating')) $('a11yFloating').style.display = 'none';
     }
-    
+
     return telaSalva;
 }
 async function checkLogin() {
@@ -827,7 +827,7 @@ $('btnLogar').addEventListener('click', async () => {
     const senha = $('senhaLogin').value;
 
     if (!identificador || !senha) {
-       mostrarToast(dicionarioAtual.errLoginEmpty || '⚠️ Preencha todos os campos.', 'danger');
+        mostrarToast(dicionarioAtual.errLoginEmpty || '⚠️ Preencha todos os campos.', 'danger');
         return;
     }
 
@@ -860,7 +860,7 @@ $('btnLogar').addEventListener('click', async () => {
             mostrarToast('⚠️ ' + (data.detail || dicionarioAtual.errLogin || 'Erro ao entrar.'), 'danger');
         }
     } catch (e) {
-       mostrarToast('⚠️ ' + (e.message || 'Erro de conexão.'), 'danger');
+        mostrarToast('⚠️ ' + (e.message || 'Erro de conexão.'), 'danger');
     }
 
     btn.textContent = dicionarioAtual.btnLogin || 'Entrar';
@@ -903,14 +903,14 @@ $('btnCadastrar').addEventListener('click', async () => {
 
     // VALIDAÇÃO DE E-MAIL
     const dominios = ['@gmail.com', '@hotmail.com', '@outlook.com'];
-   if (!dominios.some(d => email.toLowerCase().endsWith(d))) {
+    if (!dominios.some(d => email.toLowerCase().endsWith(d))) {
         mostrarToast(dictMsg.errEmailFormat, 'danger');
         return;
     }
 
     // VALIDAÇÃO DE SENHA RIGOROSA
     const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
- if (!regexSenha.test(senha)) {
+    if (!regexSenha.test(senha)) {
         mostrarToast(dictMsg.errPassFormat, 'danger');
         return;
     }
@@ -929,13 +929,13 @@ $('btnCadastrar').addEventListener('click', async () => {
         const data = await res.json();
 
         if (res.ok) {
-           mostrarToast(data.mensagem || 'Conta criada com sucesso!', 'success');
+            mostrarToast(data.mensagem || 'Conta criada com sucesso!', 'success');
             setTimeout(() => $('btnIrLogin').click(), 1500);
         } else {
-           mostrarToast(data.detail || 'Erro ao cadastrar', 'danger');
+            mostrarToast(data.detail || 'Erro ao cadastrar', 'danger');
         }
     } catch (e) {
-mostrarToast('Erro de conexão', 'danger');
+        mostrarToast('Erro de conexão', 'danger');
     }
 
     btn.textContent = 'Criar Minha Conta';
@@ -1149,7 +1149,7 @@ function ajustarIdiomaMobile() {
     const select = $('langSelect');
     if (!select) return;
 
-Array.from(select.options).forEach(opt => {
+    Array.from(select.options).forEach(opt => {
         if (opt.value === 'pt') opt.text = '🇧🇷 PT';
         if (opt.value === 'en') opt.text = '🇺🇸 EN';
         if (opt.value === 'es') opt.text = '🇪🇸 ES';
@@ -1292,7 +1292,7 @@ $('btnEnviarReset').addEventListener('click', async () => {
     // Validação de segurança parecida com a do cadastro
     const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     if (!regexSenha.test(senhaNova)) {
-       mostrarToast(dictMsg.errPassFormat, 'danger');
+        mostrarToast(dictMsg.errPassFormat, 'danger');
         return;
     }
 
@@ -1309,16 +1309,16 @@ $('btnEnviarReset').addEventListener('click', async () => {
         const data = await res.json();
 
         if (res.ok) {
-           mostrarToast(data.mensagem || 'Senha redefinida com sucesso!', 'success');
+            mostrarToast(data.mensagem || 'Senha redefinida com sucesso!', 'success');
             setTimeout(() => {
                 $('boxReset').style.display = 'none';
                 $('boxLogin').style.display = 'block';
             }, 2000);
         } else {
-           mostrarToast(data.detail || 'Erro ao redefinir.', 'danger');
+            mostrarToast(data.detail || 'Erro ao redefinir.', 'danger');
         }
     } catch (e) {
-       mostrarToast('Erro de conexão.', 'danger');
+        mostrarToast('Erro de conexão.', 'danger');
     }
 
     btn.textContent = dictMsg.btnReset || 'Salvar Nova Senha';
@@ -1420,11 +1420,8 @@ function startTutorial(userEmail) {
         ],
 
         onDestroyStarted: () => {
-            if (!driverObj.hasNextStep()) {
-                driverObj.destroy();
-                localStorage.setItem(storageKey, 'true');
-                return;
-            }
+            driverObj.destroy();
+            localStorage.setItem(storageKey, 'true');
 
             abrirModalGenerico(
                 dict.tourSkipTitle || "Sair do Tutorial",
