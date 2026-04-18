@@ -1431,7 +1431,6 @@ function startTutorial(userEmail) {
 
         steps: [
             { element: '#logoSistemaHeader', popover: { title: dict.tourS1Title, description: dict.tourS1Desc, side: "bottom", align: 'start' } },
-            // CORREÇÃO: Apontando para o label visível (#lblDsFile) em vez do input invisível (#dsFile)
             { element: '#lblDsFile', popover: { title: dict.tourS2Title, description: dict.tourS2Desc, side: "top", align: 'start' } },
             { element: '#method', popover: { title: dict.tourS3Title, description: dict.tourS3Desc, side: "left", align: 'start' } },
             { element: '#dsTbody', popover: { title: dict.tourS4Title, description: dict.tourS4Desc, side: "top", align: 'start' } },
@@ -1442,16 +1441,6 @@ function startTutorial(userEmail) {
         onDestroyStarted: () => {
             driverObj.destroy();
             localStorage.setItem(storageKey, 'true');
-
-            abrirModalGenerico(
-                dict.tourSkipTitle || "Sair do Tutorial",
-                dict.tourSkip || "Deseja pular o tutorial e ir direto para o sistema?",
-                false, "", "danger",
-                () => {
-                    driverObj.destroy();
-                    localStorage.setItem(storageKey, 'true');
-                }
-            );
         }
     });
 
