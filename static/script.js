@@ -1136,13 +1136,33 @@ function atualizarBotaoTema() {
     if (!btnThemeToggle) return;
     const currentTheme = htmlEl.getAttribute('data-theme');
     const themeIcon = $('themeIcon');
+    const floatIcon = $('btnThemeToggleFloat');
 
-    // Altera o ícone dependendo do tema atual
     if (currentTheme === 'light') {
         if (themeIcon) themeIcon.textContent = '🌙';
+        if (floatIcon) floatIcon.textContent = '🌙';
     } else {
         if (themeIcon) themeIcon.textContent = '☀️';
+        if (floatIcon) floatIcon.textContent = '☀️';
     }
+}
+
+// Sincronizar interações dos botões flutuantes de Tema e Idioma
+if ($('btnThemeToggleFloat')) {
+    $('btnThemeToggleFloat').addEventListener('click', () => $('btnThemeToggle').click());
+}
+
+if ($('langSelectFloat')) {
+    $('langSelectFloat').value = currentLang;
+    $('langSelectFloat').addEventListener('change', (e) => {
+        if ($('langSelect')) {
+            $('langSelect').value = e.target.value;
+            $('langSelect').dispatchEvent(new Event('change'));
+        }
+    });
+    $('langSelect')?.addEventListener('change', (e) => {
+        $('langSelectFloat').value = e.target.value;
+    });
 }
 
 function ajustarIdiomaMobile() {
