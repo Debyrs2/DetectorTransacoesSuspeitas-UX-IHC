@@ -204,6 +204,7 @@ async function apiJson(url, opts = {}) {
     return data;
 }
 async function refreshDatasets() {
+    clearMsg();
     const tbody = $('dsTbody');
     const dict = dicionarioAtual;
     tbody.innerHTML = `<tr><td colspan="5">${dict.tblLoading}</td></tr>`;
@@ -775,6 +776,7 @@ async function checkLogin() {
             $('landingPage').style.display = 'none';
             $('loginOverlay').style.display = 'none';
             $('dashboardApp').style.display = 'block';
+            clearMsg();
 
             if ($('btnHamburger')) $('btnHamburger').style.display = 'flex';
 
