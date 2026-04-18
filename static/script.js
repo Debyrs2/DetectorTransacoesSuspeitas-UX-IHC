@@ -1457,5 +1457,20 @@ function startTutorial(userEmail) {
 
     driverObj.drive();
 }
+// Ocultar botão de menu no mobile ao rolar a página para baixo
+let lastScrollTop = 0;
+window.addEventListener("scroll", () => {
+    const st = window.pageYOffset || document.documentElement.scrollTop;
+    const btnMenu = $('btnHamburger');
+    if (window.innerWidth <= 768 && btnMenu && btnMenu.style.display !== 'none') {
+        if (st > lastScrollTop && st > 50) {
+            btnMenu.style.transform = "translateY(-100px)";
+            btnMenu.style.transition = "transform 0.3s ease";
+        } else {
+            btnMenu.style.transform = "translateY(0)";
+        }
+    }
+    lastScrollTop = st <= 0 ? 0 : st;
+});
 // Inicializa o sistema verificando se o usuário já tem um acesso salvo
 checkLogin();

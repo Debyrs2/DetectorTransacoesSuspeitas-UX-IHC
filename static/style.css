@@ -281,7 +281,7 @@ button:disabled {
 }
 
 .btn2:hover {
-  background:  #185BF4;
+  background: #185BF4;
 }
 
 .danger {
@@ -921,15 +921,14 @@ div[vw-plugin-wrapper] {
   }
 
   #btnThemeToggle {
-    width: 32px !important;
-    min-width: 32px !important;
-    padding: 0 !important;
-    justify-content: center !important;
-    gap: 0 !important;
+    width: 100% !important;
+    padding: 8px 12px !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
   }
 
   #btnThemeToggle #themeText {
-    display: none !important;
+    display: inline !important;
   }
 
   #btnA11yToggle {
@@ -939,10 +938,10 @@ div[vw-plugin-wrapper] {
   }
 
   #langSelect {
-    width: 60px !important;
-    min-width: 60px !important;
-    padding: 0 10px !important;
-    text-align: center !important;
+    width: 100px !important;
+    min-width: 100px !important;
+    padding: 8px 12px !important;
+    text-align: left !important;
   }
 
   #userProfile {
@@ -956,7 +955,7 @@ div[vw-plugin-wrapper] {
   #userProfile>div:first-child,
   #userEmailDisplay,
   #userNameDisplay {
-    display: none !important;
+    display: block !important;
   }
 
   #userAvatar {
