@@ -1265,61 +1265,152 @@ $('btnSysInfo').addEventListener('click', () => {
     $('btnGenCancel').style.display = 'none';
     $('btnGenConfirm').textContent = dicionarioAtual.btnClose || 'Fechar';
 
-    // Lógica de filtro (esconde os elementos que não contêm o texto buscado)
-    setTimeout(() => {
-        const inputBusca = $('buscaManual');
-        const corpoManual = $('corpoManual');
+    // Lógica de Informações do Sistema
+    $('btnSysInfo').addEventListener('click', () => {
+        fecharSidebar();
 
-        if (inputBusca && corpoManual) {
-            // 1. Cria e adiciona a mensagem de "não encontrado" escondida
-            const msgVazia = document.createElement('div');
-            msgVazia.style.display = 'none';
-            msgVazia.style.textAlign = 'center';
-            msgVazia.style.padding = '20px 0';
-            msgVazia.style.color = 'var(--muted)';
-            msgVazia.style.fontWeight = '500';
-            msgVazia.innerHTML = '🔍 Termo não encontrado.';
-            corpoManual.appendChild(msgVazia);
+        const textoOriginal = dicionarioAtual.sysInfoText || "<p>Informações do sistema.</p>";
 
-            // 2. Seleciona os elementos granulares de texto (parágrafos, itens de lista, títulos)
-            const elementosTexto = corpoManual.querySelectorAll('p, li, h2, h3, h4');
+        // Estrutura visual estilo Ctrl+F (Barra de busca com setas e contador)
+        const conteudoComBusca = `
+        <div style="display: flex; gap: 8px; margin-bottom: 15px; align-items: center; background: var(--bg-0); border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px;">
+            <span style="color: var(--muted);">🔍</span>
+            <input type="text" id="buscaManual" placeholder="Buscar no manual (Ctrl+F)..." style="border: none; background: transparent; outline: none; flex: 1; padding: 6px 0; color: var(--text); box-shadow: none;">
+            <span id="buscaContador" class="muted" style="font-size: 12px; white-space: nowrap; margin: 0 8px;">0/0</span>
+            <div style="display: flex; gap: 4px;">
+                <button id="btnBuscaPrev" class="btn2 btn-sm" aria-label="Anterior" style="padding: 4px 10px; font-size: 14px;">↑</button>
+                <button id="btnBuscaNext" class="btn2 btn-sm" aria-label="Próximo" style="padding: 4px 10px; font-size: 14px;">↓</button>
+            </div>
+        </div>
+        <div id="corpoManual" style="max-height: 55vh; overflow-y: auto; text-align: left; padding-right: 5px; scroll-behavior: smooth;">
+            ${textoOriginal}
+        </div>
+    `;
 
-            inputBusca.focus();
-            inputBusca.addEventListener('input', (e) => {
-                const termo = e.target.value.toLowerCase().trim();
-                let encontrouAlgo = false;
+        abrirModalGenerico(
+            dicionarioAtual.sysInfoTitle || "Manual do Sistema",
+            conteudoComBusca,
+            false, "", "", () => { }
+        );
 
-                // Se o input estiver vazio, volta tudo ao normal
-                if (termo === '') {
-                    elementosTexto.forEach(el => el.style.display = '');
-                    corpoManual.querySelectorAll('ul, ol').forEach(el => el.style.display = '');
-                    msgVazia.style.display = 'none';
-                    return;
+        $('modalGenerico').querySelector('.panel').style.maxWidth = '750px';
+        $('modalGenerico').querySelector('.panel').style.width = '95%';
+        $('btnGenCancel').style.display = 'none';
+        $('btnGenConfirm').textContent = dicionarioAtual.btnClose || 'Fechar';
+
+        // Lógica de Highlighting (Navegação Ctrl+F simulada)
+        setTimeout(() => {
+            const inputBusca = $('buscaManual');
+            const corpoManual = $('corpoManual');
+            const btnPrev = $('btnBuscaPrev');
+            const btnNext = $('btnBuscaNext');
+            const contador = $('buscaContador');
+
+            let matches = [];
+            let currentIndex = -1;
+
+            function focarMatch(index) {
+                if (matches.length === 0) return;
+
+                // Reseta a cor de todos os resultados encontrados
+                matches.forEach(m => {
+                    m.style.backgroundColor = 'rgba(251, 191, 36, 0.4)'; // Amarelo transparente
+                    m.style.borderBottom = 'none';
+                });
+
+                // Destaca o resultado atual selecionado
+                const atual = matches[index];
+                atual.style.backgroundColor = '#fbbf24'; // Amarelo forte
+                atual.style.borderBottom = '2px solid #d97706';
+                atual.style.color = '#000';
+
+                // Faz a tela rolar suavemente até o texto
+                atual.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                contador.textContent = `${index + 1}/${matches.length}`;
+            }
+
+            function realizarBusca() {
+                const termo = inputBusca.value.trim();
+
+                // Restaura o texto original para limpar buscas anteriores
+                corpoManual.innerHTML = textoOriginal;
+                matches = [];
+                currentIndex = -1;
+                contador.textContent = '0/0';
+
+                if (!termo) return;
+
+                // Prepara a palavra para a busca ignorando maiúsculas/minúsculas
+                const escapedTerm = termo.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`(${escapedTerm})`, 'gi');
+
+                // Vasculha apenas textos puros (ignorando tags HTML)
+                const walker = document.createTreeWalker(corpoManual, NodeFilter.SHOW_TEXT, null, false);
+                const nodesParaSubstituir = [];
+
+                let node;
+                while (node = walker.nextNode()) {
+                    nodesParaSubstituir.push(node);
                 }
 
-                // Oculta as listas inteiras inicialmente para não ficarem "flutuando" vazias
-                corpoManual.querySelectorAll('ul, ol').forEach(el => el.style.display = 'none');
+                nodesParaSubstituir.forEach(n => {
+                    if (n.nodeValue.match(regex)) {
+                        const fragmento = document.createDocumentFragment();
+                        const partes = n.nodeValue.split(regex);
 
-                // Filtra item por item
-                elementosTexto.forEach(el => {
-                    if (el.textContent.toLowerCase().includes(termo)) {
-                        el.style.display = '';
-                        encontrouAlgo = true;
-
-                        // Se achou a palavra dentro de um <li>, garante que a lista (ul/ol) apareça
-                        if (el.tagName === 'LI') {
-                            el.closest('ul, ol').style.display = '';
-                        }
-                    } else {
-                        el.style.display = 'none';
+                        partes.forEach(parte => {
+                            if (parte.toLowerCase() === termo.toLowerCase()) {
+                                const mark = document.createElement('mark');
+                                mark.textContent = parte;
+                                mark.style.backgroundColor = 'rgba(251, 191, 36, 0.4)';
+                                mark.style.color = 'inherit';
+                                mark.style.borderRadius = '3px';
+                                mark.style.transition = 'all 0.2s';
+                                fragmento.appendChild(mark);
+                                matches.push(mark);
+                            } else if (parte) {
+                                fragmento.appendChild(document.createTextNode(parte));
+                            }
+                        });
+                        n.parentNode.replaceChild(fragmento, n);
                     }
                 });
 
-                // Mostra ou esconde a mensagem de erro com base no resultado
-                msgVazia.style.display = encontrouAlgo ? 'none' : 'block';
+                if (matches.length > 0) {
+                    currentIndex = 0;
+                    focarMatch(currentIndex);
+                }
+            }
+
+            // Executa a busca ao digitar
+            inputBusca.addEventListener('input', realizarBusca);
+
+            // Botão de Próximo
+            btnNext.addEventListener('click', () => {
+                if (matches.length === 0) return;
+                currentIndex = (currentIndex + 1) % matches.length;
+                focarMatch(currentIndex);
             });
-        }
-    }, 100);
+
+            // Botão de Anterior
+            btnPrev.addEventListener('click', () => {
+                if (matches.length === 0) return;
+                currentIndex = (currentIndex - 1 + matches.length) % matches.length;
+                focarMatch(currentIndex);
+            });
+
+            // Permite usar a tecla "Enter" para pular pro próximo (e Shift+Enter pro anterior)
+            inputBusca.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (e.shiftKey) btnPrev.click();
+                    else btnNext.click();
+                }
+            });
+
+            inputBusca.focus();
+        }, 150);
+    });
 });
 
 // Lógica de Rever Tutorial
