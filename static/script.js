@@ -1599,13 +1599,12 @@ function abrirModalGenerico(titulo, mensagem, isInput, placeholder, tipoBotaoCon
     const btnConfirm = $('btnGenConfirm');
     btnConfirm.className = 'btn';
 
-    // CORREÇÃO: Reseta o texto para "Confirmar" por padrão para não herdar textos antigos
+    // Reseta textos por padrão para não herdar vazamentos de outras chamadas
     btnConfirm.textContent = dicionarioAtual.btnConfirm || 'Confirmar';
+    $('btnGenCancel').textContent = dicionarioAtual.btnCancel || 'Cancelar';
 
     if (tipoBotaoConfirmar === 'danger') {
         btnConfirm.classList.add('danger');
-
-        // Deixa o botão mais intuitivo dependendo da ação de perigo
         if (titulo === dicionarioAtual.logoutTitle || titulo === 'Sair') {
             btnConfirm.textContent = dicionarioAtual.btnLogout || 'Sair';
         } else {
@@ -1615,22 +1614,37 @@ function abrirModalGenerico(titulo, mensagem, isInput, placeholder, tipoBotaoCon
 
     $('modalGenerico').style.display = 'flex';
 
-    // Truque para limpar eventos de cliques antigos clonando os botões
+    // Clonagem de limpeza de eventos
     const novoBtnCancel = $('btnGenCancel').cloneNode(true);
     $('btnGenCancel').replaceWith(novoBtnCancel);
     const novoBtnConfirm = btnConfirm.cloneNode(true);
     btnConfirm.replaceWith(novoBtnConfirm);
 
+    // Configura o evento do botão X superior (se existir no HTML)
+    const btnX = $('btnGenCloseX');
+    if (btnX) {
+        const novoBtnX = btnX.cloneNode(true);
+        btnX.replaceWith(novoBtnX);
+        $('btnGenCloseX').addEventListener('click', () => {
+            $('modalGenerico').style.display = 'none';
+        });
+    }
+
     $('btnGenCancel').addEventListener('click', () => {
         $('modalGenerico').style.display = 'none';
     });
 
-    $('btnGenConfirm').addEventListener('click', () => {
-        $('modalGenerico').style.display = 'none';
+    $('btnGenConfirm').addEventListener('click', async () => {
+        let fechar = true;
         if (isInput) {
-            callbackConfirmacao($('modalGenInput').value.trim());
+            fechar = await callbackConfirmacao($('modalGenInput').value.trim());
         } else {
-            callbackConfirmacao();
+            fechar = await callbackConfirmacao();
+        }
+
+        // Se a callback retornar exatamente 'false', aborta o fechamento do modal!
+        if (fechar !== false) {
+            $('modalGenerico').style.display = 'none';
         }
     });
 }
