@@ -92,7 +92,7 @@
       <button id="btnReplayTour" class="btn2 btn-sm" style="display: flex; justify-content: flex-start; gap: 10px;">
         <span style="width: 20px; text-align: center;">▶️</span> <span data-i18n="btnReplayTour">Rever Tutorial</span>
       </button>
-    <button id="btnFeedback" class="btn2 btn-sm" style="display: flex; justify-content: flex-start; gap: 10px;">
+      <button id="btnFeedback" class="btn2 btn-sm" style="display: flex; justify-content: flex-start; gap: 10px;">
         <span style="width: 20px; text-align: center;">⭐</span> <span data-i18n="btnEvaluate">Avaliar Sistema</span>
       </button>
     </div>
@@ -547,6 +547,10 @@
     style="display: none; position: fixed; inset: 0; z-index: 999999; align-items: center; justify-content: center;">
     <div class="panel"
       style="position: relative; max-width: 340px; width: 90%; text-align: center; animation: modalIn 0.3s ease;">
+
+      <button id="btnGenCloseX" aria-label="Fechar janela"
+        style="position: absolute; top: 12px; right: 16px; background: transparent; border: none; color: var(--muted); font-size: 24px; cursor: pointer; padding: 0; line-height: 1; transition: color 0.2s;"
+        onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--muted)'">&times;</button>
 
       <h2 id="modalGenTitle" style="margin-top: 0; margin-bottom: 8px; font-size: 18px; color: var(--text);">Título</h2>
       <p id="modalGenMsg" class="muted" style="font-size: 13px; margin-bottom: 20px; line-height: 1.4;">Mensagem
