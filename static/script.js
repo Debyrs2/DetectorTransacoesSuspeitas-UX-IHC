@@ -658,13 +658,54 @@ async function deleteDataset(id) {
     const dict = dicionarioAtual;
     abrirModalGenerico(dict.btnDelete, dict.confirmDelete.replace('{id}', id), false, "", 'danger', async () => {
         clearMsg();
-        try {
-            await apiJson(`/datasets/${id}`, { method: 'DELETE' });
-            await refreshDatasets();
-            showOk(dict.msgDeleted);
-        } catch (e) {
-            showErr(e.message);
-        }
+
+        //Esconde a linha visualmente na hora
+        const btnDelete = document.querySelector(`button[data-act="delete"][data-id="${id}"]`);
+        const tr = btnDelete ? btnDelete.closest('tr') : null;
+        if (tr) tr.style.display = 'none';
+
+        // Variável de controle
+        let desfez = false;
+
+        // Monta o Toast de Desfazer
+        const toastId = 'toast-undo-' + id;
+        const oldToast = document.getElementById('app-toast');
+        if (oldToast) oldToast.remove();
+
+        const toast = document.createElement('div');
+        toast.id = 'app-toast';
+        toast.className = `toast toast-warn`;
+        toast.style.borderLeftColor = '#f59e0b';
+        toast.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span>Excluindo planilha...</span>
+                <button id="${toastId}" class="btn2 btn-sm" style="position: relative; right: 0; transform: none; margin-left: 12px; color: var(--text);">Desfazer</button>
+            </div>
+        `;
+        document.body.appendChild(toast);
+
+        // Ação de Desfazer
+        document.getElementById(toastId).onclick = () => {
+            desfez = true;
+            if (tr) tr.style.display = ''; // Devolve a linha pra tela
+            toast.remove();
+        };
+
+        // Executa no backend se passarem 5s sem clique
+        setTimeout(async () => {
+            if (document.body.contains(toast)) toast.remove();
+
+            if (!desfez) {
+                try {
+                    await apiJson(`/datasets/${id}`, { method: 'DELETE' });
+                    await refreshDatasets();
+                    showOk(dict.msgDeleted || "Dataset excluído com sucesso.");
+                } catch (e) {
+                    if (tr) tr.style.display = ''; // Volta a exibir se a API falhar
+                    showErr(e.message);
+                }
+            }
+        }, 5000);
     });
 }
 $('btnUpload').addEventListener('click', handleUpload);
