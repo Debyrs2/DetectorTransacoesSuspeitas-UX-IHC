@@ -586,7 +586,7 @@ async function handleUpload() {
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', API_URL + '/datasets');
-    
+
     // Adiciona a Autenticação
     const token = getAuthToken();
     if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`);
@@ -604,9 +604,9 @@ async function handleUpload() {
         btn.disabled = false;
         if (xhr.status >= 200 && xhr.status < 300) {
             // Teoria das cores: Verde para sucesso (Sensação de alívio/completude)
-            progressBar.style.background = '#10b981'; 
+            progressBar.style.background = '#10b981';
             progressText.textContent = 'Planilha salva com sucesso!';
-            
+
             setTimeout(() => {
                 progressContainer.style.display = 'none';
                 showOk(dict.msgSaved || "Salvo com sucesso!");
@@ -624,7 +624,7 @@ async function handleUpload() {
             try {
                 const errData = JSON.parse(xhr.responseText);
                 showErr(errData.detail || 'Erro ao salvar o dataset');
-            } catch(e) { showErr('Erro de servidor.'); }
+            } catch (e) { showErr('Erro de servidor.'); }
             if (xhr.status === 401) { clearAuthToken(); irParaDeslogado('login'); }
         }
     };
@@ -1577,7 +1577,6 @@ $('btnEnviarReset').addEventListener('click', async () => {
     btn.textContent = dictMsg.btnReset || 'Salvar Nova Senha';
     btn.disabled = false;
 });
-
 //SISTEMA DE POP-UP GENÉRICO
 function abrirModalGenerico(titulo, mensagem, isInput, placeholder, tipoBotaoConfirmar, callbackConfirmacao) {
     $('modalGenerico').querySelector('.panel').style.maxWidth = '340px';
@@ -1599,8 +1598,19 @@ function abrirModalGenerico(titulo, mensagem, isInput, placeholder, tipoBotaoCon
 
     const btnConfirm = $('btnGenConfirm');
     btnConfirm.className = 'btn';
+
+    // CORREÇÃO: Reseta o texto para "Confirmar" por padrão para não herdar textos antigos
+    btnConfirm.textContent = dicionarioAtual.btnConfirm || 'Confirmar';
+
     if (tipoBotaoConfirmar === 'danger') {
         btnConfirm.classList.add('danger');
+
+        // Deixa o botão mais intuitivo dependendo da ação de perigo
+        if (titulo === dicionarioAtual.logoutTitle || titulo === 'Sair') {
+            btnConfirm.textContent = dicionarioAtual.btnLogout || 'Sair';
+        } else {
+            btnConfirm.textContent = dicionarioAtual.btnDelete || 'Excluir';
+        }
     }
 
     $('modalGenerico').style.display = 'flex';
@@ -1698,7 +1708,7 @@ window.addEventListener("scroll", () => {
 // Lógica de Feedback do Usuário
 $('btnFeedback')?.addEventListener('click', () => {
     fecharSidebar();
-    
+
     const conteudoFeedback = `
         <div id="starContainer" style="font-size: 34px; margin-bottom: 16px; cursor: pointer; color: var(--muted); user-select: none;">
             <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5">★</span>
@@ -1713,7 +1723,7 @@ $('btnFeedback')?.addEventListener('click', () => {
             return;
         }
         const texto = $('feedbackText').value.trim();
-        
+
         try {
             await apiJson('/feedback', {
                 method: 'POST',
@@ -1721,7 +1731,7 @@ $('btnFeedback')?.addEventListener('click', () => {
                 body: JSON.stringify({ rating, texto })
             });
             mostrarToast("Obrigado! Seu feedback nos ajuda a evoluir. 🚀", "success");
-        } catch(e) {
+        } catch (e) {
             mostrarToast("Erro ao enviar avaliação.", "danger");
         }
     });
@@ -1733,14 +1743,14 @@ $('btnFeedback')?.addEventListener('click', () => {
         let ratingAtual = 0;
         const stars = document.querySelectorAll('#starContainer span');
         stars.forEach(star => {
-            star.addEventListener('mouseover', function() {
+            star.addEventListener('mouseover', function () {
                 const val = parseInt(this.getAttribute('data-val'));
                 stars.forEach(s => s.style.color = parseInt(s.getAttribute('data-val')) <= val ? '#fbbf24' : 'var(--muted)'); // Amarelo
             });
-            star.addEventListener('mouseout', function() {
+            star.addEventListener('mouseout', function () {
                 stars.forEach(s => s.style.color = parseInt(s.getAttribute('data-val')) <= ratingAtual ? '#fbbf24' : 'var(--muted)');
             });
-            star.addEventListener('click', function() {
+            star.addEventListener('click', function () {
                 ratingAtual = parseInt(this.getAttribute('data-val'));
                 $('starContainer').setAttribute('data-rating', ratingAtual);
             });
