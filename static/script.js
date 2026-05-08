@@ -560,7 +560,7 @@ async function handleUpload() {
     const dict = dicionarioAtual;
     const file = $('dsFile').files[0];
     if (!file) {
-        showErr(dict.errNoFile);
+        showErr(dict.errNoFile || "Selecione um arquivo primeiro.");
         return;
     }
 
@@ -571,21 +571,72 @@ async function handleUpload() {
     const name = $('dsName').value.trim();
     if (name) fd.append('name', name);
 
-    try {
-        const ds = await apiJson('/datasets', { method: 'POST', body: fd });
-        showOk(`${dict.msgSaved}`);
-        $('dsName').value = '';
-        $('dsFile').value = '';
-        $('fileNameDisplay').textContent = dict.noFileChosen;
-        $('fileNameDisplay').setAttribute('data-i18n', 'noFileChosen');
-        await refreshDatasets();
-    } catch (e) {
-        showErr(e.message);
-    } finally {
-        btn.disabled = false;
-    }
-}
+    // Variáveis da barra
+    const progressContainer = $('uploadProgressContainer');
+    const progressBar = $('uploadProgressBar');
+    const progressText = $('uploadProgressText');
+    const progressPercent = $('uploadProgressPercent');
 
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '0%';
+    progressBar.style.background = 'var(--brand)'; // Azul do upload
+    progressText.textContent = 'Enviando e processando...';
+    progressPercent.textContent = '0%';
+    clearMsg();
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', API_URL + '/datasets');
+    
+    // Adiciona a Autenticação
+    const token = getAuthToken();
+    if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+
+    // Evento de Progresso (Visual)
+    xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) {
+            const percent = Math.round((e.loaded / e.total) * 100);
+            progressBar.style.width = percent + '%';
+            progressPercent.textContent = percent + '%';
+        }
+    };
+
+    xhr.onload = async () => {
+        btn.disabled = false;
+        if (xhr.status >= 200 && xhr.status < 300) {
+            // Teoria das cores: Verde para sucesso (Sensação de alívio/completude)
+            progressBar.style.background = '#10b981'; 
+            progressText.textContent = 'Planilha salva com sucesso!';
+            
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+                showOk(dict.msgSaved || "Salvo com sucesso!");
+            }, 2500);
+
+            $('dsName').value = '';
+            $('dsFile').value = '';
+            $('fileNameDisplay').textContent = dict.noFileChosen || "Nenhum arquivo";
+            $('fileNameDisplay').setAttribute('data-i18n', 'noFileChosen');
+            $('fileNameDisplay').classList.remove('file-ready');
+            $('lblDsFile').classList.remove('file-ready');
+            await refreshDatasets();
+        } else {
+            progressContainer.style.display = 'none';
+            try {
+                const errData = JSON.parse(xhr.responseText);
+                showErr(errData.detail || 'Erro ao salvar o dataset');
+            } catch(e) { showErr('Erro de servidor.'); }
+            if (xhr.status === 401) { clearAuthToken(); irParaDeslogado('login'); }
+        }
+    };
+
+    xhr.onerror = () => {
+        btn.disabled = false;
+        progressContainer.style.display = 'none';
+        showErr('Falha de conexão com a API.');
+    };
+
+    xhr.send(fd);
+}
 async function analyze(id) {
     clearMsg();
     const cfg = getAnalyzeConfig();
