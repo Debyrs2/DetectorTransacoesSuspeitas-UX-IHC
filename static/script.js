@@ -1269,14 +1269,54 @@ $('btnSysInfo').addEventListener('click', () => {
     setTimeout(() => {
         const inputBusca = $('buscaManual');
         const corpoManual = $('corpoManual');
+
         if (inputBusca && corpoManual) {
+            // 1. Cria e adiciona a mensagem de "não encontrado" escondida
+            const msgVazia = document.createElement('div');
+            msgVazia.style.display = 'none';
+            msgVazia.style.textAlign = 'center';
+            msgVazia.style.padding = '20px 0';
+            msgVazia.style.color = 'var(--muted)';
+            msgVazia.style.fontWeight = '500';
+            msgVazia.innerHTML = '🔍 Termo não encontrado.';
+            corpoManual.appendChild(msgVazia);
+
+            // 2. Seleciona os elementos granulares de texto (parágrafos, itens de lista, títulos)
+            const elementosTexto = corpoManual.querySelectorAll('p, li, h2, h3, h4');
+
             inputBusca.focus();
             inputBusca.addEventListener('input', (e) => {
-                const termo = e.target.value.toLowerCase();
-                const elementos = corpoManual.children;
-                for (let el of elementos) {
-                    el.style.display = el.textContent.toLowerCase().includes(termo) ? '' : 'none';
+                const termo = e.target.value.toLowerCase().trim();
+                let encontrouAlgo = false;
+
+                // Se o input estiver vazio, volta tudo ao normal
+                if (termo === '') {
+                    elementosTexto.forEach(el => el.style.display = '');
+                    corpoManual.querySelectorAll('ul, ol').forEach(el => el.style.display = '');
+                    msgVazia.style.display = 'none';
+                    return;
                 }
+
+                // Oculta as listas inteiras inicialmente para não ficarem "flutuando" vazias
+                corpoManual.querySelectorAll('ul, ol').forEach(el => el.style.display = 'none');
+
+                // Filtra item por item
+                elementosTexto.forEach(el => {
+                    if (el.textContent.toLowerCase().includes(termo)) {
+                        el.style.display = '';
+                        encontrouAlgo = true;
+
+                        // Se achou a palavra dentro de um <li>, garante que a lista (ul/ol) apareça
+                        if (el.tagName === 'LI') {
+                            el.closest('ul, ol').style.display = '';
+                        }
+                    } else {
+                        el.style.display = 'none';
+                    }
+                });
+
+                // Mostra ou esconde a mensagem de erro com base no resultado
+                msgVazia.style.display = encontrouAlgo ? 'none' : 'block';
             });
         }
     }, 100);
