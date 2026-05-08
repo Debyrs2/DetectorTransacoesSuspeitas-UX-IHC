@@ -580,7 +580,7 @@ async function handleUpload() {
     progressContainer.style.display = 'block';
     progressBar.style.width = '0%';
     progressBar.style.background = 'var(--brand)'; // Azul do upload
-    progressText.textContent = 'Enviando e processando...';
+    progressText.textContent = dict.uploadingMsg || 'Enviando e processando...';
     progressPercent.textContent = '0%';
     clearMsg();
 
@@ -605,7 +605,7 @@ async function handleUpload() {
         if (xhr.status >= 200 && xhr.status < 300) {
             // Teoria das cores: Verde para sucesso (Sensação de alívio/completude)
             progressBar.style.background = '#10b981';
-            progressText.textContent = 'Planilha salva com sucesso!';
+            progressText.textContent = dict.uploadSuccessMsg || 'Planilha salva com sucesso!';
 
             setTimeout(() => {
                 progressContainer.style.display = 'none';
@@ -624,7 +624,7 @@ async function handleUpload() {
             try {
                 const errData = JSON.parse(xhr.responseText);
                 showErr(errData.detail || 'Erro ao salvar o dataset');
-            } catch (e) { showErr('Erro de servidor.'); }
+            } catch (e) { showErr(dict.errServer || 'Erro de servidor.'); }
             if (xhr.status === 401) { clearAuthToken(); irParaDeslogado('login'); }
         }
     };
@@ -632,7 +632,7 @@ async function handleUpload() {
     xhr.onerror = () => {
         btn.disabled = false;
         progressContainer.style.display = 'none';
-        showErr('Falha de conexão com a API.');
+        showErr(dict.errApiConnection || 'Falha de conexão com a API.');
     };
 
     xhr.send(fd);
@@ -729,8 +729,8 @@ async function deleteDataset(id) {
         toast.style.borderLeftColor = '#f59e0b';
         toast.innerHTML = `
             <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                <span>Excluindo planilha...</span>
-                <button id="${toastId}" class="btn2 btn-sm" style="position: relative; right: 0; transform: none; margin-left: 12px; color: var(--text);">Desfazer</button>
+                <span>${dict.undoDeleting || 'Excluindo planilha...'}</span>
+                <button id="${toastId}" class="btn2 btn-sm" style="position: relative; right: 0; transform: none; margin-left: 12px; color: var(--text);">${dict.btnUndo || 'Desfazer'}</button>
             </div>
         `;
         document.body.appendChild(toast);
@@ -1342,7 +1342,7 @@ $('btnSysInfo').addEventListener('click', () => {
     const conteudoComBusca = `
         <div style="display: flex; gap: 8px; margin-bottom: 15px; align-items: center; background: var(--bg-0); border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px;">
             <span style="color: var(--muted);">🔍</span>
-            <input type="text" id="buscaManual" placeholder="Buscar no manual (Ctrl+F)..." style="border: none; background: transparent; outline: none; flex: 1; padding: 6px 0; color: var(--text); box-shadow: none;">
+            <input type="text" id="buscaManual" placeholder="${dicionarioAtual.manualSearchPlaceholder || 'Buscar no manual (Ctrl+F)...'}" style="border: none; background: transparent; outline: none; flex: 1; padding: 6px 0; color: var(--text); box-shadow: none;">
             <span id="buscaContador" class="muted" style="font-size: 12px; white-space: nowrap; margin: 0 8px;">0/0</span>
             <div style="display: flex; gap: 4px;">
                 <button id="btnBuscaPrev" class="btn2 btn-sm" aria-label="Anterior" style="padding: 4px 10px; font-size: 14px;">↑</button>
@@ -1713,13 +1713,13 @@ $('btnFeedback')?.addEventListener('click', () => {
         <div id="starContainer" style="font-size: 34px; margin-bottom: 16px; cursor: pointer; color: var(--muted); user-select: none;">
             <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5">★</span>
         </div>
-        <textarea id="feedbackText" placeholder="Conte-nos o que achou da plataforma (opcional)" style="width: 100%; height: 90px; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text); resize: none; margin-bottom: 10px;"></textarea>
+        <textarea id="feedbackText" placeholder="${dicionarioAtual.feedbackPlaceholder || 'Conte-nos o que achou da plataforma (opcional)'}" style="width: 100%; height: 90px; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text); resize: none; margin-bottom: 10px;"></textarea>
     `;
 
-    abrirModalGenerico("Avalie o DataGuard", conteudoFeedback, false, "", "brand", async () => {
+    abrirModalGenerico(dicionarioAtual.feedbackTitle || "Avalie o DataGuard", conteudoFeedback, false, "", "brand", async () => {
         const rating = parseInt($('starContainer').getAttribute('data-rating') || "0");
         if (rating === 0) {
-            mostrarToast("Por favor, selecione pelo menos 1 estrela.", "danger");
+            mostrarToast(dicionarioAtual.feedbackStarErr || "Por favor, selecione pelo menos 1 estrela.", "danger");
             return;
         }
         const texto = $('feedbackText').value.trim();
@@ -1730,13 +1730,13 @@ $('btnFeedback')?.addEventListener('click', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ rating, texto })
             });
-            mostrarToast("Obrigado! Seu feedback nos ajuda a evoluir. 🚀", "success");
+            mostrarToast(dicionarioAtual.feedbackSuccess || "Obrigado! Seu feedback nos ajuda a evoluir. 🚀", "success");
         } catch (e) {
-            mostrarToast("Erro ao enviar avaliação.", "danger");
+            mostrarToast(dicionarioAtual.feedbackError || "Erro ao enviar avaliação.", "danger");
         }
     });
 
-    $('btnGenConfirm').textContent = "Enviar Avaliação";
+    $('btnGenConfirm').textContent = dicionarioAtual.btnSubmitFeedback || "Enviar Avaliação";
 
     // Lógica visual das estrelas 
     setTimeout(() => {
