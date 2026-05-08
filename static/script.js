@@ -1244,16 +1244,42 @@ if (sidebarOverlay) {
 $('btnSysInfo').addEventListener('click', () => {
     fecharSidebar();
 
-    abrirModalGenerico(
+    const textoOriginal = dicionarioAtual.sysInfoText || "<p>Informações do sistema.</p>";
 
+    // Injetamos a barra de pesquisa e um container em volta do texto
+    const conteudoComBusca = `
+        <input type="text" id="buscaManual" placeholder="Buscar no manual..." style="margin-bottom: 15px; width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text);">
+        <div id="corpoManual" style="max-height: 55vh; overflow-y: auto; text-align: left; padding-right: 5px;">
+            ${textoOriginal}
+        </div>
+    `;
+
+    abrirModalGenerico(
         dicionarioAtual.sysInfoTitle || "Manual do Sistema",
-        dicionarioAtual.sysInfoText || "Informações do sistema.",
+        conteudoComBusca,
         false, "", "", () => { }
     );
+
     $('modalGenerico').querySelector('.panel').style.maxWidth = '750px';
     $('modalGenerico').querySelector('.panel').style.width = '95%';
     $('btnGenCancel').style.display = 'none';
     $('btnGenConfirm').textContent = dicionarioAtual.btnClose || 'Fechar';
+
+    // Lógica de filtro (esconde os elementos que não contêm o texto buscado)
+    setTimeout(() => {
+        const inputBusca = $('buscaManual');
+        const corpoManual = $('corpoManual');
+        if (inputBusca && corpoManual) {
+            inputBusca.focus();
+            inputBusca.addEventListener('input', (e) => {
+                const termo = e.target.value.toLowerCase();
+                const elementos = corpoManual.children;
+                for (let el of elementos) {
+                    el.style.display = el.textContent.toLowerCase().includes(termo) ? '' : 'none';
+                }
+            });
+        }
+    }, 100);
 });
 
 // Lógica de Rever Tutorial
