@@ -225,6 +225,29 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+class FeedbackInput(BaseModel):
+    rating: int
+    texto: Optional[str] = ""
+
+@app.post("/feedback", dependencies=[Depends(verifica_sessao)])
+def receber_feedback(req: FeedbackInput, request: Request):
+    email = verifica_sessao(request)
+    feedbacks_file = APP_DIR / "feedbacks.json"
+    
+    feeds = []
+    if feedbacks_file.exists():
+        feeds = json.loads(feedbacks_file.read_text(encoding="utf-8"))
+        
+    feeds.append({
+        "email": email,
+        "rating": req.rating,
+        "texto": req.texto,
+        "data": utc_now_iso()
+    })
+    
+    feedbacks_file.write_text(json.dumps(feeds, indent=2, ensure_ascii=False), encoding="utf-8")
+    return {"status": "ok", "msg": "Feedback recebido com sucesso!"}
+
 class DatasetOut(BaseModel):
     id: str
     name: str

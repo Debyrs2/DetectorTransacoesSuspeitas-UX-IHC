@@ -1720,5 +1720,58 @@ window.addEventListener("scroll", () => {
     }
     lastScrollTop = st <= 0 ? 0 : st;
 });
+
+// Lógica de Feedback do Usuário
+$('btnFeedback')?.addEventListener('click', () => {
+    fecharSidebar();
+    
+    const conteudoFeedback = `
+        <div id="starContainer" style="font-size: 34px; margin-bottom: 16px; cursor: pointer; color: var(--muted); user-select: none;">
+            <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5">★</span>
+        </div>
+        <textarea id="feedbackText" placeholder="Conte-nos o que achou da plataforma (opcional)" style="width: 100%; height: 90px; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-0); color: var(--text); resize: none; margin-bottom: 10px;"></textarea>
+    `;
+
+    abrirModalGenerico("Avalie o DataGuard", conteudoFeedback, false, "", "brand", async () => {
+        const rating = parseInt($('starContainer').getAttribute('data-rating') || "0");
+        if (rating === 0) {
+            mostrarToast("Por favor, selecione pelo menos 1 estrela.", "danger");
+            return;
+        }
+        const texto = $('feedbackText').value.trim();
+        
+        try {
+            await apiJson('/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rating, texto })
+            });
+            mostrarToast("Obrigado! Seu feedback nos ajuda a evoluir. 🚀", "success");
+        } catch(e) {
+            mostrarToast("Erro ao enviar avaliação.", "danger");
+        }
+    });
+
+    $('btnGenConfirm').textContent = "Enviar Avaliação";
+
+    // Lógica visual das estrelas 
+    setTimeout(() => {
+        let ratingAtual = 0;
+        const stars = document.querySelectorAll('#starContainer span');
+        stars.forEach(star => {
+            star.addEventListener('mouseover', function() {
+                const val = parseInt(this.getAttribute('data-val'));
+                stars.forEach(s => s.style.color = parseInt(s.getAttribute('data-val')) <= val ? '#fbbf24' : 'var(--muted)'); // Amarelo
+            });
+            star.addEventListener('mouseout', function() {
+                stars.forEach(s => s.style.color = parseInt(s.getAttribute('data-val')) <= ratingAtual ? '#fbbf24' : 'var(--muted)');
+            });
+            star.addEventListener('click', function() {
+                ratingAtual = parseInt(this.getAttribute('data-val'));
+                $('starContainer').setAttribute('data-rating', ratingAtual);
+            });
+        });
+    }, 100);
+});
 // Inicializa o sistema verificando se o usuário já tem um acesso salvo
 checkLogin();
