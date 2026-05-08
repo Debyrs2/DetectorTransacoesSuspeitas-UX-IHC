@@ -31,3 +31,4 @@ uvicorn
 pandas
 python-multipart
 pydantic
+supabase

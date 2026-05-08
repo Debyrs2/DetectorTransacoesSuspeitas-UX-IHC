@@ -19,6 +19,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel, Field
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile, Request, Response, Depends
+from supabase import create_client, Client
 
 import storage
 
@@ -30,25 +31,23 @@ def utc_now_iso() -> str:
 
 app = FastAPI(title="Detecção de Transações Suspeitas")
 
-#Sistema de Login com bd
 # Sistema de Login com bd
-USERS_FILE = APP_DIR / "users.json"
+SUPABASE_URL = "https://qhmxiezjzodhrduxfjlo.supabase.co"
+SUPABASE_KEY = "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_7HfOvVPG_Rl1Hu7A1QLrBQ_pH2ND2bb"
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 SECRET_KEY = os.getenv("APP_SECRET_KEY", "troque-esta-chave-no-render")
 TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7  # 7 dias
-
-
+ 
 def _load_users() -> Dict[str, Any]:
-    if not USERS_FILE.exists():
-        return {}
-    return json.loads(USERS_FILE.read_text(encoding="utf-8"))
-
+    # Busca todos os usuários na tabela 'users'
+    response = supabase.table("users").select("*").execute()
+    # Converte o formato de lista do banco para o dicionário que seu código já usa
+    return {u['email']: {"nome": u['nome'], "senha": u['senha']} for u in response.data}
 
 def _write_users(users_data: Dict[str, Any]) -> None:
-    USERS_FILE.write_text(
-        json.dumps(users_data, ensure_ascii=False, indent=2),
-        encoding="utf-8"
-    )
-
+    # Como o registro agora é individual, o ideal é usar o método de registro abaixo
+    pass
 
 def _b64url_encode(data: bytes) -> str:
     return base64.urlsafe_b64encode(data).rstrip(b"=").decode("utf-8")
@@ -176,20 +175,19 @@ def login(identificador: str = Form(...), senha: str = Form(...)):
 
 @app.post("/register")
 def register(nome: str = Form(...), email: str = Form(...), senha: str = Form(...)):
-    users = _load_users()
     email_limpo = email.strip().lower()
-
-    if not email_limpo or not senha or not nome:
-        raise HTTPException(status_code=400, detail="Preencha todos os campos.")
-
-    if email_limpo in users:
+    
+    # Verifica se já existe no banco
+    check = supabase.table("users").select("email").eq("email", email_limpo).execute()
+    if check.data:
         raise HTTPException(status_code=400, detail="E-mail já cadastrado.")
 
-    users[email_limpo] = {
+    # Insere no banco de dados da nuvem
+    supabase.table("users").insert({
         "nome": nome.strip(),
+        "email": email_limpo,
         "senha": senha
-    }
-    _write_users(users)
+    }).execute()
 
     return {"status": "ok", "mensagem": "Conta criada com sucesso!"}
 
@@ -756,3 +754,13 @@ def reset_password(email: str = Form(...), nova_senha: str = Form(...)):
     _write_users(users)
     
     return { "status": "ok", "mensagem": "Senha redefinida com sucesso!" }
+
+    from fastapi.responses import FileResponse
+
+@app.get("/admin/download-feedbacks", dependencies=[Depends(verifica_sessao)])
+def download_feedbacks():
+    # Isso força o download do arquivo que está no servidor do Render
+    path = APP_DIR / "feedbacks.json"
+    if path.exists():
+        return FileResponse(path, media_type='application/json', filename="feedbacks_backup.json")
+    raise HTTPException(status_code=404, detail="Arquivo ainda não foi criado no servidor.")

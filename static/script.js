@@ -1,4 +1,9 @@
-const API_URL = "https://dataguard-4cpi.onrender.com";
+// Detecta automaticamente se está rodando localmente ou na nuvem
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_URL = isLocalhost
+    ? "http://127.0.0.1:8000"
+    : "https://dataguard-4cpi.onrender.com";
+
 const TOKEN_KEY = 'dataguard_access_token';
 
 function getAuthToken() {
