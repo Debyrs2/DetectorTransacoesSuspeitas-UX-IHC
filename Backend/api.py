@@ -79,7 +79,7 @@ def validar_token(token: str) -> str:
         payload_b64, assinatura_b64 = token.split(".", 1)
         assinatura_recebida = _b64url_decode(assinatura_b64)
     except Exception:
-        raise HTTPException(status_code=401, detail="Token inválido")
+        raise HTTPException (status_code=401, detail="errInvalidToken")
 
     assinatura_esperada = hmac.new(
         SECRET_KEY.encode("utf-8"),
@@ -88,24 +88,24 @@ def validar_token(token: str) -> str:
     ).digest()
 
     if not hmac.compare_digest(assinatura_recebida, assinatura_esperada):
-        raise HTTPException(status_code=401, detail="Token inválido")
+        raise HTTPException(status_code=401, detail="errInvalidToken")
 
     try:
         payload = json.loads(_b64url_decode(payload_b64).decode("utf-8"))
         email = str(payload.get("sub", "")).strip().lower()
         exp = int(payload.get("exp", 0))
     except Exception:
-        raise HTTPException(status_code=401, detail="Token inválido")
+        raise HTTPException(status_code=401, detail="errInvalidToken")
 
     if not email:
-        raise HTTPException(status_code=401, detail="Token inválido")
+        raise HTTPException(status_code=401, detail="errInvalidToken")
 
     if exp < int(time.time()):
-        raise HTTPException(status_code=401, detail="Token expirado")
+        raise HTTPException(status_code=401, detail="errTokenExpired")
 
     users = _load_users()
     if email not in users:
-        raise HTTPException(status_code=401, detail="Usuário não encontrado")
+        raise HTTPException(status_code=401, detail="errUserNotFound")
 
     return email
 
@@ -129,7 +129,7 @@ def verifica_sessao(request: Request):
         if cookie_token in users:
             return cookie_token
 
-    raise HTTPException(status_code=401, detail="Não autorizado")
+    raise HTTPException(status_code=401, detail="errNotAuthorized")
 
 
 class LoginOut(BaseModel):
@@ -251,7 +251,7 @@ def receber_feedback(req: FeedbackInput, request: Request):
     })
     
     feedbacks_file.write_text(json.dumps(feeds, indent=2, ensure_ascii=False), encoding="utf-8")
-    return {"status": "ok", "msg": "Feedback recebido com sucesso!"}
+    return {"status": "ok", "msg": "feedbackSuccess"}
 
 class DatasetOut(BaseModel):
     id: str
@@ -630,7 +630,7 @@ def list_datasets(request: Request) -> List[DatasetOut]:
 def get_dataset(dataset_id: str) -> DatasetOut:
     meta = storage.get_dataset(dataset_id)
     if not meta:
-        raise HTTPException(status_code=404, detail="Dataset não encontrado")
+        raise HTTPException(status_code=404, detail="errDatasetNotFound")
     return DatasetOut(
         id=meta.id,
         name=meta.name,
@@ -658,7 +658,7 @@ async def update_dataset(
     try:
         meta = storage.update_dataset(dataset_id, new_name=name, new_file_bytes=new_bytes, new_filename=new_filename)
     except KeyError:
-        raise HTTPException(status_code=404, detail="Dataset não encontrado")
+        raise HTTPException(status_code=404, detail="errDatasetNotFound")
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -680,16 +680,16 @@ def delete_dataset(dataset_id: str, request: Request) -> Dict[str, str]:
     email_logado = verifica_sessao(request) 
     meta = storage.get_dataset(dataset_id)
     if not meta:
-        raise HTTPException(status_code=404, detail="Dataset não encontrado")
+        raise HTTPException(status_code=404, detail="errDatasetNotFound")
     
     # Trava de segurança
     if getattr(meta, 'owner', None) != email_logado:
-        raise HTTPException(status_code=403, detail="Acesso negado a este recurso.")
+        raise HTTPException(status_code=403, detail="errAccessDenied")
         
     try:
         storage.delete_dataset(dataset_id)
     except KeyError:
-        raise HTTPException(status_code=404, detail="Dataset não encontrado")
+        raise HTTPException(status_code=404, detail="errDatasetNotFound")
     return {"status": "deleted"}
 
 
@@ -698,15 +698,15 @@ def analyze_dataset(dataset_id: str, req: AnalyzeRequest, request: Request) -> D
     email_logado = verifica_sessao(request) 
     meta = storage.get_dataset(dataset_id)
     if not meta:
-        raise HTTPException(status_code=404, detail="Dataset não encontrado")
+        raise HTTPException(status_code=404, detail="errDatasetNotFound")
         
     # Trava de segurança 
     if getattr(meta, 'owner', None) != email_logado:
-        raise HTTPException(status_code=403, detail="Acesso negado a este recurso.")
+        raise HTTPException(status_code=403, detail="errAccessDenied")
 
     path = storage.dataset_path(meta)
     if not path.exists():
-        raise HTTPException(status_code=404, detail="Arquivo do dataset não encontrado")
+        raise HTTPException(status_code=404, detail="errFileNotFound")
 
     try:
         result = _analyze_path(path, req)
@@ -724,15 +724,15 @@ def get_last_result(dataset_id: str, request: Request) -> Dict[str, Any]:
     email_logado = verifica_sessao(request)
     meta = storage.get_dataset(dataset_id)
     if not meta:
-        raise HTTPException(status_code=404, detail="Dataset não encontrado")
+        raise HTTPException(status_code=404, detail="errDatasetNotFound")
         
     # Trava de segurança 
     if getattr(meta, 'owner', None) != email_logado:
-        raise HTTPException(status_code=403, detail="Acesso negado a este recurso.")
+        raise HTTPException(status_code=403, detail="errAccessDenied")
         
     result = storage.load_result(dataset_id)
     if not result:
-        raise HTTPException(status_code=404, detail="Nenhuma análise encontrada para este dataset")
+        raise HTTPException(status_code=404, detail="errNoAnalysisFound")
     return result
 
 @app.post("/analisar", dependencies=[Depends(verifica_sessao)])
@@ -758,7 +758,7 @@ def reset_password(email: str = Form(...), nova_senha: str = Form(...)):
     email_limpo = email.strip().lower()
     check = supabase.table("users").select("email").eq("email", email_limpo).execute()
     if not check.data:
-        raise HTTPException(status_code=404, detail="E-mail não encontrado no sistema.")
+        raise HTTPException(status_code=404, detail="errEmailNotFound")
     supabase.table("users").update({"senha": nova_senha}).eq("email", email_limpo).execute()
     
-    return { "status": "ok", "mensagem": "Senha redefinida com sucesso!" };
+    return { "status": "ok", "mensagem": "msgPassResetSuccess" };

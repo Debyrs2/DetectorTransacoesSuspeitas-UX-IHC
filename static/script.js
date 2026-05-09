@@ -192,8 +192,14 @@ async function apiJson(url, opts = {}) {
             irParaDeslogado('login');
         }
 
-        let msg = data.detail || data.erro || ('Erro HTTP ' + res.status);
+        let msg = data.detail || data.erro || ((dicionarioAtual.httpError || 'Erro HTTP') + ' ' + res.status);
         const dict = dicionarioAtual;
+
+        if (dict[msg]) {
+            msg = dict[msg];
+        } if (dict[msg]) {
+            msg = dict[msg];
+        }
 
         if (msg.startsWith('ERR_MISSING_COLUMN|')) {
             msg = dict.errMissingCol.replace('{col}', msg.split('|')[1]);
@@ -474,8 +480,8 @@ function renderResult(result, isReview = false, skipScroll = false) {
 
     const rows = result.suspeitas || [];
     if (rows.length === 0) {
-        head.innerHTML = '<th>Resultado</th>';
-        body.innerHTML = `<tr><td>Nenhuma suspeita encontrada.</td></tr>`;
+        head.innerHTML = `<th>${dictMsg.thResult || 'Resultado'}</th>`;
+        body.innerHTML = `<tr><td>${dictMsg.noSuspectsFound || 'Nenhuma suspeita encontrada.'}</td></tr>`;
     } else {
         const cols = Object.keys(rows[0]).filter(c => {
             const nomeNormalizado = c.toLowerCase().trim();
@@ -522,7 +528,9 @@ function renderResult(result, isReview = false, skipScroll = false) {
         body.innerHTML = linhasHTML;
 
         $('truncMsg').textContent = result.truncated
-            ? `⚠️ A lista de suspeitas foi limitada a ${$('maxSus').value}. Total real: ${result.quantidade_suspeitas}.`
+            ? (dictMsg.truncAlert || '⚠️ Lista limitada a {limite}. Total: {total}.')
+                .replace('{limite}', $('maxSus').value)
+                .replace('{total}', result.quantidade_suspeitas)
             : '';
         $('btnDownTable').style.display = result.quantidade_suspeitas > 0 ? 'block' : 'none';
 
@@ -532,8 +540,8 @@ function renderResult(result, isReview = false, skipScroll = false) {
             if (isReview) {
                 desenharGrafico(result.chart_data);
                 $('boxGrafico').setAttribute('tabindex', '0');
-                $('boxGrafico').setAttribute('aria-label', `Gráfico de linha gerado. Exibindo ${result.n_valid} transações normais e ${result.quantidade_suspeitas} suspeitas destacadas em vermelho.`);
 
+                $('boxGrafico').setAttribute('aria-label', `${dictMsg.chartNormalSingle}: ${result.n_valid}. ${dictMsg.chartSuspectSingle}: ${result.quantidade_suspeitas}.`);
                 $('sessao-grafico').style.display = 'block';
                 $('sessao-grafico').style.display = 'block';
                 if (!skipScroll) {
@@ -956,10 +964,11 @@ $('btnLogar').addEventListener('click', async () => {
             localStorage.setItem('currentScreen', 'dashboard');
             checkLogin();
         } else {
-            mostrarToast('⚠️ ' + (data.detail || dicionarioAtual.errLogin || 'Erro ao entrar.'), 'danger');
+            const erroTraduzido = dicionarioAtual[data.detail] || data.detail || dicionarioAtual.errLogin;
+            mostrarToast('⚠️ ' + erroTraduzido, 'danger');
         }
     } catch (e) {
-        mostrarToast('⚠️ ' + (e.message || 'Erro de conexão.'), 'danger');
+        mostrarToast(dicionarioAtual.errConnection || 'Erro de conexão', 'danger');
     }
 
     btn.textContent = dicionarioAtual.btnLogin || 'Entrar';
@@ -1131,7 +1140,7 @@ $('btnSair').addEventListener('click', (e) => {
         irParaDeslogado('landing');
         resetarResultado();
 
-        $('dsTbody').innerHTML = `<tr><td colspan="5">Sessão encerrada.</td></tr>`;
+        $('dsTbody').innerHTML = `<tr><td colspan="5">${dict.sessionEnded || 'Sessão encerrada.'}</td></tr>`;
 
         btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> <span data-i18n="btnLogout">${dict.btnLogout || 'Sair'}</span>`;
     });
@@ -1176,9 +1185,7 @@ $('btnA11yAudio').addEventListener('click', () => {
         btn.classList.add('active-a11y');
         if (btnFloat) btnFloat.classList.add('active-a11y');
 
-        falar(currentLang === 'pt' ? 'Leitor ativado. Navegue com a tecla Tab.' :
-            currentLang === 'en' ? 'Reader activated. Navigate with Tab.' :
-                'Lector activado. Navega con Tab.');
+        falar(dicionarioAtual.readerActivated || 'Leitor ativado.');
     } else {
         // Desliga a cor dos botões e cala a voz
         btn.classList.remove('active-a11y');
@@ -1569,13 +1576,13 @@ $('btnEnviarReset').addEventListener('click', async () => {
         const data = await res.json();
 
         if (res.ok) {
-            mostrarToast(data.mensagem || 'Senha redefinida com sucesso!', 'success');
+            mostrarToast(dicionarioAtual[data.mensagem] || data.mensagem, 'success');
             setTimeout(() => {
                 $('boxReset').style.display = 'none';
                 $('boxLogin').style.display = 'block';
             }, 2000);
         } else {
-            mostrarToast(data.detail || 'Erro ao redefinir.', 'danger');
+            mostrarToast(dicionarioAtual[data.detail] || data.detail, 'danger');
         }
     } catch (e) {
         mostrarToast('Erro de conexão.', 'danger');

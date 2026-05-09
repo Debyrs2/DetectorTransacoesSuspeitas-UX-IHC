@@ -189,5 +189,19 @@
     "errUserNotFound": "Usuario no encontrado. Por favor, regístrese.",
     "successTitle": "¡Acceso Liberado!",
     "successMsg": "Su correo electrónico ha sido confirmado con éxito. Su cuenta ya está activa.",
-    "btnGoToSystem": "Ir al Sistema"
+    "btnGoToSystem": "Ir al Sistema",
+    "errNotAuthorized": "Sesión caducada o no autorizada.",
+    "errDatasetNotFound": "Base de datos no encontrada.",
+    "errAccessDenied": "Acceso denegado a este recurso.",
+    "errFileNotFound": "Archivo físico no encontrado en el servidor.",
+    "errNoAnalysisFound": "No se encontró ningún análisis previo.",
+    "errEmailNotFound": "Correo electrónico no encontrado en el sistema.",
+    "msgPassResetSuccess": "¡Contraseña restablecida correctamente!",
+    "httpError": "Error HTTP",
+    "errConnection": "Error de conexión con el servidor.",
+    "thResult": "Resultado",
+    "noSuspectsFound": "No se encontraron sospechosos.",
+    "truncAlert": "⚠️ La lista de sospechosos se ha limitado a {limit}. Total real: {total}.",
+    "sessionEnded": "Sesión finalizada",
+    "readerActivated": "Lector activado. Navegue con la tecla Tab."
 }

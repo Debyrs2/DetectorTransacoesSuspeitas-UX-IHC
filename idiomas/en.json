@@ -189,5 +189,19 @@
   "errUserNotFound": "User not found. Please register.",
   "successTitle": "Access Granted!",
   "successMsg": "Your email has been successfully confirmed. Your account is now active.",
-  "btnGoToSystem": "Go to System"
+  "btnGoToSystem": "Go to System",
+  "errNotAuthorized": "Session expired or unauthorized.",
+  "errDatasetNotFound": "Database not found.",
+  "errAccessDenied": "Access denied to this resource.",
+  "errFileNotFound": "Physical file not found on the server.",
+  "errNoAnalysisFound": "No prior analysis found.",
+  "errEmailNotFound": "Email not found in the system.",
+  "msgPassResetSuccess": "Password reset successfully!",
+  "httpError": "HTTP error",
+  "errConnection": "Server connection error.",
+  "thResult": "Result",
+  "noSuspectsFound": "No suspects found.",
+  "truncAlert": "⚠️ The list of suspects has been limited to {limit}. Actual total: {total}.",
+  "sessionEnded": "Session ended.",
+  "readerActivated": "Reader activated. Navigate with the Tab key."
 }

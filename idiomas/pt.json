@@ -189,5 +189,19 @@
   "errUserNotFound": "Por favor, cadastre-se.",
   "successTitle": "Acesso Liberado!",
   "successMsg": "Seu e-mail foi confirmado com sucesso. Sua conta do DataGuard já está ativa e pronta para uso.",
-  "btnGoToSystem": "Ir para o Sistema"
+  "btnGoToSystem": "Ir para o Sistema",
+  "errNotAuthorized": "Sessão expirada ou não autorizada.",
+  "errDatasetNotFound": "Base de dados não encontrada.",
+  "errAccessDenied": "Acesso negado a este recurso.",
+  "errFileNotFound": "Arquivo físico não encontrado no servidor.",
+  "errNoAnalysisFound": "Nenhuma análise prévia encontrada.",
+  "errEmailNotFound": "E-mail não encontrado no sistema.",
+  "msgPassResetSuccess": "Senha redefinida com sucesso!",
+  "httpError": "Erro HTTP",
+  "errConnection": "Erro de conexão com o servidor.",
+  "thResult": "Resultado",
+  "noSuspectsFound": "Nenhuma suspeita encontrada.",
+  "truncAlert": "⚠️ A lista de suspeitas foi limitada a {limite}. Total real: {total}.",
+  "sessionEnded": "Sessão encerrada.",
+  "readerActivated": "Leitor ativado. Navegue com a tecla Tab."
 }
