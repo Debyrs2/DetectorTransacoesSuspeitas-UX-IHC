@@ -1041,8 +1041,9 @@ $('btnCadastrar').addEventListener('click', async () => {
             const msg = dicionarioAtual[data.mensagem] || data.mensagem;
             mostrarToast(msg, 'success');
             setTimeout(() => $('btnIrLogin').click(), 2500);
-        } else {
-            mostrarToast(data.detail || 'Erro ao cadastrar', 'danger');
+       } else {
+            const erroTraduzido = dicionarioAtual[data.detail] || data.detail || 'Erro ao cadastrar';
+            mostrarToast('⚠️ ' + erroTraduzido, 'danger');
         }
     } catch (e) {
         mostrarToast('Erro de conexão', 'danger');
