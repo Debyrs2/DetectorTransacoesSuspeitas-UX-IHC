@@ -7,6 +7,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional
 from uuid import uuid4
+from dataclasses import dataclass, asdict
+from typing import Optional, Dict, Any
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -18,14 +20,12 @@ ALLOWED_EXTENSIONS = {".csv", ".xlsx", ".xls"}
 
 _lock = threading.Lock()
 
-
 def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
-
-
 @dataclass
 class DatasetMeta:
     id: str
+    owner: str  
     name: str
     original_filename: str
     stored_filename: str
@@ -36,9 +36,6 @@ class DatasetMeta:
     last_analysis_method: Optional[str] = None
     last_suspeitas_count: Optional[int] = None
     last_thresholds: Optional[Dict[str, Any]] = None
-    notes: Dict[str, Any] = field(default_factory=dict)
-
-
 def ensure_storage() -> None:
     """Cria pastas/arquivos necessários (filesystem storage)."""
     DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -80,8 +77,7 @@ def result_path(ds_id: str) -> Path:
 def _safe_ext(filename: str) -> str:
     return Path(filename).suffix.lower()
 
-
-def create_dataset(*, file_bytes: bytes, filename: str, name: Optional[str] = None) -> DatasetMeta:
+def create_dataset(file_bytes, filename, name, owner):
     ensure_storage()
     ext = _safe_ext(filename)
     if ext not in ALLOWED_EXTENSIONS:
@@ -92,23 +88,26 @@ def create_dataset(*, file_bytes: bytes, filename: str, name: Optional[str] = No
     (DATA_DIR / stored_filename).write_bytes(file_bytes)
 
     now = _utc_now_iso()
-    meta = DatasetMeta(
+    
+    # Cria o objeto usando a Dataclass para o asdict() funcionar depois
+    meta = DatasetMeta (
         id=ds_id,
+        owner=owner,  
         name=(name or Path(filename).stem or ds_id),
         original_filename=filename,
         stored_filename=stored_filename,
         size_bytes=len(file_bytes),
         uploaded_at=now,
-        updated_at=now,
+        updated_at=now
     )
 
     with _lock:
         raw = _read_meta_raw()
+        # O asdict converte o objeto meta num dicionário e salva no JSON
         raw["datasets"][ds_id] = asdict(meta)
         _write_meta_raw(raw)
 
     return meta
-
 
 def update_dataset(
     ds_id: str,

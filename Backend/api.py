@@ -23,7 +23,7 @@ from supabase import create_client, Client
 import storage
 
 APP_DIR = Path(__file__).resolve().parent
-#INDEX_HTML = APP_DIR.parent / "Frontend" / "index.html"
+#INDEX_HTML = APP_DIR.parent "index.html"
 
 def utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -597,50 +597,34 @@ def health() -> Dict[str, str]:
 def home() -> Dict[str, str]:
     return {"status": "A API do DataGuard está ONLINE na nuvem!"}
 
-@app.post("/datasets", response_model=DatasetOut, dependencies=[Depends(verifica_sessao)])
+@app.post("/datasets", response_model=DatasetOut)
 async def create_dataset(
+    request: Request, # Adicionamos o request aqui
     arquivo: UploadFile = File(...),
     name: Optional[str] = Form(default=None),
 ) -> DatasetOut:
+    email = verifica_sessao(request) # Pegamos o e-mail do dono real
     content = await arquivo.read()
     try:
-        meta = storage.create_dataset(file_bytes=content, filename=arquivo.filename or "dataset", name=name)
+        # Passamos o email para o storage saber quem é o dono
+        meta = storage.create_dataset(file_bytes=content, filename=arquivo.filename, name=name, owner=email)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    return DatasetOut(
-        id=meta.id,
-        name=meta.name,
-        original_filename=meta.original_filename,
-        size_bytes=meta.size_bytes,
-        uploaded_at=meta.uploaded_at,
-        updated_at=meta.updated_at,
-        last_analysis_at=meta.last_analysis_at,
-        last_analysis_method=meta.last_analysis_method,
-        last_suspeitas_count=meta.last_suspeitas_count,
-        last_thresholds=meta.last_thresholds,
-    )
-
-
-@app.get("/datasets", response_model=List[DatasetOut], dependencies=[Depends(verifica_sessao)])
-def list_datasets() -> List[DatasetOut]:
-    datasets = storage.list_datasets().values()
-    ordered = sorted(datasets, key=lambda m: m.uploaded_at, reverse=True)
-    return [
-        DatasetOut(
-            id=m.id,
-            name=m.name,
-            original_filename=m.original_filename,
-            size_bytes=m.size_bytes,
-            uploaded_at=m.uploaded_at,
-            updated_at=m.updated_at,
-            last_analysis_at=m.last_analysis_at,
-            last_analysis_method=m.last_analysis_method,
-            last_suspeitas_count=m.last_suspeitas_count,
-            last_thresholds=m.last_thresholds,
-        )
-        for m in ordered
-    ]
+    return DatasetOut(id=meta.id, name=meta.name, original_filename=meta.original_filename, 
+                      size_bytes=meta.size_bytes, uploaded_at=meta.uploaded_at, updated_at=meta.updated_at)
+@app.get("/datasets", response_model=List[DatasetOut])
+def list_datasets(request: Request) -> List[DatasetOut]:
+    email = verifica_sessao(request) # Identifica quem está pedindo a lista
+    
+    # Filtra os datasets: só aparecem os que o dono (owner) é o email logado
+    all_datasets = storage.list_datasets().values()
+    user_datasets = [m for m in all_datasets if getattr(m, 'owner', None) == email]
+    
+    ordered = sorted(user_datasets, key=lambda m: m.uploaded_at, reverse=True)
+    return [DatasetOut(id=m.id, name=m.name, original_filename=m.original_filename, 
+                       size_bytes=m.size_bytes, uploaded_at=m.uploaded_at, updated_at=m.updated_at) 
+            for m in ordered]
 
 @app.get("/datasets/{dataset_id}", response_model=DatasetOut, dependencies=[Depends(verifica_sessao)])
 def get_dataset(dataset_id: str) -> DatasetOut:
@@ -692,18 +676,33 @@ async def update_dataset(
     )
 
 @app.delete("/datasets/{dataset_id}", dependencies=[Depends(verifica_sessao)])
-def delete_dataset(dataset_id: str) -> Dict[str, str]:
+def delete_dataset(dataset_id: str, request: Request) -> Dict[str, str]:
+    email_logado = verifica_sessao(request) 
+    meta = storage.get_dataset(dataset_id)
+    if not meta:
+        raise HTTPException(status_code=404, detail="Dataset não encontrado")
+    
+    # Trava de segurança
+    if getattr(meta, 'owner', None) != email_logado:
+        raise HTTPException(status_code=403, detail="Acesso negado a este recurso.")
+        
     try:
         storage.delete_dataset(dataset_id)
     except KeyError:
         raise HTTPException(status_code=404, detail="Dataset não encontrado")
     return {"status": "deleted"}
 
+
 @app.post("/datasets/{dataset_id}/analyze", dependencies=[Depends(verifica_sessao)])
-def analyze_dataset(dataset_id: str, req: AnalyzeRequest) -> Dict[str, Any]:
+def analyze_dataset(dataset_id: str, req: AnalyzeRequest, request: Request) -> Dict[str, Any]:
+    email_logado = verifica_sessao(request) 
     meta = storage.get_dataset(dataset_id)
     if not meta:
         raise HTTPException(status_code=404, detail="Dataset não encontrado")
+        
+    # Trava de segurança 
+    if getattr(meta, 'owner', None) != email_logado:
+        raise HTTPException(status_code=403, detail="Acesso negado a este recurso.")
 
     path = storage.dataset_path(meta)
     if not path.exists():
@@ -721,10 +720,16 @@ def analyze_dataset(dataset_id: str, req: AnalyzeRequest) -> Dict[str, Any]:
 
 
 @app.get("/datasets/{dataset_id}/result", dependencies=[Depends(verifica_sessao)])
-def get_last_result(dataset_id: str) -> Dict[str, Any]:
+def get_last_result(dataset_id: str, request: Request) -> Dict[str, Any]:
+    email_logado = verifica_sessao(request)
     meta = storage.get_dataset(dataset_id)
     if not meta:
         raise HTTPException(status_code=404, detail="Dataset não encontrado")
+        
+    # Trava de segurança 
+    if getattr(meta, 'owner', None) != email_logado:
+        raise HTTPException(status_code=403, detail="Acesso negado a este recurso.")
+        
     result = storage.load_result(dataset_id)
     if not result:
         raise HTTPException(status_code=404, detail="Nenhuma análise encontrada para este dataset")
