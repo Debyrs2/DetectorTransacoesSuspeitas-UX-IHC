@@ -60,6 +60,34 @@
             display: inline-block;
             width: 100%;
             box-sizing: border-box;
+            margin-bottom: 20px;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #4f46e5;
+        }
+
+        .lang-selector select {
+            background: transparent;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .lang-selector select:focus {
+            border-color: #6366f1;
+        }
+
+        .lang-selector select option {
+            background: #1e293b;
+            color: white;
         }
     </style>
 </head>
@@ -70,16 +98,55 @@
         <h1 id="title">Acesso Liberado!</h1>
         <p id="msg">Processando...</p>
         <a href="index.html" class="btn" id="btn">Ir para o Sistema</a>
+
+        <div class="lang-selector">
+            <select id="langSelect" aria-label="Alterar idioma">
+                <option value="pt">🇧🇷 PT</option>
+                <option value="en">🇺🇸 EN</option>
+                <option value="es">🇪🇸 ES</option>
+            </select>
+        </div>
     </div>
+
     <script>
-        const lang = localStorage.getItem('app-lang') || 'pt';
-        fetch(`idiomas/${lang}.json`)
-            .then(r => r.json())
-            .then(dict => {
-                document.getElementById('title').textContent = dict.successTitle || "Acesso Liberado!";
-                document.getElementById('msg').textContent = dict.successMsg || "";
-                document.getElementById('btn').textContent = dict.btnGoToSystem || "Entrar";
-            });
+        const langSelect = document.getElementById('langSelect');
+
+        // Função que isola a lógica de buscar e aplicar os textos
+        function carregarIdioma(lang) {
+            document.documentElement.lang = lang === 'en' ? 'en-US' : (lang === 'es' ? 'es-ES' : 'pt-BR');
+
+            fetch(`idiomas/${lang}.json`)
+                .then(r => {
+                    if (!r.ok) throw new Error("Falha ao carregar arquivo de idioma.");
+                    return r.json();
+                })
+                .then(dict => {
+                    document.title = dict.successTitle ? `DataGuard - ${dict.successTitle}` : "DataGuard";
+                    document.getElementById('title').textContent = dict.successTitle || "Acesso Liberado!";
+                    document.getElementById('msg').textContent = dict.successMsg || "Seu e-mail foi confirmado com sucesso. Sua conta do DataGuard já está ativa.";
+                    document.getElementById('btn').textContent = dict.btnGoToSystem || "Ir para o Sistema";
+                })
+                .catch(err => {
+                    // Fallback de segurança caso a rede falhe
+                    console.error("Erro ao carregar tradução:", err);
+                    document.title = "DataGuard - Acesso Liberado";
+                    document.getElementById('title').textContent = "Acesso Liberado!";
+                    document.getElementById('msg').textContent = "Seu e-mail foi confirmado com sucesso. Sua conta do DataGuard já está ativa.";
+                    document.getElementById('btn').textContent = "Ir para o Sistema";
+                });
+        }
+
+        // Setup Inicial
+        let currentLang = localStorage.getItem('app-lang') || 'pt';
+        langSelect.value = currentLang;
+        carregarIdioma(currentLang);
+
+        // Ouve quando o usuário troca o idioma no select
+        langSelect.addEventListener('change', (e) => {
+            currentLang = e.target.value;
+            localStorage.setItem('app-lang', currentLang);
+            carregarIdioma(currentLang);
+        });
     </script>
 </body>
 
