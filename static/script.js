@@ -220,10 +220,15 @@ async function refreshDatasets() {
     const dict = dicionarioAtual;
     tbody.innerHTML = `<tr><td colspan="5">${dict.tblLoading}</td></tr>`;
 
+    // Lógica à prova de falhas para a data de análise
+        const textoUltimaAnalise = ds.last_analysis_at 
+            ? new Date(ds.last_analysis_at).toLocaleString() 
+            : (dicionarioAtual.tblNoAnalysis || "sem análise");
+
     try {
         const list = await apiJson('/datasets');
         if (list.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5">${dict.tblEmpty}</td></tr>`;
+            tbody.innerHTML = `<tr><td>${textoUltimaAnalise}</td></tr>`;
             return;
         }
 
