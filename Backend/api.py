@@ -140,57 +140,55 @@ class LoginOut(BaseModel):
     token_type: str = "Bearer"
     expires_in: int
 
-
 @app.post("/login", response_model=LoginOut)
 def login(identificador: str = Form(...), senha: str = Form(...)):
-    users = _load_users()
     ident_limpo = identificador.strip().lower()
 
-    user_key = None
-    user_data = None
+    try:
+        # Tenta autenticar na segurança do Supabase
+        res = supabase.auth.sign_in_with_password({
+            "email": ident_limpo,
+            "password": senha
+        })
 
-    for key, data in users.items():
-        if key.lower() == ident_limpo or data["nome"].strip().lower() == ident_limpo:
-            user_key = key
-            user_data = data
-            break
+        # Pega o nome do usuário dos metadados
+        user_info = res.user
+        nome = user_info.user_metadata.get("nome", "Usuário")
 
-    if not user_data:
-        raise HTTPException(status_code=404, detail="Usuário ou e-mail não cadastrado.")
-    if user_data["senha"] != senha:
-        raise HTTPException(status_code=401, detail="Senha incorreta.")
+        # Gera o token do seu sistema (DataGuard)
+        access_token = gerar_token(ident_limpo)
 
-    access_token = gerar_token(user_key)
-
-    return {
-        "status": "ok",
-        "nome": user_data["nome"],
-        "email": user_key,
-        "access_token": access_token,
-        "token_type": "Bearer",
-        "expires_in": TOKEN_TTL_SECONDS
-    }
-
-
+        return {
+            "status": "ok",
+            "nome": nome,
+            "email": ident_limpo,
+            "access_token": access_token,
+            "token_type": "Bearer",
+            "expires_in": TOKEN_TTL_SECONDS
+        }
+    except Exception as e:
+        erro_msg = str(e)
+        # Se a pessoa tentar logar sem ter clicado no link do e-mail:
+        if "Email not confirmed" in erro_msg:
+            raise HTTPException(status_code=401, detail="⚠️ Por favor, confirme seu e-mail antes de entrar.")
+        
+        raise HTTPException(status_code=401, detail="E-mail ou senha incorretos.")
 @app.post("/register")
 def register(nome: str = Form(...), email: str = Form(...), senha: str = Form(...)):
     email_limpo = email.strip().lower()
+    try:
+        res = supabase.auth.sign_up({
+            "email": email_limpo,
+            "password": senha,
+            "options": {
+                "data": { "nome": nome.strip() }
+            }
+        })
+        # Retornamos uma chave de tradução (i18n)
+        return {"status": "ok", "mensagem": "msgLinkSent"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="errCreateAccount")
     
-    # Verifica se já existe no banco
-    check = supabase.table("users").select("email").eq("email", email_limpo).execute()
-    if check.data:
-        raise HTTPException(status_code=400, detail="E-mail já cadastrado.")
-
-    # Insere no banco de dados da nuvem
-    supabase.table("users").insert({
-        "nome": nome.strip(),
-        "email": email_limpo,
-        "senha": senha
-    }).execute()
-
-    return {"status": "ok", "mensagem": "Conta criada com sucesso!"}
-
-
 @app.post("/logout")
 def logout():
     return {"status": "deslogado"}

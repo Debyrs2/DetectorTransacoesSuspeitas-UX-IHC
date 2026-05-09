@@ -180,5 +180,8 @@
     "feedbackStarErr": "Por favor, selecciona al menos 1 estrella.",
     "feedbackSuccess": "¡Gracias! Tu feedback nos ayuda a mejorar. 🚀",
     "feedbackError": "Error al enviar la evaluación.",
-    "btnSubmitFeedback": "Enviar Evaluación"
+    "btnSubmitFeedback": "Enviar Evaluación",
+    "msgLinkSent": "¡Enlace enviado! Revisa tu correo electrónico para activar tu cuenta.",
+    "errEmailNotConfirmed": "⚠️ Confirma tu correo electrónico antes de iniciar sesión.",
+    "errCreateAccount": "Error al crear la cuenta. Inténtalo de nuevo."
 }

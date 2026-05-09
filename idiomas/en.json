@@ -180,5 +180,8 @@
   "feedbackStarErr": "Please select at least 1 star.",
   "feedbackSuccess": "Thank you! Your feedback helps us improve. 🚀",
   "feedbackError": "Error submitting rating.",
-  "btnSubmitFeedback": "Submit Rating"
+  "btnSubmitFeedback": "Submit Rating",
+  "msgLinkSent": "Link sent! Check your email to activate your account.",
+  "errEmailNotConfirmed": "⚠️ Please confirm your email before logging in.",
+  "errCreateAccount": "Error creating account. Try again."
 }

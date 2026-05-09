@@ -1028,8 +1028,10 @@ $('btnCadastrar').addEventListener('click', async () => {
         const data = await res.json();
 
         if (res.ok) {
-            mostrarToast(data.mensagem || 'Conta criada com sucesso!', 'success');
-            setTimeout(() => $('btnIrLogin').click(), 1500);
+            // Busca a tradução da chave 'msgLinkSent'
+            const msg = dicionarioAtual[data.mensagem] || data.mensagem;
+            mostrarToast(msg, 'success');
+            setTimeout(() => $('btnIrLogin').click(), 2500);
         } else {
             mostrarToast(data.detail || 'Erro ao cadastrar', 'danger');
         }
