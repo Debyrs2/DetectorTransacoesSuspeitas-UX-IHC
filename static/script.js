@@ -269,6 +269,7 @@ async function refreshDatasets() {
             tbody.appendChild(tr);
         }
     } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--danger);">Erro ao carregar dados.</td></tr>`;
         showErr(e.message);
     }
 }
@@ -1041,7 +1042,7 @@ $('btnCadastrar').addEventListener('click', async () => {
             const msg = dicionarioAtual[data.mensagem] || data.mensagem;
             mostrarToast(msg, 'success');
             setTimeout(() => $('btnIrLogin').click(), 2500);
-       } else {
+        } else {
             const erroTraduzido = dicionarioAtual[data.detail] || data.detail || 'Erro ao cadastrar';
             mostrarToast('⚠️ ' + erroTraduzido, 'danger');
         }

@@ -49,6 +49,12 @@ def _read_meta_raw() -> Dict[str, Any]:
     raw = json.loads(META_FILE.read_text(encoding="utf-8"))
     if "datasets" not in raw or not isinstance(raw["datasets"], dict):
         raw = {"datasets": {}}
+        
+    # Migração silenciosa de dados legados para evitar quebra de tela
+    for ds_id, item in raw["datasets"].items():
+        if "owner" not in item:
+            item["owner"] = ""
+            
     return raw
 
 
