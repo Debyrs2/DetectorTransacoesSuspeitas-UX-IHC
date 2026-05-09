@@ -183,5 +183,11 @@
   "btnSubmitFeedback": "Submit Rating",
   "msgLinkSent": "Link sent! Check your email to activate your account.",
   "errEmailNotConfirmed": "⚠️ Please confirm your email before logging in.",
-  "errCreateAccount": "Error creating account. Try again."
+  "errCreateAccount": "Error creating account. Try again.",
+  "errRealEmailRequired": "Please enter a valid existing email.",
+  "errEmailExists": "This email is already registered, please use a new one.",
+  "errUserNotFound": "User not found. Please register.",
+  "successTitle": "Access Granted!",
+  "successMsg": "Your email has been successfully confirmed. Your account is now active.",
+  "btnGoToSystem": "Go to System"
 }

@@ -167,27 +167,37 @@ def login(identificador: str = Form(...), senha: str = Form(...)):
             "expires_in": TOKEN_TTL_SECONDS
         }
     except Exception as e:
-        erro_msg = str(e)
-        # Se a pessoa tentar logar sem ter clicado no link do e-mail:
-        if "Email not confirmed" in erro_msg:
-            raise HTTPException(status_code=401, detail="⚠️ Por favor, confirme seu e-mail antes de entrar.")
+        erro_msg = str(e).lower()
+        if "email not confirmed" in erro_msg:
+            raise HTTPException(status_code=401, detail="errEmailNotConfirmed")
         
-        raise HTTPException(status_code=401, detail="E-mail ou senha incorretos.")
+        # Verifica se o usuário sequer existe no banco
+        check = supabase.table("users").select("email").eq("email", ident_limpo).execute()
+        if not check.data:
+            raise HTTPException(status_code=404, detail="errUserNotFound")
+            
+        raise HTTPException(status_code=401, detail="errLogin")
+    
 @app.post("/register")
 def register(nome: str = Form(...), email: str = Form(...), senha: str = Form(...)):
     email_limpo = email.strip().lower()
     try:
+        # Verifica se o e-mail já existe na nossa tabela antes de tentar o Auth
+        check = supabase.table("users").select("email").eq("email", email_limpo).execute()
+        if check.data:
+            raise HTTPException(status_code=400, detail="errEmailExists")
+            
         res = supabase.auth.sign_up({
             "email": email_limpo,
             "password": senha,
-            "options": {
-                "data": { "nome": nome.strip() }
-            }
+            "options": {"data": {"nome": nome.strip()}}
         })
-        # Retornamos uma chave de tradução (i18n)
         return {"status": "ok", "mensagem": "msgLinkSent"}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail="errCreateAccount")
+    except HTTPException as he:
+        raise he
+    except Exception:
+        # Se o Supabase rejeitar por domínio inválido ou erro de servidor
+        raise HTTPException(status_code=400, detail="errRealEmailRequired")
     
 @app.post("/logout")
 def logout():

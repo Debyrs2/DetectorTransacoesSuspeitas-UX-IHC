@@ -183,5 +183,11 @@
   "btnSubmitFeedback": "Enviar Avaliação",
   "msgLinkSent": "Link enviado! Verifique seu e-mail para ativar a conta.",
   "errEmailNotConfirmed": "⚠️ Por favor, confirme seu e-mail antes de entrar.",
-  "errCreateAccount": "Erro ao criar conta. Tente novamente."
+  "errCreateAccount": "Erro ao criar conta. Tente novamente.",
+  "errRealEmailRequired": "Entre com um email existente.",
+  "errEmailExists": "Este email já foi cadastrado, entre com um novo.",
+  "errUserNotFound": "Por favor, cadastre-se.",
+  "successTitle": "Acesso Liberado!",
+  "successMsg": "Seu e-mail foi confirmado com sucesso. Sua conta do DataGuard já está ativa e pronta para uso.",
+  "btnGoToSystem": "Ir para o Sistema"
 }

@@ -1003,7 +1003,7 @@ $('btnCadastrar').addEventListener('click', async () => {
     // VALIDAÇÃO DE E-MAIL
     const dominios = ['@gmail.com', '@hotmail.com', '@outlook.com'];
     if (!dominios.some(d => email.toLowerCase().endsWith(d))) {
-        mostrarToast(dictMsg.errEmailFormat, 'danger');
+        mostrarToast(dicionarioAtual.errRealEmailRequired, 'danger');
         return;
     }
 

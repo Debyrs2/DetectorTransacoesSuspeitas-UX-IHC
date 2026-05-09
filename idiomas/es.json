@@ -183,5 +183,11 @@
     "btnSubmitFeedback": "Enviar Evaluación",
     "msgLinkSent": "¡Enlace enviado! Revisa tu correo electrónico para activar tu cuenta.",
     "errEmailNotConfirmed": "⚠️ Confirma tu correo electrónico antes de iniciar sesión.",
-    "errCreateAccount": "Error al crear la cuenta. Inténtalo de nuevo."
+    "errCreateAccount": "Error al crear la cuenta. Inténtalo de nuevo.",
+    "errRealEmailRequired": "Por favor, ingrese un correo electrónico existente.",
+    "errEmailExists": "Este correo ya ha sido registrado, por favor ingrese uno nuevo.",
+    "errUserNotFound": "Usuario no encontrado. Por favor, regístrese.",
+    "successTitle": "¡Acceso Liberado!",
+    "successMsg": "Su correo electrónico ha sido confirmado con éxito. Su cuenta ya está activa.",
+    "btnGoToSystem": "Ir al Sistema"
 }
