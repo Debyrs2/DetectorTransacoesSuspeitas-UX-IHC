@@ -237,21 +237,18 @@ class FeedbackInput(BaseModel):
 @app.post("/feedback", dependencies=[Depends(verifica_sessao)])
 def receber_feedback(req: FeedbackInput, request: Request):
     email = verifica_sessao(request)
-    feedbacks_file = APP_DIR / "feedbacks.json"
     
-    feeds = []
-    if feedbacks_file.exists():
-        feeds = json.loads(feedbacks_file.read_text(encoding="utf-8"))
+    try:
+        # Insere o feedback direto na tabela do Supabase
+        supabase.table("feedbacks").insert({
+            "email": email,
+            "rating": req.rating,
+            "texto": req.texto
+        }).execute()
         
-    feeds.append({
-        "email": email,
-        "rating": req.rating,
-        "texto": req.texto,
-        "data": utc_now_iso()
-    })
-    
-    feedbacks_file.write_text(json.dumps(feeds, indent=2, ensure_ascii=False), encoding="utf-8")
-    return {"status": "ok", "msg": "feedbackSuccess"}
+        return {"status": "ok", "msg": "feedbackSuccess"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="feedbackError")
 
 class DatasetOut(BaseModel):
     id: str
