@@ -16,7 +16,6 @@ import pandas as pd
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel, Field
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile, Request, Response, Depends
 from supabase import create_client, Client
@@ -33,7 +32,7 @@ app = FastAPI(title="Detecção de Transações Suspeitas")
 
 # Sistema de Login com bd
 SUPABASE_URL = "https://qhmxiezjzodhrduxfjlo.supabase.co"
-SUPABASE_KEY = "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_7HfOvVPG_Rl1Hu7A1QLrBQ_pH2ND2bb"
+SUPABASE_KEY = "sb_publishable_7HfOvVPG_Rl1Hu7A1QLrBQ_pH2ND2bb"
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 SECRET_KEY = os.getenv("APP_SECRET_KEY", "troque-esta-chave-no-render")
@@ -743,24 +742,10 @@ async def analisar_planilha_legado(
 
 @app.post("/reset-password")
 def reset_password(email: str = Form(...), nova_senha: str = Form(...)):
-    users = _load_users()
     email_limpo = email.strip().lower()
-
-    if email_limpo not in users:
+    check = supabase.table("users").select("email").eq("email", email_limpo).execute()
+    if not check.data:
         raise HTTPException(status_code=404, detail="E-mail não encontrado no sistema.")
-
-    # Atualiza a senha e salva no banco
-    users[email_limpo ][ "senha" ] = nova_senha
-    _write_users(users)
+    supabase.table("users").update({"senha": nova_senha}).eq("email", email_limpo).execute()
     
-    return { "status": "ok", "mensagem": "Senha redefinida com sucesso!" }
-
-    from fastapi.responses import FileResponse
-
-@app.get("/admin/download-feedbacks", dependencies=[Depends(verifica_sessao)])
-def download_feedbacks():
-    # Isso força o download do arquivo que está no servidor do Render
-    path = APP_DIR / "feedbacks.json"
-    if path.exists():
-        return FileResponse(path, media_type='application/json', filename="feedbacks_backup.json")
-    raise HTTPException(status_code=404, detail="Arquivo ainda não foi criado no servidor.")
+    return { "status": "ok", "mensagem": "Senha redefinida com sucesso!" };
