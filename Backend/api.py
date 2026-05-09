@@ -750,12 +750,27 @@ async def analisar_planilha_legado(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Falha ao analisar: {type(e).__name__}: {e}")
 
-@app.post("/reset-password")
-def reset_password(email: str = Form(...), nova_senha: str = Form(...)):
+@app.post("/request-password-reset")
+def request_password_reset(email: str = Form(...)):
     email_limpo = email.strip().lower()
-    check = supabase.table("users").select("email").eq("email", email_limpo).execute()
-    if not check.data:
-        raise HTTPException(status_code=404, detail="errEmailNotFound")
-    supabase.table("users").update({"senha": nova_senha}).eq("email", email_limpo).execute()
-    
-    return { "status": "ok", "mensagem": "msgPassResetSuccess" };
+    try:
+        # O Supabase envia o e-mail com um link que redireciona de volta para o seu site
+        supabase.auth.reset_password_for_email(
+            email_limpo,
+            options={"redirect_to": "https://debyrs2.github.io/DetectorTransacoesSuspeitas-UX-IHC/index.html"}
+        )
+        return {"status": "ok", "mensagem": "E-mail de recuperação enviado! Verifique a sua caixa de entrada."}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Erro ao enviar e-mail. Verifique se o endereço está correto.")
+
+@app.post("/update-password")
+def update_password(access_token: str = Form(...), refresh_token: str = Form(...), nova_senha: str = Form(...)):
+    try:
+
+        supabase.auth.set_session(access_token, refresh_token)
+        supabase.auth.update_user({"password": nova_senha})
+        supabase.auth.sign_out()
+        
+        return {"status": "ok", "mensagem": "Palavra-passe atualizada com sucesso!"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="O link expirou ou é inválido. Tente novamente.")

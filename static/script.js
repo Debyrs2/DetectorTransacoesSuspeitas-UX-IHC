@@ -1551,48 +1551,109 @@ document.addEventListener('keydown', (e) => {
         $('modalReset').style.display = 'none';
     }
 });
-
-$('btnEnviarReset').addEventListener('click', async () => {
+// Pedir o e-mail de recuperação
+$('btnPedirReset').addEventListener('click', async () => {
     const email = $('emailReset').value.trim();
-    const senhaNova = $('senhaReset').value;
-    const msgBox = $('resetMsg');
-    const dictMsg = dicionarioAtual;
-
-    // Validação de segurança parecida com a do cadastro
-    const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-    if (!regexSenha.test(senhaNova)) {
-        mostrarToast(dictMsg.errPassFormat, 'danger');
+    if (!email) {
+        mostrarToast('Por favor, insira o seu e-mail.', 'danger');
         return;
     }
 
-    const btn = $('btnEnviarReset');
-    btn.textContent = dictMsg.statusSaving || 'Salvando...';
+    const btn = $('btnPedirReset');
+    btn.textContent = 'A Enviar...';
     btn.disabled = true;
 
     const fd = new FormData();
     fd.append('email', email);
-    fd.append('nova_senha', senhaNova);
 
     try {
-        const res = await fetch(API_URL + '/reset-password', { method: 'POST', body: fd });
+        const res = await fetch(API_URL + '/request-password-reset', { method: 'POST', body: fd });
         const data = await res.json();
 
         if (res.ok) {
-            mostrarToast(dicionarioAtual[data.mensagem] || data.mensagem, 'success');
+            mostrarToast(data.mensagem, 'success');
             setTimeout(() => {
                 $('boxReset').style.display = 'none';
                 $('boxLogin').style.display = 'block';
-            }, 2000);
+            }, 3000);
         } else {
-            mostrarToast(dicionarioAtual[data.detail] || data.detail, 'danger');
+            mostrarToast(data.detail || 'Erro ao enviar e-mail.', 'danger');
         }
     } catch (e) {
-        mostrarToast('Erro de conexão.', 'danger');
+        mostrarToast('Erro de ligação.', 'danger');
     }
 
-    btn.textContent = dictMsg.btnReset || 'Salvar Nova Senha';
+    btn.textContent = 'Enviar Link';
     btn.disabled = false;
 });
+
+// Intercetar o retorno do e-mail (Ao carregar a página)
+window.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash;
+    // Verifica se o URL contém a chave de recuperação do Supabase
+    if (hash && hash.includes('type=recovery')) {
+        const params = new URLSearchParams(hash.substring(1));
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token');
+
+        if (accessToken && refreshToken) {
+            // Guarda os tokens temporariamente na memória
+            window.recoveryTokens = { accessToken, refreshToken };
+
+            // Abre diretamente a janela de Nova Palavra-passe
+            $('landingPage').style.display = 'none';
+            $('loginOverlay').style.display = 'flex';
+            $('boxLogin').style.display = 'none';
+            $('boxCadastro').style.display = 'none';
+            $('boxReset').style.display = 'none';
+            $('boxNovaSenha').style.display = 'block';
+
+            // Limpa o URL por segurança e estética (esconde o token gigante)
+            window.history.replaceState(null, null, window.location.pathname);
+        }
+    }
+});
+
+// Guardar a Nova Palavra-Passe
+$('btnSalvarNovaSenha').addEventListener('click', async () => {
+    const senhaNova = $('senhaNovaRecuperacao').value;
+    const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+    if (!regexSenha.test(senhaNova)) {
+        mostrarToast('A palavra-passe deve ter pelo menos 8 caracteres, com maiúscula, minúscula, número e símbolo.', 'danger');
+        return;
+    }
+
+    const btn = $('btnSalvarNovaSenha');
+    btn.textContent = 'A Guardar...';
+    btn.disabled = true;
+
+    const fd = new FormData();
+    fd.append('access_token', window.recoveryTokens.accessToken);
+    fd.append('refresh_token', window.recoveryTokens.refreshToken);
+    fd.append('nova_senha', senhaNova);
+
+    try {
+        const res = await fetch(API_URL + '/update-password', { method: 'POST', body: fd });
+        const data = await res.json();
+
+        if (res.ok) {
+            mostrarToast(data.mensagem, 'success');
+            setTimeout(() => {
+                $('boxNovaSenha').style.display = 'none';
+                $('boxLogin').style.display = 'block';
+            }, 2000);
+        } else {
+            mostrarToast(data.detail || 'O link expirou. Peça um novo e-mail.', 'danger');
+        }
+    } catch (e) {
+        mostrarToast('Erro de ligação.', 'danger');
+    }
+
+    btn.textContent = 'Guardar Palavra-passe';
+    btn.disabled = false;
+});
+
 //SISTEMA DE POP-UP GENÉRICO
 function abrirModalGenerico(titulo, mensagem, isInput, placeholder, tipoBotaoConfirmar, callbackConfirmacao) {
     $('modalGenerico').querySelector('.panel').style.maxWidth = '340px';
