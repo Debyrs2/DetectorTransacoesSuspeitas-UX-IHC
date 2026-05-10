@@ -766,11 +766,11 @@ def request_password_reset(email: str = Form(...)):
 @app.post("/update-password")
 def update_password(access_token: str = Form(...), refresh_token: str = Form(...), nova_senha: str = Form(...)):
     try:
-
+       
         supabase.auth.set_session(access_token, refresh_token)
         supabase.auth.update_user({"password": nova_senha})
         supabase.auth.sign_out()
         
-        return {"status": "ok", "mensagem": "Palavra-passe atualizada com sucesso!"}
+        return {"status": "ok", "mensagem": "Senha atualizada no banco com sucesso!"}
     except Exception as e:
-        raise HTTPException(status_code=400, detail="O link expirou ou é inválido. Tente novamente.")
+        raise HTTPException(status_code=400, detail="O link expirou. Solicite uma nova recuperação.")

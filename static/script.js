@@ -221,9 +221,9 @@ async function refreshDatasets() {
     tbody.innerHTML = `<tr><td colspan="5">${dict.tblLoading}</td></tr>`;
 
     // Lógica à prova de falhas para a data de análise
-        const textoUltimaAnalise = ds.last_analysis_at 
-            ? new Date(ds.last_analysis_at).toLocaleString() 
-            : (dicionarioAtual.tblNoAnalysis || "sem análise");
+    const textoUltimaAnalise = ds.last_analysis_at
+        ? new Date(ds.last_analysis_at).toLocaleString()
+        : (dicionarioAtual.tblNoAnalysis || "sem análise");
 
     try {
         const list = await apiJson('/datasets');
@@ -1592,20 +1592,19 @@ $('btnPedirReset').addEventListener('click', async () => {
     btn.disabled = false;
 });
 
-// Intercetar o retorno do e-mail (Ao carregar a página)
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
     const hash = window.location.hash;
-    // Verifica se o URL contém a chave de recuperação do Supabase
+
+    // Se for link de recuperação de senha, para tudo e mostra a tela de troca
     if (hash && hash.includes('type=recovery')) {
         const params = new URLSearchParams(hash.substring(1));
         const accessToken = params.get('access_token');
         const refreshToken = params.get('refresh_token');
 
         if (accessToken && refreshToken) {
-            // Guarda os tokens temporariamente na memória
             window.recoveryTokens = { accessToken, refreshToken };
 
-            // Abre diretamente a janela de Nova Palavra-passe
+            // Garante que o sistema mostre apenas a tela de Nova Senha
             $('landingPage').style.display = 'none';
             $('loginOverlay').style.display = 'flex';
             $('boxLogin').style.display = 'none';
@@ -1613,12 +1612,30 @@ window.addEventListener('DOMContentLoaded', () => {
             $('boxReset').style.display = 'none';
             $('boxNovaSenha').style.display = 'block';
 
-            // Limpa o URL por segurança e estética (esconde o token gigante)
+            // Limpa o hash da URL por segurança
             window.history.replaceState(null, null, window.location.pathname);
+            return;
         }
     }
-});
 
+    // verifica login automático se NÃO estiver em modo recuperação
+    const token = getAuthToken();
+    if (!token) return;
+
+    try {
+        const res = await fetch(API_URL + '/perfil', {
+            headers: buildAuthHeaders()
+        });
+        if (res.ok) {
+            const user = await res.json();
+            showSystem(user);
+        } else {
+            clearAuthToken();
+        }
+    } catch (e) {
+        console.error("Erro ao verificar sessão automática:", e);
+    }
+});
 // Guardar a Nova Palavra-Passe
 $('btnSalvarNovaSenha').addEventListener('click', async () => {
     const senhaNova = $('senhaNovaRecuperacao').value;
