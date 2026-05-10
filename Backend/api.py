@@ -19,6 +19,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile, Request, Response, Depends
 from supabase import create_client, Client
+from fastapi.responses import JSONResponse
+from fastapi import Request
+import traceback
 
 import storage
 
@@ -29,6 +32,16 @@ def utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 app = FastAPI(title="Detecção de Transações Suspeitas")
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    print("🔥 ERRO FATAL CAPTURADO:")
+    traceback.print_exc() 
+    
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"Erro interno revelado: {str(exc)}"},
+        headers={"Access-Control-Allow-Origin": "*"} 
+    )
 
 # Sistema de Login com bd
 SUPABASE_URL = "https://qhmxiezjzodhrduxfjlo.supabase.co"
@@ -225,7 +238,7 @@ ALLOWED_ORIGINS = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
+    allow_origins=["*"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
