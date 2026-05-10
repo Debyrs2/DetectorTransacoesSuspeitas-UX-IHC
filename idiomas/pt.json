@@ -12,7 +12,7 @@
   "btnRegister": "Criar Minha Conta",
   "btnGoLogin": "Já tem conta? Entrar",
   "rulePass": "A senha deve ter no mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo especial (ex: *).",
-  "phUserOrEmail": "E-mail ou Nome de Usuário",
+  "phUserOrEmail": "Digite seu email",
   "phPassword": "ex: @Maria0000",
   "phName": "ex: Maria Silva",
   "phEmail": "ex: maria@gmail.com",

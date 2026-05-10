@@ -128,7 +128,7 @@
     "optZscore": "Análisis Directo (Z-score)",
     "optIqr": "Análisis por Rango Esperado",
     "optMad": "Análisis Riguroso",
-    "phUserOrEmail": "Correo o Usuario",
+    "phUserOrEmail": "ingresa tu correo electrónico",
     "phPassword": "ej: @Maria0000",
     "phName": "ej: Maria Silva",
     "phEmail": "ej: maria@gmail.com",
