@@ -273,7 +273,7 @@ async function refreshDatasets() {
                     <button class="btn2 btn-sm" data-act="rename" data-id="${ds.id}">${dict.btnRename || 'Renomear'}</button>
                     <button class="btn2 btn-sm" data-act="replace" data-id="${ds.id}">${dict.btnReplace || 'Substituir'}</button>
                     <button class="danger btn-sm" data-act="delete" data-id="${ds.id}">${dict.btnDelete || 'Excluir'}</button>
-                    <input type="file" accept=".csv,.xlsx,.xls" style="display:none" data-file="${ds.id}" />
+                    <input type="file" accept=".csv,.xlsx,.xls, .pdf" style="display:none" data-file="${ds.id}" />
                   </div>
                 </td>
             `;
