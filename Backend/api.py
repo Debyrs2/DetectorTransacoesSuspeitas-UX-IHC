@@ -285,7 +285,22 @@ class AnalyzeRequest(BaseModel):
     max_suspeitas: int = Field(default=500, ge=1, le=5000)
 
 def _normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
+    # Padroniza tudo para minúsculo e remove espaços em branco 
     df.columns = df.columns.astype(str).str.strip().str.lower()
+   
+    # Lista de nomes comuns que os bancos usam para a coluna de valores e datas
+    mapeamento_bancos = {
+        "valor": ["r$", "saída", "saídas", "entrada", "entradas", "lançamentos", "lançamento", "amount", "value", "importância", "débito", "crédito"],
+        "data": ["date", "fecha", "dia", "data lançamento", "data da transação"]
+    }
+    
+    #Varre as colunas e renomeia se encontrar um dos sinônimos
+    for coluna_padrao, sinonimos in mapeamento_bancos.items():
+        if coluna_padrao not in df.columns:
+            for col in df.columns:
+                if col in sinonimos:
+                    df.rename(columns={col: coluna_padrao}, inplace=True)
+                    break                  
     return df
 
 # Converte representações textuais localizadas para vetores de ponto flutuante, preparando o domínio matemático para cálculos aritméticos de precisão.
