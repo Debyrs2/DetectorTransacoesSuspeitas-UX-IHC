@@ -1146,3 +1146,19 @@ div[vw-plugin-wrapper] {
 .sidebar-open {
   left: 0 !important;
 }
+
+/* --- FEEDBACK VISUAL DE ARQUIVO SELECIONADO --- */
+#fileNameDisplay.file-ready {
+  color: var(--text);
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+#lblDsFile.file-ready {
+  color: #10b981;
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.05);
+  transition: all 0.3s ease;
+}
