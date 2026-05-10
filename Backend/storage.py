@@ -43,20 +43,27 @@ def ensure_storage() -> None:
     if not META_FILE.exists():
         META_FILE.write_text(json.dumps({"datasets": {}}, ensure_ascii=False, indent=2), encoding="utf-8")
 
-
 def _read_meta_raw() -> Dict[str, Any]:
     ensure_storage()
-    raw = json.loads(META_FILE.read_text(encoding="utf-8"))
+    texto = META_FILE.read_text(encoding="utf-8").strip()
+    
+    # Previne o erro se o ficheiro estiver completamente vazio
+    if not texto:
+        return {"datasets": {}}
+        
+    try:
+        raw = json.loads(texto)
+    except json.JSONDecodeError:
+        raw = {"datasets": {}}
+
     if "datasets" not in raw or not isinstance(raw["datasets"], dict):
         raw = {"datasets": {}}
-        
-    # Migração silenciosa de dados legados para evitar quebra de tela
+    
     for ds_id, item in raw["datasets"].items():
         if "owner" not in item:
             item["owner"] = ""
             
     return raw
-
 
 def _write_meta_raw(raw: Dict[str, Any]) -> None:
     META_FILE.write_text(json.dumps(raw, ensure_ascii=False, indent=2), encoding="utf-8")
