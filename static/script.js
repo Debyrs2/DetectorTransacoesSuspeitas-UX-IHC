@@ -228,6 +228,15 @@ async function refreshDatasets() {
     const dict = dicionarioAtual;
     tbody.innerHTML = `<tr><td colspan="5">${dict.tblLoading}</td></tr>`;
 
+    const res = await fetch(API_URL + '/datasets', { headers: buildAuthHeaders() });
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+
+    if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 20px;">${dicionarioAtual.tblEmpty || 'Nenhum dataset salvo ainda.'}</td></tr>`;
+        return;
+    }
+
     // Lógica à prova de falhas para a data de análise
     const textoAnalise = dataset.last_analysis_at
         ? new Date(dataset.last_analysis_at).toLocaleString()
