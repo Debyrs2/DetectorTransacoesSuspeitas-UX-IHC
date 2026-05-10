@@ -629,8 +629,8 @@ def listar_datasets(request: Request):
     email = verifica_sessao(request)
     from dataclasses import asdict
     
-    all_ds = storage.list_datasets()
-    user_ds = [ds for ds in all_ds if ds.owner == email]
+    all_ds_dict = storage.list_datasets()
+    user_ds = [ds for ds in all_ds_dict.values() if ds.owner == email]
     
     return [asdict(ds) for ds in user_ds]
 
