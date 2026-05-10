@@ -114,10 +114,18 @@ if (langSelectElem) {
 updateUI();
 
 function showErr(msg) {
-    const box = $('errBox');
-    $('errText').textContent = msg;
-    box.style.display = 'block';
-    $('okBox').style.display = 'none';
+    const cleanMsg = msg.replace(/^400: /, '').replace(/^500: /, '');
+
+    if (cleanMsg === 'errNotAuthorized' || cleanMsg === 'errAccessDenied') {
+        clearAuthToken();
+        mostrarToast(dicionarioAtual.errNotAuthorized || "Sua sessão expirou por segurança. Por favor, acesse novamente.", "danger");
+        setTimeout(() => {
+            location.reload();
+        }, 2000);
+        return;
+    }
+
+    mostrarToast(dicionarioAtual[cleanMsg] || cleanMsg, 'danger');
 }
 
 function showOk(msg) {
