@@ -127,7 +127,7 @@
   "msgRenamed": "Nome atualizado.",
   "msgReplaced": "Arquivo substituído. (Resultado anterior limpo)",
   "msgDeleted": "Dataset excluído.",
-  "msgSaved": "Dataset salvo:",
+  "msgSaved": "Dados salvos!",
   "errNoFile": "Escolha um arquivo.",
   "optSigma": "Análise Padrão (Recomendado)",
   "optZscore": "Análise Direta (Z-score)",

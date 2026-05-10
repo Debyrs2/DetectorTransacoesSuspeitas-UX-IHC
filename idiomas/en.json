@@ -127,7 +127,7 @@
   "msgRenamed": "Name updated.",
   "msgReplaced": "File replaced. (Previous result cleared)",
   "msgDeleted": "Dataset deleted.",
-  "msgSaved": "Dataset saved:",
+  "msgSaved": "Data saved!",
   "errNoFile": "Please choose a file.",
   "optSigma": "Standard Analysis",
   "optZscore": "Direct Analysis",
