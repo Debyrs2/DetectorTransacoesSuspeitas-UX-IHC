@@ -16,7 +16,7 @@ DATA_DIR = BASE_DIR / "data"
 RESULTS_DIR = BASE_DIR / "results"
 META_FILE = BASE_DIR / "datasets.json"
 
-ALLOWED_EXTENSIONS = {".csv", ".xlsx", ".xls"}
+ALLOWED_EXTENSIONS = {".csv", ".xlsx", ".xls", ".pdf"}
 
 _lock = threading.Lock()
 
