@@ -1603,7 +1603,6 @@ $('btnPedirReset').addEventListener('click', async () => {
 window.addEventListener('DOMContentLoaded', async () => {
     const hash = window.location.hash;
 
-    // Se for link de recuperação de senha, para tudo e mostra a tela de troca
     if (hash && hash.includes('type=recovery')) {
         const params = new URLSearchParams(hash.substring(1));
         const accessToken = params.get('access_token');
@@ -1612,7 +1611,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         if (accessToken && refreshToken) {
             window.recoveryTokens = { accessToken, refreshToken };
 
-            // Garante que o sistema mostre apenas a tela de Nova Senha
             $('landingPage').style.display = 'none';
             $('loginOverlay').style.display = 'flex';
             $('boxLogin').style.display = 'none';
@@ -1620,13 +1618,11 @@ window.addEventListener('DOMContentLoaded', async () => {
             $('boxReset').style.display = 'none';
             $('boxNovaSenha').style.display = 'block';
 
-            // Limpa o hash da URL por segurança
             window.history.replaceState(null, null, window.location.pathname);
             return;
         }
     }
 
-    // verifica login automático se NÃO estiver em modo recuperação
     const token = getAuthToken();
     if (!token) return;
 
@@ -1641,7 +1637,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             clearAuthToken();
         }
     } catch (e) {
-        console.error("Erro ao verificar sessão automática:", e);
+        console.error("Erro na verificação de sessão", e);
     }
 });
 // Guardar a Nova Palavra-Passe
