@@ -22,7 +22,7 @@ from supabase import create_client, Client
 from fastapi.responses import JSONResponse
 from fastapi import Request
 import traceback
-
+import pdfplumber
 import storage
 
 APP_DIR = Path(__file__).resolve().parent
@@ -302,6 +302,24 @@ def _coerce_ptbr_numeric(series: pd.Series) -> pd.Series:
 
     return pd.to_numeric(series, errors="coerce")
 
+def _parse_pdf_to_dataframe(content: bytes) -> pd.DataFrame:
+    with pdfplumber.open(io.BytesIO(content)) as pdf:
+        all_data = []
+        for page in pdf.pages:
+            # Extrai as tabelas da página atual
+            tables = page.extract_tables()
+            for table in tables:
+                # Remove linhas vazias que o extrator possa gerar
+                clean_table = [[cell if cell is not None else "" for cell in row] for row in table]
+                all_data.extend(clean_table)
+        
+        if not all_data:
+            raise ValueError("Não foi possível encontrar tabelas estruturadas neste PDF.")
+            
+        # O Pandas transforma a primeira linha capturada no cabeçalho
+        df = pd.DataFrame(all_data[1:], columns=all_data[0])
+        return df
+
 def _read_dataframe_from_bytes(filename: str, content: bytes) -> pd.DataFrame:
     name = (filename or "").lower()
     if name.endswith(".csv"):
@@ -310,9 +328,10 @@ def _read_dataframe_from_bytes(filename: str, content: bytes) -> pd.DataFrame:
         return pd.read_excel(io.BytesIO(content), engine="openpyxl")
     if name.endswith(".xls"):
         return pd.read_excel(io.BytesIO(content), engine="xlrd")
+    if name.endswith(".pdf"):
+        return _parse_pdf_to_dataframe(content)
     # fallback
     return pd.read_excel(io.BytesIO(content))
-
 
 def _read_dataframe_from_path(path: Path) -> pd.DataFrame:
     name = path.name.lower()
