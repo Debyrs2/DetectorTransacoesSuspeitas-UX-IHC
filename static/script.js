@@ -221,31 +221,20 @@ async function apiJson(url, opts = {}) {
     }
 
     return data;
-}
+} 
+
 async function refreshDatasets() {
     clearMsg();
     const tbody = $('dsTbody');
     const dict = dicionarioAtual;
-    tbody.innerHTML = `<tr><td colspan="5">${dict.tblLoading}</td></tr>`;
-
-    const res = await fetch(API_URL + '/datasets', { headers: buildAuthHeaders() });
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.json();
-    
-        if (data.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 20px;">${dicionarioAtual.tblEmpty || 'Nenhum dataset salvo ainda.'}</td></tr>`;
-            return;
-        }
-
-    // Lógica à prova de falhas para a data de análise
-    const textoAnalise = dataset.last_analysis_at
-        ? new Date(dataset.last_analysis_at).toLocaleString()
-        : (dicionarioAtual.tblNoAnalysis || "sem análise");
+    tbody.innerHTML = `<tr><td colspan="5">${dict.tblLoading || 'Carregando...'}</td></tr>`;
 
     try {
+    
         const list = await apiJson('/datasets');
+
         if (list.length === 0) {
-            tbody.innerHTML = `<tr><td>${textoUltimaAnalise}</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--muted); padding: 20px;">${dict.tblEmpty || 'Nenhum dataset salvo ainda.'}</td></tr>`;
             return;
         }
 
@@ -264,30 +253,30 @@ async function refreshDatasets() {
 
             const last = ds.last_analysis_at
                 ? pill(
-                    `${nomeMetodo} · ${ds.last_suspeitas_count ?? '--'} ${dict.tblSuspects}`,
+                    `${nomeMetodo} · ${ds.last_suspeitas_count ?? '--'} ${dict.tblSuspects || 'suspeitas'}`,
                     (ds.last_suspeitas_count || 0) > 0 ? 'pill-warn' : 'pill-ok'
                 )
-                : pill(dict.tblNoAnalysis, 'pill-info');
-            const dataObj = new Date(ds.uploaded_at);
+                : pill(dict.tblNoAnalysis || "sem análise", 'pill-info');
+
             const dataHumanizada = tempoRelativo(ds.uploaded_at);
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
-            <td>${escapeHtml(ds.name)}</td>
-            <td>${escapeHtml(ds.original_filename)}</td>
-            <td>${dataHumanizada}</td>
-            <td>${last}</td>
-            <td>
-              <div class="actions">
-                <button class="btn btn-sm" data-act="analyze" data-id="${ds.id}">${dict.btnAnalyze}</button>
-                <button class="btn2 btn-sm" data-act="view" data-id="${ds.id}">${dict.btnReview}</button>
-                <button class="btn2 btn-sm" data-act="rename" data-id="${ds.id}">${dict.btnRename}</button>
-                <button class="btn2 btn-sm" data-act="replace" data-id="${ds.id}">${dict.btnReplace}</button>
-                <button class="danger btn-sm" data-act="delete" data-id="${ds.id}">${dict.btnDelete}</button>
-                <input type="file" accept=".csv,.xlsx,.xls" style="display:none" data-file="${ds.id}" />
-              </div>
-            </td>
-          `;
+                <td>${escapeHtml(ds.name)}</td>
+                <td>${escapeHtml(ds.original_filename)}</td>
+                <td>${dataHumanizada}</td>
+                <td>${last}</td>
+                <td>
+                  <div class="actions">
+                    <button class="btn btn-sm" data-act="analyze" data-id="${ds.id}">${dict.btnAnalyze || 'Analisar'}</button>
+                    <button class="btn2 btn-sm" data-act="view" data-id="${ds.id}">${dict.btnReview || 'Revisar'}</button>
+                    <button class="btn2 btn-sm" data-act="rename" data-id="${ds.id}">${dict.btnRename || 'Renomear'}</button>
+                    <button class="btn2 btn-sm" data-act="replace" data-id="${ds.id}">${dict.btnReplace || 'Substituir'}</button>
+                    <button class="danger btn-sm" data-act="delete" data-id="${ds.id}">${dict.btnDelete || 'Excluir'}</button>
+                    <input type="file" accept=".csv,.xlsx,.xls" style="display:none" data-file="${ds.id}" />
+                  </div>
+                </td>
+            `;
             tbody.appendChild(tr);
         }
     } catch (e) {
