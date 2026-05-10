@@ -155,7 +155,7 @@ def login(identificador: str = Form(...), senha: str = Form(...)):
         user_info = res.user
         nome = user_info.user_metadata.get("nome", "Usuário")
 
-        # Gera o token do seu sistema (DataGuard)
+        # Gera o token
         access_token = gerar_token(ident_limpo)
 
         return {
@@ -610,18 +610,16 @@ async def create_dataset(
 
     return DatasetOut(id=meta.id, name=meta.name, original_filename=meta.original_filename, 
                       size_bytes=meta.size_bytes, uploaded_at=meta.uploaded_at, updated_at=meta.updated_at)
-@app.get("/datasets", response_model=List[DatasetOut])
-def list_datasets(request: Request) -> List[DatasetOut]:
-    email = verifica_sessao(request) # Identifica quem está pedindo a lista
+
+@app.get("/datasets", dependencies=[Depends(verifica_sessao)])
+def listar_datasets(request: Request):
+    email = verifica_sessao(request)
+    from dataclasses import asdict
     
-    # Filtra os datasets: só aparecem os que o dono (owner) é o email logado
-    all_datasets = storage.list_datasets().values()
-    user_datasets = [m for m in all_datasets if getattr(m, 'owner', None) == email]
+    all_ds = storage.list_datasets()
+    user_ds = [ds for ds in all_ds if ds.owner == email]
     
-    ordered = sorted(user_datasets, key=lambda m: m.uploaded_at, reverse=True)
-    return [DatasetOut(id=m.id, name=m.name, original_filename=m.original_filename, 
-                       size_bytes=m.size_bytes, uploaded_at=m.uploaded_at, updated_at=m.updated_at) 
-            for m in ordered]
+    return [asdict(ds) for ds in user_ds]
 
 @app.get("/datasets/{dataset_id}", response_model=DatasetOut, dependencies=[Depends(verifica_sessao)])
 def get_dataset(dataset_id: str) -> DatasetOut:
@@ -720,6 +718,7 @@ def analyze_dataset(dataset_id: str, req: AnalyzeRequest, request: Request) -> D
 def get_last_result(dataset_id: str, request: Request) -> Dict[str, Any]:
     email_logado = verifica_sessao(request)
     meta = storage.get_dataset(dataset_id)
+    
     if not meta:
         raise HTTPException(status_code=404, detail="errDatasetNotFound")
         
