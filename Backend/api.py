@@ -321,18 +321,40 @@ def _parse_pdf_to_dataframe(content: bytes) -> pd.DataFrame:
     with pdfplumber.open(io.BytesIO(content)) as pdf:
         all_data = []
         for page in pdf.pages:
-            # Extrai as tabelas da página atual
             tables = page.extract_tables()
             for table in tables:
-                # Remove linhas vazias que o extrator possa gerar
                 clean_table = [[cell if cell is not None else "" for cell in row] for row in table]
                 all_data.extend(clean_table)
         
         if not all_data:
             raise ValueError("Não foi possível encontrar tabelas estruturadas neste PDF.")
             
-        # O Pandas transforma a primeira linha capturada no cabeçalho
-        df = pd.DataFrame(all_data[1:], columns=all_data[0])
+        df = pd.DataFrame(all_data)
+        
+        palavras_ignoradas = ["total", "saldo", "pagamento", "juros", "iof", "limite", "fatura"]
+        
+        # Cria uma máscara que identifica se alguma célula da linha contém essas palavras
+        mascara_ignorar = df.apply(lambda row: row.astype(str).str.lower().str.contains('|'.join(palavras_ignoradas)).any(), axis=1)
+        
+        df = df[~mascara_ignorar].copy()
+
+        coluna_valor = None
+        max_matches = 0
+        
+        for col in df.columns:
+            s = df[col].astype(str).str.strip()
+            matches = s.str.contains(r"(?:R\$|BRL|\$|€)?\s*-?[\d\.]+\,\d{2}\s*-?", regex=True, na=False)
+            count = matches.sum()
+            
+            if count > max_matches:
+                max_matches = count
+                coluna_valor = col
+                
+        if coluna_valor is not None and max_matches > 0:
+            df.rename(columns={coluna_valor: "valor"}, inplace=True)
+        elif not df.empty:
+            df.rename(columns={df.columns[-1]: "valor"}, inplace=True)
+
         return df
 
 def _read_dataframe_from_bytes(filename: str, content: bytes) -> pd.DataFrame:
