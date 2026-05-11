@@ -221,7 +221,7 @@ async function apiJson(url, opts = {}) {
     }
 
     return data;
-} 
+}
 
 async function refreshDatasets() {
     clearMsg();
@@ -230,7 +230,7 @@ async function refreshDatasets() {
     tbody.innerHTML = `<tr><td colspan="5">${dict.tblLoading || 'Carregando...'}</td></tr>`;
 
     try {
-    
+
         const list = await apiJson('/datasets');
 
         if (list.length === 0) {
@@ -860,15 +860,15 @@ async function checkLogin() {
         });
 
         if (!res.ok) {
-            clearAuthToken();
-            irParaDeslogado(telaSalva);
+            if (res.status === 401) {
+                clearAuthToken();
+                irParaDeslogado(telaSalva);
+            }
             return;
         }
         data = await res.json();
     } catch (e) {
         console.error("Erro na validação do token com a API:", e);
-        clearAuthToken();
-        irParaDeslogado(telaSalva);
         return;
     }
 
