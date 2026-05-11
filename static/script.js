@@ -1601,6 +1601,7 @@ $('btnPedirReset').addEventListener('click', async () => {
 window.addEventListener('DOMContentLoaded', async () => {
     const hash = window.location.hash;
 
+    // Lógica de recuperação de senha via hash 
     if (hash && hash.includes('type=recovery')) {
         const params = new URLSearchParams(hash.substring(1));
         const accessToken = params.get('access_token');
@@ -1619,23 +1620,6 @@ window.addEventListener('DOMContentLoaded', async () => {
             window.history.replaceState(null, null, window.location.pathname);
             return;
         }
-    }
-
-    const token = getAuthToken();
-    if (!token) return;
-
-    try {
-        const res = await fetch(API_URL + '/perfil', {
-            headers: buildAuthHeaders()
-        });
-        if (res.ok) {
-            const user = await res.json();
-            showSystem(user);
-        } else {
-            clearAuthToken();
-        }
-    } catch (e) {
-        console.error("Erro na verificação de sessão", e);
     }
 });
 // Guardar a Nova Palavra-Passe
