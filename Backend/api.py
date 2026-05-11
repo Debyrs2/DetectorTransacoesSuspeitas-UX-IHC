@@ -303,12 +303,16 @@ def _normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
                     break                  
     return df
 
-# Converte representações textuais localizadas para vetores de ponto flutuante, preparando o domínio matemático para cálculos aritméticos de precisão.
 def _coerce_ptbr_numeric(series: pd.Series) -> pd.Series:
-    # Converte números de string para float considerando formatos PT-BR e EN.
     if series.dtype == "object":
         s = series.astype(str).str.strip()
+        
+        # Limpeza inicial (tira R$ e espaços invisíveis)
         s = s.str.replace("R$", "", regex=False).str.replace("\u00A0", "", regex=False).str.replace(" ", "", regex=False)
+        
+        s = s.apply(lambda x: "-" + str(x).replace("-", "") if str(x).endswith("-") else x)
+        
+        # Converte a vírgula brasileira para o ponto americano do Python
         ptbr = s.str.contains(",").fillna(False)
         s_ptbr = s.where(ptbr, "").str.replace(".", "", regex=False).str.replace(",", ".", regex=False)
         s = s.where(~ptbr, s_ptbr)
