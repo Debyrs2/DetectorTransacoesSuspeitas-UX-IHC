@@ -115,11 +115,6 @@ def validar_token(token: str) -> str:
 
     if exp < int(time.time()):
         raise HTTPException(status_code=401, detail="errTokenExpired")
-
-    users = _load_users()
-    if email not in users:
-        raise HTTPException(status_code=401, detail="errUserNotFound")
-
     return email
 
 
