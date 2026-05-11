@@ -290,7 +290,7 @@ def _normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
    
     # Lista de nomes comuns que os bancos usam para a coluna de valores e datas
     mapeamento_bancos = {
-        "valor": ["r$", "saída", "saídas", "entrada", "entradas", "lançamentos", "lançamento", "amount", "value", "importância", "débito", "crédito"],
+        "valor": ["r$", "saída", "saídas", "entrada", "entradas", "lançamentos", "lançamento", "amount", "value", "importância", "débito", "crédito", "Emissão e envio"],
         "data": ["date", "fecha", "dia", "data lançamento", "data da transação"]
     }
     
