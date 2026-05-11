@@ -319,58 +319,36 @@ def _coerce_ptbr_numeric(series: pd.Series) -> pd.Series:
 
 def _parse_pdf_to_dataframe(content: bytes) -> pd.DataFrame:
     linhas_transacao = []
+    regex_mestre = re.compile(
+        r"(\d{2}/\d{2}(?:/\d{2,4})?|\d{2}\s+(?:JAN|FEV|MAR|ABR|MAI|JUN|JUL|AGO|SET|OUT|NOV|DEZ)[A-Z]*)" # Data
+        r"[\s\n]+(.*?)" 
+        r"[\s\n]+(-?\s*(?:R\$|BRL|\$|€)?\s*-?[\d\.]+\,\d{2}\s*-?)", 
+        re.IGNORECASE | re.DOTALL
+    )
 
-    regex_valor = re.compile(r"(-?\s*(?:R\$|BRL|\$|€)?\s*-?[\d\.]+\,\d{2}\s*-?)")
-
-    regex_data = re.compile(r"\b(\d{2}/\d{2}(?:/\d{2,4})?|\d{2}\s+(?:JAN|FEV|MAR|ABR|MAI|JUN|JUL|AGO|SET|OUT|NOV|DEZ)[A-Z]*)\b", re.IGNORECASE)
-
-    termos_resumo = [
-        "saldo anterior", "saldo atual", "total da fatura", "total a pagar",
-        "pagamento recebido", "saldo em aberto", "limite", "saldo financiado",
-        "juros", "iof", "encargos", "pagamento em", "vencimento",
-        "saldo em rotativo", "total de compras", "total pago", "saldo disponível",
-        "financiamentos"
-    ]
+    termos_resumo = ["total", "saldo", "pagamento em", "limite", "juros", "iof", "fatura"]
 
     with pdfplumber.open(io.BytesIO(content)) as pdf:
         for page in pdf.pages:
-            text = page.extract_text() 
-            if not text:
-                continue
-                
-            for line in text.split('\n'):
-                line = line.strip()
-                if not line:
-                    continue
-                    
-                line_lower = line.lower()
-          
-                if any(termo in line_lower for termo in termos_resumo):
-                    continue
-                    
-                matches_valor = regex_valor.findall(line)
-                if matches_valor:
-           
-                    valor_str = matches_valor[-1]
-                  
-                    match_data = regex_data.search(line)
-                    data_str = match_data.group(1).strip() if match_data else ""
-                  
-                    desc = line
-                    if data_str:
-                        desc = desc.replace(data_str, "", 1)
-         
-                    parts = desc.rsplit(valor_str, 1)
-                    desc = "".join(parts).strip(" -")
-       
+            text = page.extract_text()
+            if not text: continue
+            
+            # Busca todas as ocorrências na página de uma vez
+            for match in regex_mestre.finditer(text):
+                data_str = match.group(1).strip()
+                desc = match.group(2).strip().replace('\n', ' ')
+                valor_str = match.group(3).strip()
+
+                # Só adiciona se não for uma linha de resumo/pagamento
+                if not any(termo in desc.lower() for termo in termos_resumo):
                     linhas_transacao.append({
                         "data": data_str,
                         "descricao": desc,
-                        "valor": valor_str.strip()
+                        "valor": valor_str
                     })
 
-    if not linhas_transacao:
-        raise ValueError("ERR_FEW_DATA|valor (Nenhuma transação financeira foi encontrada no PDF).")
+    if len(linhas_transacao) == 0:
+        raise ValueError("ERR_FEW_DATA|valor (O sistema não conseguiu extrair transações deste PDF).")
 
     return pd.DataFrame(linhas_transacao)
 
