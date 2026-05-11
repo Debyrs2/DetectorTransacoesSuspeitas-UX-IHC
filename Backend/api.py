@@ -11,6 +11,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Tuple
+import re
 
 import pandas as pd
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
@@ -317,44 +318,61 @@ def _coerce_ptbr_numeric(series: pd.Series) -> pd.Series:
     return pd.to_numeric(series, errors="coerce")
 
 def _parse_pdf_to_dataframe(content: bytes) -> pd.DataFrame:
+    linhas_transacao = []
+
+    regex_valor = re.compile(r"(-?\s*(?:R\$|BRL|\$|€)?\s*-?[\d\.]+\,\d{2}\s*-?)")
+
+    regex_data = re.compile(r"\b(\d{2}/\d{2}(?:/\d{2,4})?|\d{2}\s+(?:JAN|FEV|MAR|ABR|MAI|JUN|JUL|AGO|SET|OUT|NOV|DEZ)[A-Z]*)\b", re.IGNORECASE)
+
+    termos_resumo = [
+        "saldo anterior", "saldo atual", "total da fatura", "total a pagar",
+        "pagamento recebido", "saldo em aberto", "limite", "saldo financiado",
+        "juros", "iof", "encargos", "pagamento em", "vencimento",
+        "saldo em rotativo", "total de compras", "total pago", "saldo disponível",
+        "financiamentos"
+    ]
+
     with pdfplumber.open(io.BytesIO(content)) as pdf:
-        all_data = []
         for page in pdf.pages:
-            tables = page.extract_tables()
-            for table in tables:
-                clean_table = [[cell if cell is not None else "" for cell in row] for row in table]
-                all_data.extend(clean_table)
-        
-        if not all_data:
-            raise ValueError("Não foi possível encontrar tabelas estruturadas neste PDF.")
-            
-        df = pd.DataFrame(all_data)
-        
-        palavras_ignoradas = ["total", "saldo", "pagamento", "juros", "iof", "limite", "fatura"]
-        
-        # Cria uma máscara que identifica se alguma célula da linha contém essas palavras
-        mascara_ignorar = df.apply(lambda row: row.astype(str).str.lower().str.contains('|'.join(palavras_ignoradas)).any(), axis=1)
-        
-        df = df[~mascara_ignorar].copy()
-
-        coluna_valor = None
-        max_matches = 0
-        
-        for col in df.columns:
-            s = df[col].astype(str).str.strip()
-            matches = s.str.contains(r"(?:R\$|BRL|\$|€)?\s*-?[\d\.]+\,\d{2}\s*-?", regex=True, na=False)
-            count = matches.sum()
-            
-            if count > max_matches:
-                max_matches = count
-                coluna_valor = col
+            text = page.extract_text() 
+            if not text:
+                continue
                 
-        if coluna_valor is not None and max_matches > 0:
-            df.rename(columns={coluna_valor: "valor"}, inplace=True)
-        elif not df.empty:
-            df.rename(columns={df.columns[-1]: "valor"}, inplace=True)
+            for line in text.split('\n'):
+                line = line.strip()
+                if not line:
+                    continue
+                    
+                line_lower = line.lower()
+          
+                if any(termo in line_lower for termo in termos_resumo):
+                    continue
+                    
+                matches_valor = regex_valor.findall(line)
+                if matches_valor:
+           
+                    valor_str = matches_valor[-1]
+                  
+                    match_data = regex_data.search(line)
+                    data_str = match_data.group(1).strip() if match_data else ""
+                  
+                    desc = line
+                    if data_str:
+                        desc = desc.replace(data_str, "", 1)
+         
+                    parts = desc.rsplit(valor_str, 1)
+                    desc = "".join(parts).strip(" -")
+       
+                    linhas_transacao.append({
+                        "data": data_str,
+                        "descricao": desc,
+                        "valor": valor_str.strip()
+                    })
 
-        return df
+    if not linhas_transacao:
+        raise ValueError("ERR_FEW_DATA|valor (Nenhuma transação financeira foi encontrada no PDF).")
+
+    return pd.DataFrame(linhas_transacao)
 
 def _read_dataframe_from_bytes(filename: str, content: bytes) -> pd.DataFrame:
     name = (filename or "").lower()
