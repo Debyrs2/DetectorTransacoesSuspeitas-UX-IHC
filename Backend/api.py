@@ -356,6 +356,8 @@ def _read_dataframe_from_path(path: Path) -> pd.DataFrame:
         return pd.read_excel(path, engine="openpyxl")
     if name.endswith(".xls"):
         return pd.read_excel(path, engine="xlrd")
+    if name.endswith(".pdf"):
+        return _parse_pdf_to_dataframe(path.read_bytes())
     return pd.read_excel(path)
 
 
