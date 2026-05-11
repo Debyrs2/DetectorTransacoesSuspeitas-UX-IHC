@@ -439,6 +439,8 @@ def _analyze_df(df: pd.DataFrame, req: AnalyzeRequest) -> Dict[str, Any]:
     _normalize_columns(df)
 
     col = (req.column or "").strip().lower()
+    if col not in df.columns and "valor" in df.columns:
+        col = "valor"
     series = _coerce_numeric_series(df, col)
     if len(series) < 2:
         raise ValueError(f"ERR_FEW_DATA|{col}")
