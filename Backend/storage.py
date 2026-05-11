@@ -1,27 +1,22 @@
-from __future__ import annotations
-
-import json
-import threading
-from dataclasses import asdict, dataclass, field
+import tempfile
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional
 from uuid import uuid4
-from dataclasses import dataclass, asdict
-from typing import Optional, Dict, Any
+from supabase import create_client, Client
 
+# Inicializa a ligação ao Supabase diretamente no motor de storage
+SUPABASE_URL = "https://qhmxiezjzodhrduxfjlo.supabase.co"
+SUPABASE_KEY = "sb_publishable_7HfOvVPG_Rl1Hu7A1QLrBQ_pH2ND2bb"
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / "data"
-RESULTS_DIR = BASE_DIR / "results"
-META_FILE = BASE_DIR / "datasets.json"
-
+BUCKET_NAME = "dataguard"
 ALLOWED_EXTENSIONS = {".csv", ".xlsx", ".xls", ".pdf"}
-
-_lock = threading.Lock()
 
 def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
+
 @dataclass
 class DatasetMeta:
     id: str
@@ -36,74 +31,52 @@ class DatasetMeta:
     last_analysis_method: Optional[str] = None
     last_suspeitas_count: Optional[int] = None
     last_thresholds: Optional[Dict[str, Any]] = None
+
 def ensure_storage() -> None:
-    """Cria pastas/arquivos necessários (filesystem storage)."""
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    if not META_FILE.exists():
-        META_FILE.write_text(json.dumps({"datasets": {}}, ensure_ascii=False, indent=2), encoding="utf-8")
-
-def _read_meta_raw() -> Dict[str, Any]:
-    ensure_storage()
-    texto = META_FILE.read_text(encoding="utf-8").strip()
-    
-    # Previne o erro se o ficheiro estiver completamente vazio
-    if not texto:
-        return {"datasets": {}}
-        
-    try:
-        raw = json.loads(texto)
-    except json.JSONDecodeError:
-        raw = {"datasets": {}}
-
-    if "datasets" not in raw or not isinstance(raw["datasets"], dict):
-        raw = {"datasets": {}}
-    
-    for ds_id, item in raw["datasets"].items():
-        if "owner" not in item:
-            item["owner"] = ""
-            
-    return raw
-
-def _write_meta_raw(raw: Dict[str, Any]) -> None:
-    META_FILE.write_text(json.dumps(raw, ensure_ascii=False, indent=2), encoding="utf-8")
-
-
-def list_datasets() -> Dict[str, DatasetMeta]:
-    with _lock:
-        raw = _read_meta_raw()
-        return {ds_id: DatasetMeta(**item) for ds_id, item in raw["datasets"].items()}
-
-
-def get_dataset(ds_id: str) -> Optional[DatasetMeta]:
-    return list_datasets().get(ds_id)
-
-
-def dataset_path(meta: DatasetMeta) -> Path:
-    return DATA_DIR / meta.stored_filename
-
-
-def result_path(ds_id: str) -> Path:
-    return RESULTS_DIR / f"{ds_id}.json"
-
+    pass 
 
 def _safe_ext(filename: str) -> str:
     return Path(filename).suffix.lower()
 
-def create_dataset(file_bytes, filename, name, owner):
-    ensure_storage()
+def list_datasets() -> Dict[str, DatasetMeta]:
+    res = supabase.table("datasets").select("id, owner, name, original_filename, stored_filename, size_bytes, uploaded_at, updated_at, last_analysis_at, last_analysis_method, last_suspeitas_count, last_thresholds").execute()
+    return {row["id"]: DatasetMeta(**row) for row in res.data}
+
+def get_dataset(ds_id: str) -> Optional[DatasetMeta]:
+    res = supabase.table("datasets").select("id, owner, name, original_filename, stored_filename, size_bytes, uploaded_at, updated_at, last_analysis_at, last_analysis_method, last_suspeitas_count, last_thresholds").eq("id", ds_id).execute()
+    if not res.data:
+        return None
+    return DatasetMeta(**res.data[0])
+
+def dataset_path(meta: DatasetMeta) -> Path:
+    # Descarrega temporariamente o ficheiro da nuvem apenas para a análise matemática
+    tmp_dir = Path(tempfile.gettempdir()) / "dataguard_cache"
+    tmp_dir.mkdir(exist_ok=True)
+    local_path = tmp_dir / meta.stored_filename
+    
+    if not local_path.exists():
+        res = supabase.storage.from_(BUCKET_NAME).download(meta.stored_filename)
+        with open(local_path, "wb") as f:
+            f.write(res)
+            
+    return local_path
+
+def create_dataset(file_bytes: bytes, filename: str, name: str, owner: str) -> DatasetMeta:
     ext = _safe_ext(filename)
     if ext not in ALLOWED_EXTENSIONS:
-        raise ValueError(f"Extensão não suportada: {ext}. Use: {', '.join(sorted(ALLOWED_EXTENSIONS))}.")
+        raise ValueError(f"Extensão não suportada: {ext}.")
 
     ds_id = uuid4().hex[:12]
     stored_filename = f"{ds_id}{ext}"
-    (DATA_DIR / stored_filename).write_bytes(file_bytes)
+    
+    # Envia o ficheiro para o Supabase Storage
+    tmp_path = Path(tempfile.gettempdir()) / stored_filename
+    tmp_path.write_bytes(file_bytes)
+    supabase.storage.from_(BUCKET_NAME).upload(stored_filename, str(tmp_path))
+    tmp_path.unlink(missing_ok=True)
 
     now = _utc_now_iso()
-    
-    # Cria o objeto usando a Dataclass para o asdict() funcionar depois
-    meta = DatasetMeta (
+    meta = DatasetMeta(
         id=ds_id,
         owner=owner,  
         name=(name or Path(filename).stem or ds_id),
@@ -113,102 +86,84 @@ def create_dataset(file_bytes, filename, name, owner):
         uploaded_at=now,
         updated_at=now
     )
-
-    with _lock:
-        raw = _read_meta_raw()
-        # O asdict converte o objeto meta num dicionário e salva no JSON
-        raw["datasets"][ds_id] = asdict(meta)
-        _write_meta_raw(raw)
-
+    
+    # Guarda os metadados na base de dados
+    supabase.table("datasets").insert(asdict(meta)).execute()
     return meta
 
-def update_dataset(
-    ds_id: str,
-    *,
-    new_name: Optional[str] = None,
-    new_file_bytes: Optional[bytes] = None,
-    new_filename: Optional[str] = None,
-) -> DatasetMeta:
-    ensure_storage()
-    with _lock:
-        raw = _read_meta_raw()
-        item = raw["datasets"].get(ds_id)
-        if not item:
-            raise KeyError("Dataset não encontrado")
+def update_dataset(ds_id: str, *, new_name: Optional[str] = None, new_file_bytes: Optional[bytes] = None, new_filename: Optional[str] = None) -> DatasetMeta:
+    meta = get_dataset(ds_id)
+    if not meta:
+        raise KeyError("Dataset não encontrado")
 
-        meta = DatasetMeta(**item)
+    update_data = {"updated_at": _utc_now_iso()}
 
-        if new_name:
-            meta.name = new_name
+    if new_name:
+        update_data["name"] = new_name
+        meta.name = new_name
 
-        if new_file_bytes is not None:
-            if not new_filename:
-                raise ValueError("new_filename é obrigatório ao substituir o arquivo")
+    if new_file_bytes is not None and new_filename:
+        ext = _safe_ext(new_filename)
+        if ext not in ALLOWED_EXTENSIONS:
+            raise ValueError(f"Extensão não suportada: {ext}.")
 
-            ext = _safe_ext(new_filename)
-            if ext not in ALLOWED_EXTENSIONS:
-                raise ValueError(f"Extensão não suportada: {ext}.")
+        try:
+            supabase.storage.from_(BUCKET_NAME).remove([meta.stored_filename])
+        except Exception:
+            pass
 
-            # remove arquivo antigo
-            old_path = dataset_path(meta)
-            old_path.unlink(missing_ok=True)
+        meta.original_filename = new_filename
+        meta.stored_filename = f"{ds_id}{ext}"
+        
+        tmp_path = Path(tempfile.gettempdir()) / meta.stored_filename
+        tmp_path.write_bytes(new_file_bytes)
+        supabase.storage.from_(BUCKET_NAME).upload(meta.stored_filename, str(tmp_path))
+        tmp_path.unlink(missing_ok=True)
+        
+        update_data["original_filename"] = meta.original_filename
+        update_data["stored_filename"] = meta.stored_filename
+        update_data["size_bytes"] = len(new_file_bytes)
+        update_data["last_analysis_at"] = None
+        update_data["last_analysis_method"] = None
+        update_data["last_suspeitas_count"] = None
+        update_data["last_thresholds"] = None
+        update_data["result_data"] = None
 
-            # salva novo arquivo mantendo o mesmo id
-            meta.original_filename = new_filename
-            meta.stored_filename = f"{ds_id}{ext}"
-            dataset_path(meta).write_bytes(new_file_bytes)
-            meta.size_bytes = len(new_file_bytes)
+    supabase.table("datasets").update(update_data).eq("id", ds_id).execute()
+    
+    cache_path = Path(tempfile.gettempdir()) / "dataguard_cache" / meta.stored_filename
+    cache_path.unlink(missing_ok=True)
 
-            # invalida resultado anterior
-            result_path(ds_id).unlink(missing_ok=True)
-            meta.last_analysis_at = None
-            meta.last_analysis_method = None
-            meta.last_suspeitas_count = None
-            meta.last_thresholds = None
-
-        meta.updated_at = _utc_now_iso()
-        raw["datasets"][ds_id] = asdict(meta)
-        _write_meta_raw(raw)
-
-    return meta
-
+    return get_dataset(ds_id)
 
 def delete_dataset(ds_id: str) -> None:
-    ensure_storage()
-    with _lock:
-        raw = _read_meta_raw()
-        item = raw["datasets"].pop(ds_id, None)
-        _write_meta_raw(raw)
-
-    if not item:
+    meta = get_dataset(ds_id)
+    if not meta:
         raise KeyError("Dataset não encontrado")
-    meta = DatasetMeta(**item)
-    dataset_path(meta).unlink(missing_ok=True)
-    result_path(ds_id).unlink(missing_ok=True)
-
+        
+    try:
+        supabase.storage.from_(BUCKET_NAME).remove([meta.stored_filename])
+    except Exception:
+        pass
+        
+    supabase.table("datasets").delete().eq("id", ds_id).execute()
+    
+    cache_path = Path(tempfile.gettempdir()) / "dataguard_cache" / meta.stored_filename
+    cache_path.unlink(missing_ok=True)
 
 def save_result(ds_id: str, result: Dict[str, Any]) -> None:
-    ensure_storage()
-    result_path(ds_id).write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
-
-    # Atualiza metadados com resumo do último resultado
-    with _lock:
-        raw = _read_meta_raw()
-        item = raw["datasets"].get(ds_id)
-        if not item:
-            return
-        meta = DatasetMeta(**item)
-        meta.last_analysis_at = result.get("analysis_at")
-        meta.last_analysis_method = result.get("method")
-        meta.last_suspeitas_count = result.get("quantidade_suspeitas")
-        meta.last_thresholds = result.get("thresholds")
-        meta.updated_at = _utc_now_iso()
-        raw["datasets"][ds_id] = asdict(meta)
-        _write_meta_raw(raw)
-
+    update_data = {
+        "last_analysis_at": result.get("analysis_at"),
+        "last_analysis_method": result.get("method"),
+        "last_suspeitas_count": result.get("quantidade_suspeitas"),
+        "last_thresholds": result.get("thresholds"),
+        "result_data": result,
+        "updated_at": _utc_now_iso()
+    }
+    supabase.table("datasets").update(update_data).eq("id", ds_id).execute()
 
 def load_result(ds_id: str) -> Optional[Dict[str, Any]]:
-    rp = result_path(ds_id)
-    if not rp.exists():
+    res = supabase.table("datasets").select("result_data").eq("id", ds_id).execute()
+    if not res.data or not res.data[0].get("result_data"):
         return None
-    return json.loads(rp.read_text(encoding="utf-8"))
+    return res.data[0]["result_data"]
