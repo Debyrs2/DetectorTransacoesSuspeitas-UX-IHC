@@ -1265,33 +1265,24 @@ function atualizarBotaoTema() {
     if (!btnThemeToggle) return;
     const currentTheme = htmlEl.getAttribute('data-theme');
     const themeIcon = $('themeIcon');
+    const themeText = $('themeText'); 
     const floatIcon = $('btnThemeToggleFloat');
 
     if (currentTheme === 'light') {
         if (themeIcon) themeIcon.textContent = '🌙';
         if (floatIcon) floatIcon.textContent = '🌙';
+        if (themeText) {
+            themeText.setAttribute('data-i18n', 'themeDark');
+            themeText.textContent = dicionarioAtual.themeDark || 'Tema Escuro';
+        }
     } else {
         if (themeIcon) themeIcon.textContent = '☀️';
         if (floatIcon) floatIcon.textContent = '☀️';
-    }
-}
-
-// Sincronizar interações dos botões flutuantes de Tema e Idioma
-if ($('btnThemeToggleFloat')) {
-    $('btnThemeToggleFloat').addEventListener('click', () => $('btnThemeToggle').click());
-}
-
-if ($('langSelectFloat')) {
-    $('langSelectFloat').value = currentLang;
-    $('langSelectFloat').addEventListener('change', (e) => {
-        if ($('langSelect')) {
-            $('langSelect').value = e.target.value;
-            $('langSelect').dispatchEvent(new Event('change'));
+        if (themeText) {
+            themeText.setAttribute('data-i18n', 'themeLight');
+            themeText.textContent = dicionarioAtual.themeLight || 'Tema Claro';
         }
-    });
-    $('langSelect')?.addEventListener('change', (e) => {
-        $('langSelectFloat').value = e.target.value;
-    });
+    }
 }
 
 function ajustarIdiomaMobile() {
