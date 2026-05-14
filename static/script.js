@@ -843,6 +843,10 @@ function aplicarTelaImediata() {
     return telaSalva;
 }
 async function checkLogin() {
+    if (window.location.hash.includes('type=recovery')) {
+        return;
+    }
+
     const telaSalva = aplicarTelaImediata();
     const token = getAuthToken();
 
@@ -1265,7 +1269,7 @@ function atualizarBotaoTema() {
     if (!btnThemeToggle) return;
     const currentTheme = htmlEl.getAttribute('data-theme');
     const themeIcon = $('themeIcon');
-    const themeText = $('themeText'); 
+    const themeText = $('themeText');
     const floatIcon = $('btnThemeToggleFloat');
 
     if (currentTheme === 'light') {

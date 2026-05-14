@@ -821,14 +821,17 @@ async def analisar_planilha_legado(
 def request_password_reset(email: str = Form(...)):
     email_limpo = email.strip().lower()
     try:
-        # O Supabase envia o e-mail com um link que redireciona de volta para o seu site
         supabase.auth.reset_password_for_email(
             email_limpo,
             options={"redirect_to": "https://debyrs2.github.io/DetectorTransacoesSuspeitas-UX-IHC/index.html"}
         )
         return {"status": "ok", "mensagem": "E-mail de recuperação enviado! Verifique a sua caixa de entrada."}
     except Exception as e:
-        raise HTTPException(status_code=400, detail="Erro ao enviar e-mail. Verifique se o endereço está correto.")
+        msg_erro = str(e).lower()
+        if "rate limit" in msg_erro or "seconds" in msg_erro or "too many" in msg_erro:
+            raise HTTPException(status_code=429, detail="Muitas tentativas. Aguarde 1 minuto antes de pedir um novo link.")
+        
+        raise HTTPException(status_code=400, detail="Não foi possível enviar o link. Verifique se a conta realmente existe.")
 
 @app.post("/update-password")
 def update_password(access_token: str = Form(...), refresh_token: str = Form(...), nova_senha: str = Form(...)):
