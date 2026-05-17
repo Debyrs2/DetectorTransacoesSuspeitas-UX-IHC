@@ -109,6 +109,21 @@ if (langSelectElem) {
             resetarResultado();
         }
     });
+
+    const langSelectFloatElem = $('langSelectFloat');
+    if (langSelectFloatElem) {
+        langSelectFloatElem.value = currentLang;
+
+        langSelectFloatElem.addEventListener('change', async (e) => {
+            currentLang = e.target.value;
+            localStorage.setItem('app-lang', currentLang);
+            await carregarIdioma(currentLang);
+            ajustarIdiomaMobile();
+            atualizarBotaoTema();
+
+            if ($('langSelect')) $('langSelect').value = currentLang;
+        });
+    }
 }
 
 updateUI();

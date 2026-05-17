@@ -883,145 +883,40 @@ div[vw-plugin-wrapper] {
 }
 
 /*RESPONSIVIDADE MOBILE */
-
-@media (max-width: 980px) {
-
-  /* Oculta o super texto da logo na tela de login para abrir espaço pro formulário */
-  .login-info-column {
-    display: none !important;
-  }
-
-  /* Centraliza totalmente a caixa de login no mobile */
-  #loginOverlay>div {
-    justify-content: center !important;
-    padding-top: 20px;
-  }
-}
-
 @media (max-width: 768px) {
-  body>div[style*="position: absolute; top: 16px; right: 24px"] {
-    position: absolute !important;
-    top: 12px !important;
-    left: 50% !important;
-    right: auto !important;
-    transform: translateX(-50%) !important;
+
+  #landingPage h1 {
+    font-size: 2.2rem !important;
+    margin-bottom: 16px !important;
+  }
+
+  #landingPage p {
+    font-size: 1rem !important;
+    padding: 0 10px;
+  }
+
+  .panel {
+    padding: 16px 14px !important;
+  }
+
+  .btn-row {
     justify-content: center !important;
-    width: calc(100% - 24px) !important;
-    padding: 0 !important;
-    margin-bottom: 0 !important;
-    gap: 10px !important;
-    z-index: 999999 !important;
+    width: 100%;
   }
 
-  #landingPage {
-    padding-top: 110px !important;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
+  .btn-row .btn {
+    width: 100%;
+    margin-top: 8px;
   }
 
-  #btnThemeToggle,
-  #langSelect,
-  #btnA11yToggle,
-  #userProfile {
-    height: 32px !important;
-  }
-
-  #btnThemeToggle {
-    width: 100% !important;
-    padding: 8px 12px !important;
-    justify-content: flex-start !important;
-    gap: 10px !important;
-  }
-
-  #btnThemeToggle #themeText {
-    display: inline !important;
-  }
-
-  #btnA11yToggle {
-    width: 32px !important;
-    min-width: 32px !important;
-    padding: 0 !important;
-  }
-
-  #langSelect {
-    width: 100px !important;
-    min-width: 100px !important;
-    padding: 8px 12px !important;
-    text-align: left !important;
-  }
-
-  #userProfile {
-    width: 32px !important;
-    min-width: 32px !important;
-    padding: 4px !important;
-    justify-content: center !important;
-    gap: 0 !important;
-  }
-
-  #userProfile>div:first-child,
-  #userEmailDisplay,
-  #userNameDisplay {
-    display: block !important;
-  }
-
-  #userAvatar {
-    width: 24px !important;
-    height: 24px !important;
-    font-size: 12px !important;
-    line-height: 24px !important;
-  }
-
-  header {
-    margin-top: 0 !important;
-  }
-
-  /* Faz o menu de Perfil crescer para a direita, impedindo que corte na borda da tela */
-  #userDropdown {
-    left: 0 !important;
-    right: auto !important;
-    transform: none !important;
-    width: 200px !important;
-    z-index: 1000 !important;
-  }
-
-  /* Desloca o menu de Acessibilidade um pouco para a esquerda para alinhar melhor */
-  #a11yDropdown {
-    left: -50px !important;
-    right: auto !important;
-    transform: none !important;
-    width: 200px !important;
-    z-index: 1000 !important;
-  }
-
-  .actions {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px !important;
-    min-width: 200px;
-  }
-
-  .actions button {
-    width: 100% !important;
-    padding: 8px 4px !important;
-    font-size: 11px !important;
-    margin: 0 !important;
-  }
-
-  .actions button[data-act="delete"] {
-    grid-column: span 2;
+  .table-box,
+  #sessao-grafico>div[style*="overflow-x: auto"] {
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
   }
 
   .table-box table {
-    min-width: max-content !important;
-  }
-
-  #boxGrafico {
-    min-width: 600px !important;
-  }
-
-  #sessao-grafico>div[style*="height: 400px"] {
-    height: 300px !important;
-    padding-bottom: 8px !important;
+    min-width: 700px !important;
   }
 }
 
@@ -1161,4 +1056,15 @@ div[vw-plugin-wrapper] {
   border-color: #10b981;
   background: rgba(16, 185, 129, 0.05);
   transition: all 0.3s ease;
+}
+
+#corpoManual ul,
+#corpoManual ol {
+  padding-left: 24px;
+  list-style-position: outside;
+  margin-bottom: 12px;
+}
+
+#corpoManual {
+  padding-bottom: 30px;
 }
