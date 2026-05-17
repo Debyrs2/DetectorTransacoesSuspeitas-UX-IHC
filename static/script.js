@@ -241,11 +241,12 @@ async function apiJson(url, opts = {}) {
 window.dg_viewArchived = false;
 
 window.toggleArchive = function (id) {
+    const strId = String(id); // Blinda contra erros de tipagem
     let arquivados = JSON.parse(localStorage.getItem('dg_arquivados') || '[]');
-    if (arquivados.includes(id)) {
-        arquivados = arquivados.filter(item => item !== id);
+    if (arquivados.includes(strId)) {
+        arquivados = arquivados.filter(item => item !== strId);
     } else {
-        arquivados.push(id);
+        arquivados.push(strId);
     }
     localStorage.setItem('dg_arquivados', JSON.stringify(arquivados));
     refreshDatasets();
@@ -291,7 +292,7 @@ async function refreshDatasets() {
         const arquivadosIds = JSON.parse(localStorage.getItem('dg_arquivados') || '[]');
 
         const datasetsFiltrados = list.filter(ds => {
-            const isArchived = arquivadosIds.includes(ds.id);
+            const isArchived = arquivadosIds.includes(String(ds.id));
             return window.dg_viewArchived ? isArchived : !isArchived;
         });
         if (datasetsFiltrados.length === 0) {
@@ -336,9 +337,9 @@ async function refreshDatasets() {
                     <button class="btn2 btn-sm" data-act="rename" data-id="${ds.id}">${dict.btnRename || 'Renomear'}</button>
                     <button class="btn2 btn-sm" data-act="replace" data-id="${ds.id}">${dict.btnReplace || 'Substituir'}</button>
                     <button class="danger btn-sm" data-act="delete" data-id="${ds.id}">${dict.btnDelete || 'Excluir'}</button>
-                    <button class="btn2 btn-sm" style="border: 1px solid var(--muted);" onclick="toggleArchive(${ds.id})">
-                        ${window.dg_viewArchived ? (dict.btnRestore || 'Restaurar ↺') : (dict.btnArchive || 'Arquivar 🗃️')}
-                    </button>
+                    <button class="btn2 btn-sm" style="border: 1px solid var(--muted);" data-act="archive" data-id="${ds.id}">
+    ${window.dg_viewArchived ? (dict.btnRestore || 'Restaurar ↺') : (dict.btnArchive || 'Arquivar 🗃️')}
+</button>
                     <input type="file" accept=".csv,.xlsx,.xls, .pdf" style="display:none" data-file="${ds.id}" />
                   </div>
                 </td>
@@ -880,6 +881,7 @@ $('dsTbody').addEventListener('click', (ev) => {
     if (act === 'rename') renameDataset(id);
     if (act === 'replace') replaceFile(id);
     if (act === 'delete') deleteDataset(id);
+    if (act === 'archive') toggleArchive(id);
 });
 $('dsFile').addEventListener('change', (e) => {
     const display = $('fileNameDisplay');
