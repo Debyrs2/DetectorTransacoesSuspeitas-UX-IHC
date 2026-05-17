@@ -265,32 +265,22 @@ window.setArchiveView = function (showArchived) {
 async function refreshDatasets() {
     clearMsg();
     const tbody = $('dsTbody');
+    const dict = dicionarioAtual;
+
     const tableBox = document.querySelector('.table-box');
     if (tableBox && !$('archiveTabs')) {
         const tabsHtml = `
           <div id="archiveTabs" style="display: flex; gap: 10px; margin-bottom: 16px;">
-            <button id="tabAtivos" class="btn" onclick="setArchiveView(false)">${dicionarioAtual.tabActive || 'Ativos'}</button>
-            <button id="tabArquivados" class="btn2" onclick="setArchiveView(true)">${dicionarioAtual.tabArchived || 'Arquivados 🗃️'}</button>
+            <button id="tabAtivos" class="btn" onclick="setArchiveView(false)">${dict.tabActive || 'Ativos'}</button>
+            <button id="tabArquivados" class="btn2" onclick="setArchiveView(true)">${dict.tabArchived || 'Arquivados 🗃️'}</button>
           </div>
         `;
         tableBox.insertAdjacentHTML('beforebegin', tabsHtml);
     }
 
-    const arquivadosIds = JSON.parse(localStorage.getItem('dg_arquivados') || '[]');
-
-    const datasetsFiltrados = datasets.filter(ds => {
-        const isArchived = arquivadosIds.includes(ds.id);
-        return window.dg_viewArchived ? isArchived : !isArchived;
-    });
-    if (datasetsFiltrados.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--muted);">${dicionarioAtual.msgEmptyArchive || 'Nenhum arquivo encontrado nesta aba.'}</td></tr>`;
-        return;
-    }
-    const dict = dicionarioAtual;
     tbody.innerHTML = `<tr><td colspan="5">${dict.tblLoading || 'Carregando...'}</td></tr>`;
 
     try {
-
         const list = await apiJson('/datasets');
 
         if (list.length === 0) {
@@ -298,8 +288,21 @@ async function refreshDatasets() {
             return;
         }
 
+        const arquivadosIds = JSON.parse(localStorage.getItem('dg_arquivados') || '[]');
+
+        const datasetsFiltrados = list.filter(ds => {
+            const isArchived = arquivadosIds.includes(ds.id);
+            return window.dg_viewArchived ? isArchived : !isArchived;
+        });
+        if (datasetsFiltrados.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--muted);">${dict.msgEmptyArchive || 'Nenhum arquivo encontrado nesta aba.'}</td></tr>`;
+            return;
+        }
+
         tbody.innerHTML = '';
-        for (const ds of list) {
+
+        // DESENHA OS CARDS NA TELA
+        for (const ds of datasetsFiltrados) {
             let nomeMetodo = '';
             if (ds.last_analysis_method) {
                 const mapMetodo = {
@@ -334,8 +337,8 @@ async function refreshDatasets() {
                     <button class="btn2 btn-sm" data-act="replace" data-id="${ds.id}">${dict.btnReplace || 'Substituir'}</button>
                     <button class="danger btn-sm" data-act="delete" data-id="${ds.id}">${dict.btnDelete || 'Excluir'}</button>
                     <button class="btn2 btn-sm" style="border: 1px solid var(--muted);" onclick="toggleArchive(${ds.id})">
-    ${window.dg_viewArchived ? 'Restaurar ↺' : 'Arquivar 🗃️'}
-</button>
+                        ${window.dg_viewArchived ? (dict.btnRestore || 'Restaurar ↺') : (dict.btnArchive || 'Arquivar 🗃️')}
+                    </button>
                     <input type="file" accept=".csv,.xlsx,.xls, .pdf" style="display:none" data-file="${ds.id}" />
                   </div>
                 </td>
@@ -347,7 +350,6 @@ async function refreshDatasets() {
         showErr(e.message);
     }
 }
-
 function escapeHtml(s) {
     return String(s ?? '')
         .replaceAll('&', '&amp;')
