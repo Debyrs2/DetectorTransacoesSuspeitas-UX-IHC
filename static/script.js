@@ -241,15 +241,26 @@ async function apiJson(url, opts = {}) {
 window.dg_viewArchived = false;
 
 window.toggleArchive = function (id) {
-    const strId = String(id); // Blinda contra erros de tipagem
+    const strId = String(id); 
     let arquivados = JSON.parse(localStorage.getItem('dg_arquivados') || '[]');
+    let foiArquivado = false; 
+
     if (arquivados.includes(strId)) {
         arquivados = arquivados.filter(item => item !== strId);
     } else {
         arquivados.push(strId);
+        foiArquivado = true;
     }
+    
     localStorage.setItem('dg_arquivados', JSON.stringify(arquivados));
-    refreshDatasets();
+    refreshDatasets(); 
+
+    const dict = dicionarioAtual;
+    if (foiArquivado) {
+        mostrarToast(dict.msgArchived || "Ítem arquivado!", "success");
+    } else {
+        mostrarToast(dict.msgRestored || "Ítem restaurado!", "success");
+    }
 };
 
 window.setArchiveView = function (showArchived) {

@@ -214,5 +214,7 @@
   "tabArchived": "Arquivados 🗃️",
   "btnArchive": "Arquivar 🗃️",
   "btnRestore": "Restaurar ↺",
-  "msgEmptyArchive": "Nenhum arquivo encontrado nesta aba."
+  "msgEmptyArchive": "Nenhum arquivo encontrado nesta aba.",
+  "msgArchived": "Ítem arquivado!",
+  "msgRestored": "Ítem restaurado!"
 }

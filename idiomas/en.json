@@ -214,5 +214,7 @@
   "tabArchived": "Archived 🗃️",
   "btnArchive": "Archive 🗃️",
   "btnRestore": "Restore ↺",
-  "msgEmptyArchive": "No files found in this tab."
+  "msgEmptyArchive": "No files found in this tab.",
+  "msgArchived": "Item archived!",
+  "msgRestored": "Item restored!"
 }
