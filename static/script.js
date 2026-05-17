@@ -241,9 +241,9 @@ async function apiJson(url, opts = {}) {
 window.dg_viewArchived = false;
 
 window.toggleArchive = function (id) {
-    const strId = String(id); 
+    const strId = String(id);
     let arquivados = JSON.parse(localStorage.getItem('dg_arquivados') || '[]');
-    let foiArquivado = false; 
+    let foiArquivado = false;
 
     if (arquivados.includes(strId)) {
         arquivados = arquivados.filter(item => item !== strId);
@@ -251,9 +251,9 @@ window.toggleArchive = function (id) {
         arquivados.push(strId);
         foiArquivado = true;
     }
-    
+
     localStorage.setItem('dg_arquivados', JSON.stringify(arquivados));
-    refreshDatasets(); 
+    refreshDatasets();
 
     const dict = dicionarioAtual;
     if (foiArquivado) {
@@ -280,15 +280,34 @@ async function refreshDatasets() {
     const dict = dicionarioAtual;
 
     const tableBox = document.querySelector('.table-box');
-    if (tableBox && !$('archiveTabs')) {
-        const tabsHtml = `
-          <div id="archiveTabs" style="display: flex; gap: 10px; margin-bottom: 16px;">
-            <button id="tabAtivos" class="btn" onclick="setArchiveView(false)">${dict.tabActive || 'Ativos'}</button>
-            <button id="tabArquivados" class="btn2" onclick="setArchiveView(true)">${dict.tabArchived || 'Arquivados 🗃️'}</button>
+    if ($('archiveTabs') && !$('tableToolbar')) $('archiveTabs').remove();
+
+    if (tableBox && !$('tableToolbar')) {
+        const toolbarHtml = `
+          <div id="tableToolbar" style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; justify-content: space-between; align-items: center;">
+            <div id="archiveTabs" style="display: flex; gap: 10px; flex: 1; min-width: 200px;">
+              <button id="tabAtivos" class="btn" style="flex: 1;" onclick="setArchiveView(false)">${dict.tabActive || 'Ativos'}</button>
+              <button id="tabArquivados" class="btn2" style="flex: 1;" onclick="setArchiveView(true)">${dict.tabArchived || 'Arquivados 🗃️'}</button>
+            </div>
+            <input type="text" id="searchDataset" placeholder="${dict.phSearch || 'Buscar arquivo ou data...'}" 
+                   style="flex: 2; min-width: 250px; padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--panel-border); background: var(--bg-0); color: var(--text); outline: none; font-family: inherit;">
           </div>
         `;
-        tableBox.insertAdjacentHTML('beforebegin', tabsHtml);
+        tableBox.insertAdjacentHTML('beforebegin', toolbarHtml);
+
+        // Lógica do Filtro em Tempo Real 
+        $('searchDataset').addEventListener('input', function (e) {
+            const termo = e.target.value.toLowerCase();
+            const linhas = document.querySelectorAll('#dsTbody tr');
+
+            linhas.forEach(linha => {
+                if (linha.cells.length === 1) return;
+                const textoLinha = linha.innerText.toLowerCase();
+                linha.style.display = textoLinha.includes(termo) ? '' : 'none';
+            });
+        });
     }
+    if ($('searchDataset')) $('searchDataset').value = '';
 
     tbody.innerHTML = `<tr><td colspan="5">${dict.tblLoading || 'Carregando...'}</td></tr>`;
 

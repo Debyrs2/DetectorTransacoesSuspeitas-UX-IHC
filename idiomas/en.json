@@ -216,5 +216,6 @@
   "btnRestore": "Restore ↺",
   "msgEmptyArchive": "No files found in this tab.",
   "msgArchived": "Item archived!",
-  "msgRestored": "Item restored!"
+  "msgRestored": "Item restored!",
+  "phSearch": "Search file or date..."
 }

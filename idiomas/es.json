@@ -216,5 +216,6 @@
     "btnRestore": "Restaurar ↺",
     "msgEmptyArchive": "No se encontraron archivos en esta pestaña.",
     "msgArchived": "¡Elemento archivado!",
-    "msgRestored": "¡Elemento restaurado!"
+    "msgRestored": "¡Elemento restaurado!",
+    "phSearch": "Buscar archivo o fecha..."
 }
