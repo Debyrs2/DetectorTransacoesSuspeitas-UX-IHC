@@ -887,7 +887,7 @@ div[vw-plugin-wrapper] {
 
   .login-info-column {
     display: none !important;
-  } 
+  }
 
   #landingPage h1 {
     font-size: 2.2rem !important;
@@ -926,6 +926,7 @@ div[vw-plugin-wrapper] {
   table:has(#dsTbody) {
     min-width: 100% !important;
   }
+
   table:has(#dsTbody) thead {
     display: none;
   }
@@ -952,13 +953,15 @@ div[vw-plugin-wrapper] {
     align-items: flex-start;
     padding: 8px 0;
     border-bottom: 1px dashed var(--line);
-    white-space: normal; 
+    white-space: normal;
   }
+
   #dsTbody td:last-child {
     border-bottom: none;
     padding-bottom: 0;
     padding-top: 16px;
   }
+
   #dsTbody td::before {
     content: attr(data-label);
     font-size: 10px;
@@ -971,16 +974,17 @@ div[vw-plugin-wrapper] {
 
   .actions {
     display: grid !important;
-    grid-template-columns: 1fr 1fr; 
+    grid-template-columns: 1fr 1fr;
   }
 
   .actions button {
     width: 100% !important;
-    padding: 12px !important; 
+    padding: 12px !important;
     justify-content: center;
   }
+
   .actions .danger {
-    grid-column: 1 / -1; 
+    grid-column: 1 / -1;
   }
 }
 
@@ -1106,7 +1110,7 @@ div[vw-plugin-wrapper] {
   left: 0 !important;
 }
 
-/* --- FEEDBACK VISUAL DE ARQUIVO SELECIONADO --- */
+/* FEEDBACK VISUAL DE ARQUIVO SELECIONADO */
 #fileNameDisplay.file-ready {
   color: var(--text);
   border-color: #10b981;
@@ -1122,13 +1126,18 @@ div[vw-plugin-wrapper] {
   transition: all 0.3s ease;
 }
 
-#corpoManual ul,
-#corpoManual ol {
-  padding-left: 24px;
-  list-style-position: outside;
-  margin-bottom: 12px;
+#corpoManual {
+  padding: 0 16px 32px 16px !important;
 }
 
-#corpoManual {
-  padding-bottom: 30px;
+#corpoManual ul,
+#corpoManual ol {
+  padding-left: 24px !important;
+  list-style-position: outside !important;
+  margin-bottom: 16px !important;
+}
+
+#corpoManual li {
+  margin-bottom: 8px !important;
+  line-height: 1.5 !important;
 }
