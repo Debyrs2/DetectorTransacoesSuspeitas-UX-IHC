@@ -277,11 +277,11 @@ async function refreshDatasets() {
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${escapeHtml(ds.name)}</td>
-                <td>${escapeHtml(ds.original_filename)}</td>
-                <td>${dataHumanizada}</td>
-                <td>${last}</td>
-                <td>
+                <td data-label="${dict.thName || 'Nome'}">${escapeHtml(ds.name)}</td>
+                <td data-label="${dict.thFile || 'Arquivo'}">${escapeHtml(ds.original_filename)}</td>
+                <td data-label="${dict.thDate || 'Data de Envio'}">${dataHumanizada}</td>
+                <td data-label="${dict.thLast || 'Última análise'}">${last}</td>
+                <td data-label="${dict.thActions || 'Ações'}">
                   <div class="actions">
                     <button class="btn btn-sm" data-act="analyze" data-id="${ds.id}">${dict.btnAnalyze || 'Analisar'}</button>
                     <button class="btn2 btn-sm" data-act="view" data-id="${ds.id}">${dict.btnReview || 'Revisar'}</button>
@@ -323,7 +323,8 @@ function desenharGrafico(chartData) {
     }
 
     sessaoGrafico.style.display = 'block';
-    const larguraIdeal = chartData.labels.length * 10;
+    const minWidth = window.innerWidth <= 768 ? 600 : 0;
+    const larguraIdeal = Math.max(chartData.labels.length * 40, minWidth);
     $('boxGrafico').style.width = larguraIdeal > window.innerWidth ? larguraIdeal + 'px' : '100%';
     const ctx = $('graficoLinha').getContext('2d');
 
@@ -412,8 +413,15 @@ function desenharGrafico(chartData) {
                 y: {
                     ticks: {
                         color: corTexto,
-                        // Formata os números do eixo Y
                         callback: function (value) {
+                            if (window.innerWidth <= 768) {
+                                return new Intl.NumberFormat(currentLang, {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                    notation: 'compact',
+                                    maximumFractionDigits: 1
+                                }).format(value);
+                            }
                             return formatarMoeda(value);
                         }
                     },
@@ -1274,6 +1282,9 @@ if ($('btnA11yLeituraFloat')) {
     $('btnA11yLeituraFloat').addEventListener('click', () => $('btnA11yLeitura').click());
     $('btnA11yDaltonicoFloat').addEventListener('click', () => $('btnA11yDaltonico').click());
     $('btnA11yAudioFloat').addEventListener('click', () => $('btnA11yAudio').click());
+    if ($('btnThemeToggleFloat')) {
+        $('btnThemeToggleFloat').addEventListener('click', () => $('btnThemeToggle').click());
+    }
 }
 // MENU DO USUÁRIO E ACESSIBILIDADE
 const btnThemeToggle = $('btnThemeToggle');
