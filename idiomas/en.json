@@ -209,5 +209,10 @@
   "noSuspectsFound": "No suspects found.",
   "truncAlert": "⚠️ The list of suspects has been limited to {limit}. Actual total: {total}.",
   "sessionEnded": "Session ended.",
-  "readerActivated": "Reader activated. Navigate with the Tab key."
+  "readerActivated": "Reader activated. Navigate with the Tab key.",
+  "tabActive": "Active",
+  "tabArchived": "Archived 🗃️",
+  "btnArchive": "Archive 🗃️",
+  "btnRestore": "Restore ↺",
+  "msgEmptyArchive": "No files found in this tab."
 }

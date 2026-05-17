@@ -238,9 +238,54 @@ async function apiJson(url, opts = {}) {
     return data;
 }
 
+window.dg_viewArchived = false;
+
+window.toggleArchive = function (id) {
+    let arquivados = JSON.parse(localStorage.getItem('dg_arquivados') || '[]');
+    if (arquivados.includes(id)) {
+        arquivados = arquivados.filter(item => item !== id);
+    } else {
+        arquivados.push(id);
+    }
+    localStorage.setItem('dg_arquivados', JSON.stringify(arquivados));
+    refreshDatasets();
+};
+
+window.setArchiveView = function (showArchived) {
+    window.dg_viewArchived = showArchived;
+
+    if ($('tabAtivos') && $('tabArquivados')) {
+        $('tabAtivos').className = showArchived ? 'btn2' : 'btn';
+        $('tabArquivados').className = showArchived ? 'btn' : 'btn2';
+    }
+
+    refreshDatasets();
+};
+
 async function refreshDatasets() {
     clearMsg();
     const tbody = $('dsTbody');
+    const tableBox = document.querySelector('.table-box');
+    if (tableBox && !$('archiveTabs')) {
+        const tabsHtml = `
+          <div id="archiveTabs" style="display: flex; gap: 10px; margin-bottom: 16px;">
+            <button id="tabAtivos" class="btn" onclick="setArchiveView(false)">${dicionarioAtual.tabActive || 'Ativos'}</button>
+            <button id="tabArquivados" class="btn2" onclick="setArchiveView(true)">${dicionarioAtual.tabArchived || 'Arquivados 🗃️'}</button>
+          </div>
+        `;
+        tableBox.insertAdjacentHTML('beforebegin', tabsHtml);
+    }
+
+    const arquivadosIds = JSON.parse(localStorage.getItem('dg_arquivados') || '[]');
+
+    const datasetsFiltrados = datasets.filter(ds => {
+        const isArchived = arquivadosIds.includes(ds.id);
+        return window.dg_viewArchived ? isArchived : !isArchived;
+    });
+    if (datasetsFiltrados.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--muted);">${dicionarioAtual.msgEmptyArchive || 'Nenhum arquivo encontrado nesta aba.'}</td></tr>`;
+        return;
+    }
     const dict = dicionarioAtual;
     tbody.innerHTML = `<tr><td colspan="5">${dict.tblLoading || 'Carregando...'}</td></tr>`;
 
@@ -288,6 +333,9 @@ async function refreshDatasets() {
                     <button class="btn2 btn-sm" data-act="rename" data-id="${ds.id}">${dict.btnRename || 'Renomear'}</button>
                     <button class="btn2 btn-sm" data-act="replace" data-id="${ds.id}">${dict.btnReplace || 'Substituir'}</button>
                     <button class="danger btn-sm" data-act="delete" data-id="${ds.id}">${dict.btnDelete || 'Excluir'}</button>
+                    <button class="btn2 btn-sm" style="border: 1px solid var(--muted);" onclick="toggleArchive(${ds.id})">
+    ${window.dg_viewArchived ? 'Restaurar ↺' : 'Arquivar 🗃️'}
+</button>
                     <input type="file" accept=".csv,.xlsx,.xls, .pdf" style="display:none" data-file="${ds.id}" />
                   </div>
                 </td>

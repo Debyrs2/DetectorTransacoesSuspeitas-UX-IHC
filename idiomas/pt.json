@@ -209,5 +209,10 @@
   "noSuspectsFound": "Nenhuma suspeita encontrada.",
   "truncAlert": "⚠️ A lista de suspeitas foi limitada a {limite}. Total real: {total}.",
   "sessionEnded": "Sessão encerrada.",
-  "readerActivated": "Leitor ativado. Navegue com a tecla Tab."
+  "readerActivated": "Leitor ativado. Navegue com a tecla Tab.",
+  "tabActive": "Ativos",
+  "tabArchived": "Arquivados 🗃️",
+  "btnArchive": "Arquivar 🗃️",
+  "btnRestore": "Restaurar ↺",
+  "msgEmptyArchive": "Nenhum arquivo encontrado nesta aba."
 }
